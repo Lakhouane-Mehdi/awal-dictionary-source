@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Info, ShieldCheck, Heart, ScrollText, Users } from 'lucide-react';
+import { X, ShieldCheck, ScrollText, Users } from 'lucide-react';
 
 interface AboutModalProps {
     isOpen: boolean;
