@@ -35,5 +35,17 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# Firebase (Optional: hide project aliases if desired)
+# Firebase (Strict exclusion of all config)
+.firebase/
 .firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+storage.rules
+database.rules.json
+
+# API & Secrets
+.env
+.env.*
+*.pem
+*.key

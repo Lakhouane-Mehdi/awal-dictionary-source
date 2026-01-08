@@ -1,15 +1,8 @@
 # Awal Tamazight-English Dictionary (Source Code)
 
-**STRICTLY PROPRIETARY & CONFIDENTIAL**
-**Author:** Mehdi Lakhouane
-**Copyright:** © 2026
-
----
-
-## Restricted Access
-This repository contains the **private source code** for the Awal Dictionary PWA.
-**Unauthorized cloning, distribution, or modification is strictly prohibited.**
-Access is granted solely for archival purposes by the author.
+## License
+This project is licensed under the **MIT License**.
+See `LICENSE` for more information.
 
 ---
 
