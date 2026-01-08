@@ -1,73 +1,41 @@
-# React + TypeScript + Vite
+# Awal Tamazight-English Dictionary (Source Code)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**STRICTLY PROPRIETARY & CONFIDENTIAL**
+**Author:** Mehdi Lakhouane
+**Copyright:** © 2026
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚫 Restricted Access
+This repository contains the **private source code** for the Awal Dictionary PWA.
+**Unauthorized cloning, distribution, or modification is strictly prohibited.**
+Access is granted solely for archival purposes by the author.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📱 About The Project
+Awal is a modern, offline-first Progressive Web Application (PWA) designed to bridge the gap between Tamazight (Berber) and English.
 
-## Expanding the ESLint configuration
+### Key Features
+- **Multi-Script Support**: Seamlessly handles Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), and Arabic (أزول) inputs.
+- **Smart Transliteration**: Real-time script conversion engine.
+- **Advanced Tools**:
+    - **Verb Conjugator**: Complete conjugation tables for all tenses.
+    - **Trace Mode**: Interactive canvas for learning to write Tifinagh.
+    - **Gamified Quiz**: Fisher-Yates randomized vocabulary challenges.
+- **Offline Capabilities**: Full dictionary access without internet; Favorites sync via `idb-keyval`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + Framer Motion
+- **Hosting**: Firebase Hosting
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Development
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Property of Mehdi Lakhouane.*
