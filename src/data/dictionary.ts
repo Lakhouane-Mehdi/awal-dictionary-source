@@ -12,6 +12,8 @@ export interface DictionaryEntry {
     };
     category?: string;
     cultural_image?: string;
+    root?: string; // e.g. "M-Gh-R"
+    etymology?: string; // Cultural explanation of the root
     conjugation?: {
         preterite: string;
         intensive: string;
@@ -22,8 +24,42 @@ export interface DictionaryEntry {
 
 export const fullDictionaryData: DictionaryEntry[] = [
     // --- GREETINGS ---
-    { id: 'g1', term_latin: 'Azul', term_tifinagh: 'ⴰⵣⵓⵍ', term_arabic: 'أزول', definition: 'Hello / Welcome', category: 'Greetings' },
+    {
+        id: 'g1',
+        term_latin: 'Azul',
+        term_tifinagh: 'ⴰⵣⵓⵍ',
+        term_arabic: 'أزول',
+        definition: 'Hello / Welcome',
+        category: 'Greetings',
+        root: 'Z-L',
+        etymology: 'Often interpreted as "Az" (Come near) + "Ul" (Heart). Literally: "Come close to my heart".'
+    },
     { id: 'g2', term_latin: 'Tanmirt', term_tifinagh: 'ⵜⴰⵏⵎⵉⵔⵜ', term_arabic: 'تنميرت', definition: 'Thank you', category: 'Greetings' },
+
+    // ... (skipping unchanged)
+
+    {
+        id: 'f6',
+        term_latin: 'Tamghart',
+        term_tifinagh: 'ⵜⴰⵎⵖⴰⵔⵜ',
+        definition: 'Woman / Wife',
+        category: 'Family',
+        root: 'M-Gh-R',
+        etymology: 'Shares the root M-Gh-R with "Imghur" (To be great/big). Historically implies "The Great One" or Matriarch of the family.'
+    },
+
+    // ...
+
+    // --- ADJECTIVES ---
+    {
+        id: 'adj1',
+        term_latin: 'Imghur',
+        term_tifinagh: 'ⵉⵎⵖⵓⵔ',
+        definition: 'Big / Large',
+        category: 'Adjectives',
+        root: 'M-Gh-R',
+        etymology: 'Derived from the root concept of greatness, seniority, or physical size.'
+    },
     { id: 'g3', term_latin: 'Sbah lkhir', term_tifinagh: 'ⵚⴱⴰⵃ ⵍⵅⵉⵔ', definition: 'Good morning', category: 'Greetings' },
     { id: 'g4', term_latin: 'Timinsiwin', term_tifinagh: 'ⵜⵉⵎⵉⵏⵙⵉⵡⵉⵏ', definition: 'Good evening', category: 'Greetings' },
     { id: 'g5', term_latin: 'Ar tufat', term_tifinagh: 'ⴰⵔ ⵜⵓⴼⴰⵜ', definition: 'See you later / Until next time', category: 'Greetings' },
