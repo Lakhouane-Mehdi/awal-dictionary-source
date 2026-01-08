@@ -6,14 +6,14 @@
 
 ---
 
-## 🚫 Restricted Access
+## Restricted Access
 This repository contains the **private source code** for the Awal Dictionary PWA.
 **Unauthorized cloning, distribution, or modification is strictly prohibited.**
 Access is granted solely for archival purposes by the author.
 
 ---
 
-## 📱 About The Project
+## About The Project
 Awal is a modern, offline-first Progressive Web Application (PWA) designed to bridge the gap between Tamazight (Berber) and English.
 
 ### Key Features
@@ -25,13 +25,13 @@ Awal is a modern, offline-first Progressive Web Application (PWA) designed to br
     - **Gamified Quiz**: Fisher-Yates randomized vocabulary challenges.
 - **Offline Capabilities**: Full dictionary access without internet; Favorites sync via `idb-keyval`.
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: React 18 + TypeScript
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS + Framer Motion
 - **Hosting**: Firebase Hosting
 
-## 🚀 Development
+## Development
 ```bash
 npm install
 npm run dev
