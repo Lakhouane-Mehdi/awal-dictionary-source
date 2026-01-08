@@ -1,8 +1,9 @@
 # Awal Tamazight-English Dictionary (Source Code)
 
-## License
-This project is licensed under the **MIT License**.
-See `LICENSE` for more information.
+## Restricted Access
+This repository contains the **private source code** for the Awal Dictionary PWA.
+**Unauthorized cloning, distribution, or modification is strictly prohibited.**
+Access is granted solely for archival purposes by the author.
 
 ---
 
