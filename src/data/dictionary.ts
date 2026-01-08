@@ -77,7 +77,7 @@ export const fullDictionaryData: DictionaryEntry[] = [
     { id: 'f3', term_latin: 'Gma', term_tifinagh: 'ⴳⵎⴰ', definition: 'Brother', category: 'Family' },
     { id: 'f4', term_latin: 'Ultma', term_tifinagh: 'ⵓⵍⵜⵎⴰ', definition: 'Sister', category: 'Family' },
     { id: 'f5', term_latin: 'Argaz', term_tifinagh: 'ⴰⵔⴳⴰⵣ', definition: 'Man / Husband', category: 'Family' },
-    { id: 'f6', term_latin: 'Tamghart', term_tifinagh: 'ⵜⴰⵎⵖⴰⵔⵜ', definition: 'Woman / Wife', category: 'Family' },
+    // { id: 'f6', term_latin: 'Tamghart', term_tifinagh: 'ⵜⴰⵎⵖⴰⵔⵜ', definition: 'Woman / Wife', category: 'Family' }, // Removed duplicate
     { id: 'f7', term_latin: 'Afrukh', term_tifinagh: 'ⴰⴼⵔⵓⵅ', definition: 'Boy', category: 'Family' },
     { id: 'f8', term_latin: 'Tafrukht', term_tifinagh: 'ⵜⴰⴼⵔⵓⵅⵜ', definition: 'Girl', category: 'Family' },
 
@@ -214,7 +214,7 @@ export const fullDictionaryData: DictionaryEntry[] = [
     },
 
     // --- ADJECTIVES ---
-    { id: 'adj1', term_latin: 'Imghur', term_tifinagh: 'ⵉⵎⵖⵓⵔ', definition: 'Big / Large', category: 'Adjectives' },
+    // { id: 'adj1', term_latin: 'Imghur', term_tifinagh: 'ⵉⵎⵖⵓⵔ', definition: 'Big / Large', category: 'Adjectives' }, // Removed duplicate
     { id: 'adj2', term_latin: 'Imzi', term_tifinagh: 'ⵉⵎⵥⵉ', definition: 'Small', category: 'Adjectives' },
     { id: 'adj3', term_latin: 'Ifulki', term_tifinagh: 'ⵉⴼⵓⵍⴽⵉ', definition: 'Good / Beautiful', category: 'Adjectives' },
     { id: 'adj4', term_latin: 'Ixchn', term_tifinagh: 'ⵉⵅⵛⵏ', definition: 'Bad / Ugly', category: 'Adjectives' },
