@@ -50,6 +50,6 @@ database.rules.json
 *.pem
 *.key
 
+
 # Large Data Assets
-dictionary.pdf
 scripts/raw_content_js.txt

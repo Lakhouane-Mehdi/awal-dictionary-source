@@ -44,17 +44,22 @@ export const useSearch = () => {
     }, []);
 
     const results = useMemo(() => {
-        if (!query) return dictionaryData;
+        try {
+            // If query is empty, return a subset to avoid rendering heavy lists immediately
+            // Or typically users expect some list. Let's return the first 100 items if empty?
+            // Original code returned *all*.
+            if (!query) return dictionaryData.slice(0, 100);
 
-        const normalized = normalizeQuery(query);
-        // We search with the normalized query against the original data
-        // For better results, we might need to normalize data fields too or use a custom matching logic.
-        // For now, Fuse's fuzziness handles a lot. The normalization is for specific number-substitutions.
+            const normalized = normalizeQuery(query);
+            const searchInput = query.match(/[793]/) ? normalized : query;
 
-        // If the query contains numbers, use the normalized version, otherwise raw
-        const searchInput = query.match(/[793]/) ? normalized : query;
-
-        return fuse.search(searchInput).map(result => result.item);
+            const searchResults = fuse.search(searchInput);
+            // Limit to 100 results to prevent UI freezing/crashing on generic queries
+            return searchResults.slice(0, 100).map(result => result.item);
+        } catch (error) {
+            console.error("Search failed:", error);
+            return [];
+        }
     }, [query, fuse]);
 
     return {
