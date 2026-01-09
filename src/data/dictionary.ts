@@ -38,15 +38,21 @@ const importedEntries: DictionaryEntry[] = importedData.map((item: any, index: n
     const section = item.section || 'General';
     const dialect = item.dialect || 'General';
 
+    let category = 'General';
+    if (section === 'eng-tam') category = 'English-Tamazight';
+    else if (section === 'tam-eng') category = 'Tamazight-English';
+    else category = section; // 'Verbs', 'Countries', 'God Phrases', etc.
+
     return {
         id: `imp_${index}`,
         term_latin: termLatin,
         term_tifinagh: convertScript(termLatin, 'tifinagh'),
+        term_arabic: convertScript(termLatin, 'arabic'),
         definition: def,
-        category: section === 'eng-tam' ? 'English-Tamazight' : 'Tamazight-English',
+        category: category,
         source: 'PDF Import',
         dialects: {
-            tashelhit: dialect === 'Zaouiat Ahansal' ? termLatin : undefined, // Mapping to Tashelhit as closest proxy or just preserving info
+            tashelhit: dialect === 'Zaouiat Ahansal' ? termLatin : undefined,
             // proper way: maybe add a 'region' field or 'dialect_tag'. 
             // for now, let's put it in source or a new field if interface allows.
             // Interface has 'dialects' object. Let's just use 'source' for the dialect name to be safe without breaking types.

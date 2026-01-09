@@ -33,6 +33,20 @@ function parse() {
             section = 'Tamazight-English';
             continue;
         }
+        // Additional Categories from PDF Headers
+        if (line.includes('Verbs') && line.includes('English')) {
+            section = 'Verbs';
+            continue;
+        }
+        if (line.includes('Countries') && line.includes('Abkhazia')) {
+            section = 'Countries';
+            continue;
+        }
+        if (line.includes('God Phrases')) {
+            section = 'God Phrases';
+            continue;
+        }
+
         if (line.startsWith('--- Page')) continue;
         // Skip likely page numbers that slipped through (e.g. just a number)
         if (/^\d+$/.test(line)) continue;
@@ -70,6 +84,36 @@ function parse() {
                     tamazight: tam,
                     english: en,
                     section: 'tam-eng',
+                    dialect: 'Zaouiat Ahansal'
+                });
+            }
+        } else if (section === 'Verbs' || section === 'Countries' || section === 'God Phrases') {
+            const parts = line.split(splitRegex);
+            if (parts.length >= 2) {
+                let p1 = parts[0].trim();
+                let p2 = parts[1].trim();
+
+                let en, tam;
+                // Heuristic: English often lowercase verbs 'to ...', Tamazight often starts with special chars or lowercase.
+                // But in 'Countries', Capitalized English is typical.
+                if (p1.startsWith('to ') || /^[A-Z]/.test(p1) && section !== 'God Phrases') {
+                    en = p1;
+                    tam = p2;
+                } else {
+                    tam = p1;
+                    en = p2;
+                }
+
+                en = en.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                tam = tam.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                tam = tam.replace(/\.$/, '').trim();
+
+                if (en.length < 2 || tam.length < 2) continue;
+
+                entries.push({
+                    english: en,
+                    tamazight: tam,
+                    section: section,
                     dialect: 'Zaouiat Ahansal'
                 });
             }

@@ -35,13 +35,11 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# Firebase (Strict exclusion of all config)
+# Firebase
 .firebase/
-.firebaserc
-firebase.json
-firestore.indexes.json
-firestore.rules
-storage.rules
+firebase-debug.log
+# firestore.rules is allowed
+# storage.rules is allowed
 database.rules.json
 
 # API & Secrets
