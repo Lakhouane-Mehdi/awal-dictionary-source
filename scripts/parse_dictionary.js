@@ -34,16 +34,25 @@ function parse() {
             continue;
         }
         if (line.startsWith('--- Page')) continue;
-        if (/^\d+\s*$/.test(line)) continue; // Page numbers
+        // Skip likely page numbers that slipped through (e.g. just a number)
+        if (/^\d+$/.test(line)) continue;
 
         // Heuristic parsing
         if (section === 'English-Tamazight') {
             const parts = line.split(splitRegex);
             if (parts.length >= 2) {
+                // Clean input: remove newlines, multiple spaces
+                const en = parts[0].replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                const tam = parts[1].replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+                // Skip if header-like or empty
+                if (en.length < 2 || tam.length < 2) continue;
+
                 entries.push({
-                    english: parts[0].trim(),
-                    tamazight: parts[1].trim(),
-                    section: 'eng-tam'
+                    english: en,
+                    tamazight: tam,
+                    section: 'eng-tam',
+                    dialect: 'Zaouiat Ahansal'
                 });
             }
         } else if (section === 'Tamazight-English') {
@@ -51,10 +60,17 @@ function parse() {
             if (parts.length >= 2) {
                 // T-E section often has a period after the T-word: "word .   def"
                 let tam = parts[0].trim().replace(/\.$/, '').trim();
+                tam = tam.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+
+                const en = parts[1].replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+                if (en.length < 2 || tam.length < 2) continue;
+
                 entries.push({
                     tamazight: tam,
-                    english: parts[1].trim(),
-                    section: 'tam-eng'
+                    english: en,
+                    section: 'tam-eng',
+                    dialect: 'Zaouiat Ahansal'
                 });
             }
         }

@@ -36,6 +36,7 @@ const importedEntries: DictionaryEntry[] = importedData.map((item: any, index: n
 
     // Determine source section for potential category inference
     const section = item.section || 'General';
+    const dialect = item.dialect || 'General';
 
     return {
         id: `imp_${index}`,
@@ -43,7 +44,13 @@ const importedEntries: DictionaryEntry[] = importedData.map((item: any, index: n
         term_tifinagh: convertScript(termLatin, 'tifinagh'),
         definition: def,
         category: section === 'eng-tam' ? 'English-Tamazight' : 'Tamazight-English',
-        source: 'PDF Import'
+        source: 'PDF Import',
+        dialects: {
+            tashelhit: dialect === 'Zaouiat Ahansal' ? termLatin : undefined, // Mapping to Tashelhit as closest proxy or just preserving info
+            // proper way: maybe add a 'region' field or 'dialect_tag'. 
+            // for now, let's put it in source or a new field if interface allows.
+            // Interface has 'dialects' object. Let's just use 'source' for the dialect name to be safe without breaking types.
+        }
     };
 }).filter((item: DictionaryEntry) => item.term_latin.length > 0 && item.definition.length > 0 && item.definition !== 'English' && item.definition !== 'Tamazight');
 
