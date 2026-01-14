@@ -31,5 +31,10 @@ npm install
 npm run dev
 ```
 
+## Credits & Acknowledgements
+This project is built upon the invaluable linguistic stewardship of the following organizations:
+*   **Atlas Cultural Foundation**: Special thanks for their *Tamazight English Dictionary* (Zaouiat Ahansal region), which serves as a primary reference for the root and dialect data.
+*   **Peace Corps Morocco**: Acknowledging the foundational work of Peace Corps volunteers in documenting and preserving the Tamazight language.
+
 ---
 *Property of Mehdi Lakhouane.*

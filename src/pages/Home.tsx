@@ -6,12 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useScript } from '../context/ScriptContext';
 import { convertScript } from '../utils/scriptConverter';
-import { Eye, Volume2, Sparkles, PenTool, Heart, Moon, Sun, BookOpen } from 'lucide-react';
+import { Eye, Volume2, Sparkles, PenTool, Heart, Moon, Sun, BookOpen, Network, Info } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
 import { useAudio } from '../hooks/useAudio';
 import { useTheme } from '../context/ThemeContext';
 import { VerbConjugationModal } from '../components/VerbConjugationModal';
 import { TraceModal } from '../components/TraceModal';
+import { ProverbCard } from '../components/ProverbCard';
+import { RootExplorerModal } from '../components/RootExplorerModal';
+import { AboutModal } from '../components/AboutModal';
+import { dictionaryData } from '../data/dictionary';
 
 const getCategoryColor = (category?: string) => {
     switch (category?.toLowerCase()) {
@@ -30,8 +34,10 @@ export const Home = () => {
     const { theme, toggleTheme } = useTheme();
 
     // Modal State
+    const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [conjugationEntry, setConjugationEntry] = useState<DictionaryEntry | null>(null);
     const [traceCharacter, setTraceCharacter] = useState<string | null>(null);
+    const [rootEntry, setRootEntry] = useState<DictionaryEntry | null>(null);
 
     // Smart Discovery Logic
     const [randomWord, setRandomWord] = useState<DictionaryEntry | null>(null);
@@ -39,7 +45,7 @@ export const Home = () => {
         // Pick a random word on mount
         const idx = Math.floor(Math.random() * results.length);
         setRandomWord(results[idx]);
-    }, []); // Run once on mount
+    }, []);
 
     const handleShuffle = () => {
         const idx = Math.floor(Math.random() * results.length);
@@ -47,27 +53,37 @@ export const Home = () => {
     };
 
     const handleTrace = (char: string) => {
-        // Ensure we trace the Tifinagh character regardless of current script view
-        // If current script is Latin, we need the Tifinagh version.
-        // Doing a quick conversion if needed, but ideally we pass the Tifinagh char directly.
         setTraceCharacter(char);
+    };
+
+    // Helper to find related words
+    const getRelatedWords = (entry: DictionaryEntry) => {
+        if (!entry.root) return [];
+        return dictionaryData.filter(d => d.root === entry.root && d.id !== entry.id);
     };
 
     return (
         <div className="w-full h-full relative">
             {/* Header */}
             <header className="mb-8 mt-4 flex justify-between items-center">
-                <div>
-                    <h1 className="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent flex items-center gap-2">
+                <div onClick={() => setIsAboutOpen(true)} className="cursor-pointer group">
+                    <h1 className="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent flex items-center gap-2 group-hover:scale-105 transition-transform">
                         Awal <Sparkles size={18} className="text-yellow-400" />
                     </h1>
-                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-1">
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-1 group-hover:text-blue-500 transition-colors">
                         {script === 'latin' ? 'PREMIUM DICTIONARY' :
                             script === 'tifinagh' ? 'ⴰⵎⴰⵡⴰⵍ ⴰⵎⴰⵣⵉⵖ' :
                                 'القاموس الامازيغي'}
                     </p>
                 </div>
                 <div className="flex gap-2">
+                    <button
+                        onClick={() => setIsAboutOpen(true)}
+                        className="w-12 h-12 glass-panel flex items-center justify-center text-slate-400 dark:text-slate-500 shadow-lg hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+                        title="About & Credits"
+                    >
+                        <Info size={24} />
+                    </button>
                     <button
                         onClick={toggleTheme}
                         className="w-12 h-12 glass-panel flex items-center justify-center text-slate-600 dark:text-yellow-400 shadow-lg hover:rotate-12 transition-transform duration-300"
@@ -97,6 +113,10 @@ export const Home = () => {
             {/* Content Switcher: Search Results vs Discovery */}
             {!query ? (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <div className="mb-8">
+                        <ProverbCard />
+                    </div>
+
                     <div className="flex justify-between items-end mb-4">
                         <h3 className="text-lg font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                             Word of the Moment
@@ -116,6 +136,7 @@ export const Home = () => {
                             script={script}
                             onConjugate={() => setConjugationEntry(randomWord)}
                             onTrace={() => handleTrace(randomWord.term_tifinagh)}
+                            onRoot={() => setRootEntry(randomWord)}
                         />
                     )}
 
@@ -161,6 +182,7 @@ export const Home = () => {
                                         script={script}
                                         onConjugate={() => setConjugationEntry(entry)}
                                         onTrace={() => handleTrace(entry.term_tifinagh)}
+                                        onRoot={() => setRootEntry(entry)}
                                     />
                                 ))
                             )}
@@ -185,6 +207,20 @@ export const Home = () => {
                     script={script}
                 />
             )}
+
+            {rootEntry && (
+                <RootExplorerModal
+                    isOpen={!!rootEntry}
+                    onClose={() => setRootEntry(null)}
+                    entry={rootEntry}
+                    relatedEntries={getRelatedWords(rootEntry)}
+                />
+            )}
+
+            <AboutModal
+                isOpen={isAboutOpen}
+                onClose={() => setIsAboutOpen(false)}
+            />
         </div>
     );
 };
@@ -195,9 +231,10 @@ interface WordCardProps {
     script: 'latin' | 'tifinagh' | 'arabic';
     onConjugate: () => void;
     onTrace: () => void;
+    onRoot: () => void;
 }
 
-const WordCard = ({ entry, dialect, script, onConjugate, onTrace }: WordCardProps) => {
+const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot }: WordCardProps) => {
     const { isFavorite, toggleFavorite } = useFavorites();
     const { speak } = useAudio();
     const dialectTerm = (dialect !== 'all' && entry.dialects?.[dialect as keyof typeof entry.dialects])
@@ -281,6 +318,15 @@ const WordCard = ({ entry, dialect, script, onConjugate, onTrace }: WordCardProp
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300 font-bold text-xs hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
                         >
                             <BookOpen size={16} /> CONJUGATE
+                        </button>
+                    )}
+
+                    {entry.root && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onRoot(); }}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+                        >
+                            <Network size={16} /> ROOT
                         </button>
                     )}
                 </div>

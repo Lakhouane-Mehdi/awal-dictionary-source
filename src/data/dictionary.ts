@@ -1,3 +1,6 @@
+import importedData from './dictionary.json';
+import { convertScript } from '../utils/scriptConverter';
+
 export interface DictionaryEntry {
     id: string;
     term_latin: string;
@@ -12,18 +15,85 @@ export interface DictionaryEntry {
     };
     category?: string;
     cultural_image?: string;
+    root?: string; // e.g. "M-Gh-R"
+    etymology?: string; // Cultural explanation of the root
     conjugation?: {
         preterite: string;
         intensive: string;
         future: string;
         aorist?: string;
     };
+    source?: string;
 }
 
-export const fullDictionaryData: DictionaryEntry[] = [
+const importedEntries: DictionaryEntry[] = importedData.map((item: any, index: number) => {
+    // Determine Latin term and Definition based on section usually, but our JSON normalized it:
+    // english col -> definition, tamazight col -> term_latin
+    // Note: The PDF parser output puts 'english' key as English text and 'tamazight' key as Tamazight text
+
+    const termLatin = (item.tamazight || '').trim();
+    const def = (item.english || '').trim();
+
+    // Determine source section for potential category inference
+    const section = item.section || 'General';
+    const dialect = item.dialect || 'General';
+
+    let category = 'General';
+    if (section === 'eng-tam') category = 'English-Tamazight';
+    else if (section === 'tam-eng') category = 'Tamazight-English';
+    else category = section; // 'Verbs', 'Countries', 'God Phrases', etc.
+
+    return {
+        id: `imp_${index}`,
+        term_latin: termLatin,
+        term_tifinagh: convertScript(termLatin, 'tifinagh'),
+        term_arabic: convertScript(termLatin, 'arabic'),
+        definition: def,
+        category: category,
+        source: 'PDF Import',
+        dialects: {
+            tashelhit: dialect === 'Zaouiat Ahansal' ? termLatin : undefined,
+            // proper way: maybe add a 'region' field or 'dialect_tag'. 
+            // for now, let's put it in source or a new field if interface allows.
+            // Interface has 'dialects' object. Let's just use 'source' for the dialect name to be safe without breaking types.
+        }
+    };
+}).filter((item: DictionaryEntry) => item.term_latin.length > 0 && item.definition.length > 0 && item.definition !== 'English' && item.definition !== 'Tamazight');
+
+const manualEntries: DictionaryEntry[] = [
     // --- GREETINGS ---
-    { id: 'g1', term_latin: 'Azul', term_tifinagh: 'ⴰⵣⵓⵍ', term_arabic: 'أزول', definition: 'Hello / Welcome', category: 'Greetings' },
+    {
+        id: 'g1',
+        term_latin: 'Azul',
+        term_tifinagh: 'ⴰⵣⵓⵍ',
+        term_arabic: 'أزول',
+        definition: 'Hello / Welcome',
+        category: 'Greetings',
+        root: 'Z-L',
+        etymology: 'Often interpreted as "Az" (Come near) + "Ul" (Heart). Literally: "Come close to my heart".'
+    },
     { id: 'g2', term_latin: 'Tanmirt', term_tifinagh: 'ⵜⴰⵏⵎⵉⵔⵜ', term_arabic: 'تنميرت', definition: 'Thank you', category: 'Greetings' },
+
+    {
+        id: 'f6',
+        term_latin: 'Tamghart',
+        term_tifinagh: 'ⵜⴰⵎⵖⴰⵔⵜ',
+        definition: 'Woman / Wife',
+        category: 'Family',
+        root: 'M-Gh-R',
+        etymology: 'Shares the root M-Gh-R with "Imghur" (To be great/big). Historically implies "The Great One" or Matriarch of the family.'
+    },
+
+    // --- ADJECTIVES ---
+    {
+        id: 'adj1',
+        term_latin: 'Imghur',
+        term_tifinagh: 'ⵉⵎⵖⵓⵔ',
+        definition: 'Big / Large',
+        category: 'Adjectives',
+        root: 'M-Gh-R',
+        etymology: 'Derived from the root concept of greatness, seniority, or physical size.'
+    },
     { id: 'g3', term_latin: 'Sbah lkhir', term_tifinagh: 'ⵚⴱⴰⵃ ⵍⵅⵉⵔ', definition: 'Good morning', category: 'Greetings' },
     { id: 'g4', term_latin: 'Timinsiwin', term_tifinagh: 'ⵜⵉⵎⵉⵏⵙⵉⵡⵉⵏ', definition: 'Good evening', category: 'Greetings' },
     { id: 'g5', term_latin: 'Ar tufat', term_tifinagh: 'ⴰⵔ ⵜⵓⴼⴰⵜ', definition: 'See you later / Until next time', category: 'Greetings' },
@@ -41,7 +111,6 @@ export const fullDictionaryData: DictionaryEntry[] = [
     { id: 'f3', term_latin: 'Gma', term_tifinagh: 'ⴳⵎⴰ', definition: 'Brother', category: 'Family' },
     { id: 'f4', term_latin: 'Ultma', term_tifinagh: 'ⵓⵍⵜⵎⴰ', definition: 'Sister', category: 'Family' },
     { id: 'f5', term_latin: 'Argaz', term_tifinagh: 'ⴰⵔⴳⴰⵣ', definition: 'Man / Husband', category: 'Family' },
-    { id: 'f6', term_latin: 'Tamghart', term_tifinagh: 'ⵜⴰⵎⵖⴰⵔⵜ', definition: 'Woman / Wife', category: 'Family' },
     { id: 'f7', term_latin: 'Afrukh', term_tifinagh: 'ⴰⴼⵔⵓⵅ', definition: 'Boy', category: 'Family' },
     { id: 'f8', term_latin: 'Tafrukht', term_tifinagh: 'ⵜⴰⴼⵔⵓⵅⵜ', definition: 'Girl', category: 'Family' },
 
@@ -178,7 +247,6 @@ export const fullDictionaryData: DictionaryEntry[] = [
     },
 
     // --- ADJECTIVES ---
-    { id: 'adj1', term_latin: 'Imghur', term_tifinagh: 'ⵉⵎⵖⵓⵔ', definition: 'Big / Large', category: 'Adjectives' },
     { id: 'adj2', term_latin: 'Imzi', term_tifinagh: 'ⵉⵎⵥⵉ', definition: 'Small', category: 'Adjectives' },
     { id: 'adj3', term_latin: 'Ifulki', term_tifinagh: 'ⵉⴼⵓⵍⴽⵉ', definition: 'Good / Beautiful', category: 'Adjectives' },
     { id: 'adj4', term_latin: 'Ixchn', term_tifinagh: 'ⵉⵅⵛⵏ', definition: 'Bad / Ugly', category: 'Adjectives' },
@@ -186,5 +254,9 @@ export const fullDictionaryData: DictionaryEntry[] = [
     { id: 'adj6', term_latin: 'Iggut', term_tifinagh: 'ⵉⴳⴳⵓⵜ', definition: 'Many / Much', category: 'Adjectives' }
 ];
 
-export const dictionaryData = fullDictionaryData;
+export const fullDictionaryData: DictionaryEntry[] = [
+    ...manualEntries,
+    ...importedEntries
+];
 
+export const dictionaryData = fullDictionaryData;
