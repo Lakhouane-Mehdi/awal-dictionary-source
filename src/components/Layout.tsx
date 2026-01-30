@@ -1,8 +1,22 @@
 import { Outlet } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Home, Heart, Grid } from 'lucide-react';
+import { Home, Heart, Grid, GraduationCap, Eye } from 'lucide-react'; // Added Eye, GraduationCap
+import { Link } from 'react-router-dom';
+import { useScript } from '../context/ScriptContext';
+import { CookieBanner } from './legal/CookieBanner';
 
 export const Layout = () => {
+    const { script, toggleScript } = useScript();
+
+    // Helper to get script label
+    const getScriptLabel = () => {
+        switch (script) {
+            case 'latin': return 'ABC';
+            case 'tifinagh': return 'ⴰⴱⵛ';
+            case 'arabic': return 'أ ب ت';
+        }
+    };
+
     return (
         <div className="app-shell flex flex-col min-h-screen relative font-sans text-slate-800 selection:bg-blue-200">
             {/* Creative Top Creator Badge (Always Visible) */}
@@ -15,15 +29,44 @@ export const Layout = () => {
                 </div>
             </div>
 
+            {/* Script Toggle Button (Fixed Top Right) */}
+            <button
+                onClick={toggleScript}
+                className="fixed top-3 right-3 z-[100] glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-slate-600 dark:text-slate-300"
+                title="Switch Script"
+                aria-label={`Switch script. Current: ${getScriptLabel()}`}
+            >
+                <Eye size={18} />
+                <span className="text-[8px] font-bold mt-[-2px]">{getScriptLabel()}</span>
+            </button>
+
             {/* Main Content Area with padding for Nav */}
             <main className="flex-1 pb-28 px-4 pt-14 max-w-lg mx-auto w-full">
                 <Outlet />
+
+                {/* Legal Footer */}
+                <footer className="mt-12 mb-4 flex justify-center gap-4 text-xs text-slate-400">
+                    <Link to="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
+                    <span>•</span>
+                    <Link to="/imprint" className="hover:text-slate-600 transition-colors">Imprint</Link>
+                    <span>•</span>
+                    <button
+                        onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+                        className="hover:text-slate-600 transition-colors cursor-pointer"
+                        aria-label="Open Cookie Settings"
+                    >
+                        Cookie Settings
+                    </button>
+                </footer>
             </main>
 
+            <CookieBanner />
+
             {/* Floating Dock Navigation */}
-            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm glass-panel h-16 flex items-center justify-around z-50 px-2 shadow-2xl shadow-blue-900/10">
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-md glass-panel h-16 flex items-center justify-around z-50 px-2 shadow-2xl shadow-blue-900/10">
                 <NavItem to="/" icon={<Home strokeWidth={2.5} size={22} />} label="Search" />
                 <NavItem to="/favorites" icon={<Heart strokeWidth={2.5} size={22} />} label="Saved" />
+                <NavItem to="/learn" icon={<GraduationCap strokeWidth={2.5} size={22} />} label="Learn" />
                 <NavItem to="/tools" icon={<Grid strokeWidth={2.5} size={22} />} label="Tools" />
             </nav>
         </div>

@@ -37,38 +37,41 @@ export const useQuiz = (questionCount: number = 5) => {
     const [loading, setLoading] = useState(true);
 
     const generateQuestions = useCallback(() => {
-        setLoading(true);
-
-        // 1. Shuffle full dictionary securely
-        const shuffledData = shuffleArray(dictionaryData);
-
-        // 2. Select target words
-        const targets = shuffledData.slice(0, questionCount);
-
-        const newQuestions: Question[] = targets.map((entry, index) => {
-            // Generate 3 wrong answers
-            const distractors = getRandomDistractors(entry, 3);
-            const correctAnswer = entry.definition;
-
-            // Combine and shuffle options
-            const allOptions = shuffleArray([...distractors, correctAnswer]);
-            const correctIndex = allOptions.indexOf(correctAnswer);
-
-            return {
-                id: index,
-                question: `What does "${entry.term_latin}" (${entry.term_tifinagh}) mean?`,
-                options: allOptions,
-                correct: correctIndex, // Index of the correct definition
-                originalEntry: entry
-            };
-        });
-
-        // Add a small delay to simulate processing and ensure state creates a perception of "refresh"
+        // Defer to avoid synchronous setState warning
         setTimeout(() => {
-            setQuestions(newQuestions);
-            setLoading(false);
-        }, 100);
+            setLoading(true);
 
+            // 1. Shuffle full dictionary securely
+            const shuffledData = shuffleArray(dictionaryData);
+
+            // 2. Select target words
+            const targets = shuffledData.slice(0, questionCount);
+
+            const newQuestions: Question[] = targets.map((entry, index) => {
+                // Generate 3 wrong answers
+                const distractors = getRandomDistractors(entry, 3);
+                const correctAnswer = entry.definition;
+
+                // Combine and shuffle options
+                const allOptions = shuffleArray([...distractors, correctAnswer]);
+                const correctIndex = allOptions.indexOf(correctAnswer);
+
+                return {
+                    id: index,
+                    question: `What does "${entry.term_latin}" (${entry.term_tifinagh}) mean?`,
+                    options: allOptions,
+                    correct: correctIndex, // Index of the correct definition
+                    originalEntry: entry
+                };
+            });
+
+            // Add a small delay to simulate processing and ensure state creates a perception of "refresh"
+            setTimeout(() => {
+                setQuestions(newQuestions);
+                setLoading(false);
+            }, 100);
+
+        }, 0);
     }, [questionCount]);
 
     useEffect(() => {

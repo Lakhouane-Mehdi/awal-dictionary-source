@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShieldCheck, ScrollText, Users } from 'lucide-react';
+import { X, ShieldCheck, ScrollText, Users, Mail } from 'lucide-react';
 
 interface AboutModalProps {
     isOpen: boolean;
@@ -84,6 +84,14 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                                     </div>
                                 </div>
                             </div>
+
+                            <a
+                                href="mailto:mehdi@awaldictionary.com?subject=New Word Suggestion&body=I would like to suggest a new word for the dictionary:"
+                                className="flex items-center justify-center gap-2 w-full p-4 bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 rounded-xl font-bold hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                            >
+                                <Mail size={18} />
+                                Suggest a Missing Word
+                            </a>
 
                             <div className="w-full h-px bg-slate-100 dark:bg-slate-800" />
 

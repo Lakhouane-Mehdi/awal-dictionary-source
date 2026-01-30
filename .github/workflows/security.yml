@@ -1,0 +1,38 @@
+name: Security & Quality Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly scan
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install Dependencies
+        run: npm ci
+        
+      - name: Security Audit (Dependencies)
+        run: npm audit --audit-level=high
+        
+      - name: Static Code Analysis (Lint)
+        run: npm run lint
+        
+      - name: Check Strict Headers
+        run: |
+          if ! grep -q "Strict-Transport-Security" firebase.json; then
+            echo "Security Error: HSTS header missing in firebase.json"
+            exit 1
+          fi
+          echo "Security Check Passed: HSTS header present."

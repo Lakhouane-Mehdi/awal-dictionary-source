@@ -1,18 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Quote, ScrollText, Sparkles } from 'lucide-react';
 import { proverbs } from '../data/proverbs';
 
 export const ProverbCard = () => {
-    const [dailyProverb, setDailyProverb] = useState(proverbs[0]);
-
-    useEffect(() => {
+    const [dailyProverb] = useState(() => {
         // Simple "Day of Year" based rotation to pick a daily proverb
         const date = new Date();
         const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
         const index = dayOfYear % proverbs.length;
-        setDailyProverb(proverbs[index]);
-    }, []);
+        return proverbs[index];
+    });
 
     return (
         <motion.div

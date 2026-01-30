@@ -3,10 +3,12 @@ import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2 } from 'lucide-r
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuiz } from '../hooks/useQuiz';
+import { useGamification } from '../hooks/useGamification';
 
 export const Quiz = () => {
     const navigate = useNavigate();
     const { questions, loading, generateQuestions } = useQuiz(5);
+    const { completeDailyTask } = useGamification();
 
     // Game State
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,11 +20,13 @@ export const Quiz = () => {
     // Reset game state when new questions are generated
     useEffect(() => {
         if (!loading && questions.length > 0) {
-            setCurrentIndex(0);
-            setScore(0);
-            setShowScore(false);
-            setSelectedOption(null);
-            setIsAnswered(false);
+            setTimeout(() => {
+                setCurrentIndex(0);
+                setScore(0);
+                setShowScore(false);
+                setSelectedOption(null);
+                setIsAnswered(false);
+            }, 0);
         }
     }, [questions, loading]);
 
@@ -42,6 +46,11 @@ export const Quiz = () => {
                 setIsAnswered(false);
             } else {
                 setShowScore(true);
+                // Award streak if score is decent (e.g. at least 1 correct? or just participation?)
+                // Let's just award it for finishing for now, or maybe if score > 0
+                if (score > 0 || index === questions[currentIndex].correct) {
+                    completeDailyTask();
+                }
             }
         }, 1500);
     };

@@ -26,7 +26,7 @@ export interface DictionaryEntry {
     source?: string;
 }
 
-const importedEntries: DictionaryEntry[] = importedData.map((item: any, index: number) => {
+const importedEntries: DictionaryEntry[] = importedData.map((item: Record<string, string | undefined>, index: number) => {
     // Determine Latin term and Definition based on section usually, but our JSON normalized it:
     // english col -> definition, tamazight col -> term_latin
     // Note: The PDF parser output puts 'english' key as English text and 'tamazight' key as Tamazight text

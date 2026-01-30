@@ -1,44 +1,32 @@
-import { useState } from 'react';
-import { Search, ArrowLeft } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Search, ArrowLeft, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-
-// Mock Data for Conjugation
-const verbDatabase: Record<string, any> = {
-    'etz': {
-        root: 'Etz',
-        meaning: 'To Sleep',
-        forms: {
-            past: { s1: 'Etzigh', s2: 'Tetzid', s3m: 'Ietza', s3f: 'Tetza', p1: 'Netza', p2: 'Tetzam', p3: 'Etzan' },
-            present: { s1: 'Tetzagh', s2: 'Tetzad', s3m: 'Ietza', s3f: 'Tetza', p1: 'Netza', p2: 'Tetzam', p3: 'Etzan' }, // Simplified
-            future: { s1: 'Ad etzgh', s2: 'Ad tetzed', s3m: 'Ad itz', s3f: 'Ad tetz', p1: 'Ad netz', p2: 'Ad tetzem', p3: 'Ad etzen' }
-        }
-    },
-    'aru': {
-        root: 'Aru',
-        meaning: 'To Write',
-        forms: {
-            past: { s1: 'Urigh', s2: 'Turid', s3m: 'Iura', s3f: 'Tura', p1: 'Nura', p2: 'Turam', p3: 'Uran' },
-            present: { s1: 'Ttarigh', s2: 'Ttarid', s3m: 'Ittari', s3f: 'Tttari', p1: 'Nttari', p2: 'Tttarim', p3: 'Tttarin' },
-            future: { s1: 'Ad arigh', s2: 'Ad tarid', s3m: 'Ad yaru', s3f: 'Ad taru', p1: 'Ad naru', p2: 'Ad tarum', p3: 'Ad arun' }
-        }
-    }
-};
+import { dictionaryData } from '../data/dictionary';
+// Fix: Import DictionaryEntry as type explicitly or ensure it's exported purely as type if needed.
+// But easier here is to just use 'import type' if it's only used as type.
+import type { DictionaryEntry } from '../data/dictionary';
+import { convertScript } from '../utils/scriptConverter';
+import { useScript } from '../context/ScriptContext';
 
 export const VerbConjugator = () => {
     const navigate = useNavigate();
+    const { script } = useScript(); // Use global script setting
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
+    const [selectedVerb, setSelectedVerb] = useState<DictionaryEntry | null>(null);
 
-    const handleSearch = (term: string) => {
-        setSearchTerm(term);
-        // Direct match for now
-        const match = Object.keys(verbDatabase).find(k => k.includes(term.toLowerCase()));
-        if (match) setSelectedVerb(match);
-        else setSelectedVerb(null);
+    // Filter for verbs that have conjugation data
+    const verbList = useMemo(() => {
+        return dictionaryData.filter(entry =>
+            (entry.category === 'Verbs' || !!entry.conjugation) &&
+            (entry.term_latin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                entry.term_tifinagh.includes(searchTerm))
+        );
+    }, [searchTerm]);
+
+    const handleSelectVerb = (verb: DictionaryEntry) => {
+        setSelectedVerb(verb);
     };
-
-    const verb = selectedVerb ? verbDatabase[selectedVerb] : null;
 
     return (
         <div className="p-4 w-full max-w-md mx-auto min-h-screen pb-20">
@@ -46,68 +34,115 @@ export const VerbConjugator = () => {
                 <button onClick={() => navigate('/tools')} className="p-2 hover:bg-[var(--glass-bg)] rounded-full border border-transparent hover:border-[var(--glass-border)] transition-all">
                     <ArrowLeft size={24} />
                 </button>
-                <h1 className="text-2xl font-bold text-[var(--color-primary)]">Verb Conjugator</h1>
+                <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Verb Conjugator</h1>
             </header>
 
-            <div className="glass-panel flex items-center p-2 mb-6">
-                <Search className="text-[var(--color-text-muted)] ml-2" size={20} />
+            <div className="glass-panel flex items-center p-2 mb-6 focus-within:ring-2 ring-blue-500/30 transition-all">
+                <Search className="text-slate-400 ml-2" size={20} />
                 <input
                     type="text"
                     value={searchTerm}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    placeholder="Enter a verb (e.g. 'aru', 'etz')"
-                    className="flex-1 bg-transparent border-none outline-none px-3 py-2 text-lg"
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setSelectedVerb(null); // Reset selection on search
+                    }}
+                    placeholder="Search for a verb (e.g. 'Ech')..."
+                    className="flex-1 bg-transparent border-none outline-none px-3 py-2 text-lg text-slate-800 dark:text-slate-100 placeholder-slate-400"
                 />
             </div>
 
-            {verb ? (
+            {selectedVerb && selectedVerb.conjugation ? (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="glass-panel p-4"
+                    className="space-y-6"
                 >
-                    <div className="text-center mb-6">
-                        <h2 className="text-3xl font-bold capitalize mb-1">{verb.root}</h2>
-                        <p className="text-[var(--color-text-muted)]">{verb.meaning}</p>
+                    <div className="glass-panel p-6 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-900 border-amber-100 dark:border-slate-700">
+                        <div className="text-center mb-6">
+                            <h2 className={`text-4xl font-black mb-2 ${script === 'tifinagh' ? 'tifinagh-text' : ''} text-slate-800 dark:text-slate-100`}>
+                                {convertScript(selectedVerb.term_latin, script)}
+                            </h2>
+                            <p className="text-slate-500 text-lg font-medium">{selectedVerb.definition}</p>
+                        </div>
+
+                        <div className="space-y-8">
+                            <ConjugationTable
+                                title="Preterite (Izri)"
+                                value={selectedVerb.conjugation.preterite}
+                                script={script as 'latin' | 'tifinagh' | 'arabic'}
+                            />
+                            <ConjugationTable
+                                title="Intensive (Urmir)"
+                                value={selectedVerb.conjugation.intensive}
+                                script={script as 'latin' | 'tifinagh' | 'arabic'}
+                            />
+                            <ConjugationTable
+                                title="Future (Imal)"
+                                value={selectedVerb.conjugation.future}
+                                script={script as 'latin' | 'tifinagh' | 'arabic'}
+                            />
+                            {selectedVerb.conjugation.aorist && (
+                                <ConjugationTable
+                                    title="Imperative/Aorist"
+                                    value={selectedVerb.conjugation.aorist}
+                                    script={script as 'latin' | 'tifinagh' | 'arabic'}
+                                />
+                            )}
+                        </div>
                     </div>
 
-                    <div className="space-y-6">
-                        <ConjugationTable title="Past (Izri)" data={verb.forms.past} />
-                        <ConjugationTable title="Present (Amawal)" data={verb.forms.present} />
-                        <ConjugationTable title="Future (Imal)" data={verb.forms.future} />
-                    </div>
+                    <button
+                        onClick={() => setSelectedVerb(null)}
+                        className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+                    >
+                        Select Another Verb
+                    </button>
                 </motion.div>
             ) : (
-                <div className="text-center text-[var(--color-text-muted)] mt-10">
-                    <p>Type a verb root to see conjugation.</p>
-                    <div className="mt-4 flex flex-wrap justify-center gap-2">
-                        <button onClick={() => handleSearch('aru')} className="px-3 py-1 bg-[var(--glass-bg)] rounded-full text-sm">Examples: Aru</button>
-                        <button onClick={() => handleSearch('etz')} className="px-3 py-1 bg-[var(--glass-bg)] rounded-full text-sm">Etz</button>
-                    </div>
+                <div className="space-y-2">
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 px-2">Available Verbs</p>
+                    {verbList.length > 0 ? (
+                        verbList.map(verb => (
+                            <button
+                                key={verb.id}
+                                onClick={() => handleSelectVerb(verb)}
+                                className="w-full glass-panel p-4 flex items-center justify-between hover:scale-[1.02] active:scale-95 transition-all text-left group"
+                            >
+                                <div>
+                                    <span className={`text-lg font-bold block group-hover:text-blue-600 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                                        {convertScript(verb.term_latin, script)}
+                                    </span>
+                                    <span className="text-sm text-slate-500">{verb.definition}</span>
+                                </div>
+                                <BookOpen size={20} className="text-slate-300 group-hover:text-blue-400" />
+                            </button>
+                        ))
+                    ) : (
+                        <div className="text-center py-10 text-slate-400">
+                            <p>No verbs found matching "{searchTerm}"</p>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
     );
 };
 
-const ConjugationTable = ({ title, data }: { title: string, data: any }) => (
-    <div>
-        <h3 className="text-sm font-bold uppercase text-[var(--color-text-muted)] mb-2 tracking-wider">{title}</h3>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-            <Row label="Nekk (I)" value={data.s1} />
-            <Row label="Keyyi (You m)" value={data.s2} />
-            <Row label="Netta (He)" value={data.s3m} />
-            <Row label="Nettat (She)" value={data.s3f} />
-            <Row label="Nukni (We)" value={data.p1} />
-            <Row label="Kunwi (You pl)" value={data.p2} />
-            <Row label="Nitni (They)" value={data.p3} />
-        </div>
-    </div>
-);
+const ConjugationTable = ({ title, value, script }: { title: string, value: string, script: 'latin' | 'tifinagh' | 'arabic' }) => {
+    // Note: The dictionary currently only provides a single string example for conjugation forms
+    // In a real full app, we would parse this or have a full object per person.
+    // For now, we display the provided form clearly.
 
-const Row = ({ label, value }: { label: string, value: string }) => (
-    <>
-        <span className="text-[var(--color-text-muted)] text-right pr-2 border-r border-[var(--glass-border)]">{label}</span>
-        <span className="font-medium pl-1">{value}</span>
-    </>
-);
+    return (
+        <div className="relative">
+            <h3 className="text-xs font-bold uppercase text-amber-600 dark:text-amber-500 mb-2 tracking-wider flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {title}
+            </h3>
+            <div className="glass-panel p-4 bg-white/50 dark:bg-black/20 text-center">
+                <span className={`text-xl font-bold text-slate-800 dark:text-slate-200 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                    {convertScript(value, script)}
+                </span>
+            </div>
+        </div>
+    );
+};
