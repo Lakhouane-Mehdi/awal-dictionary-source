@@ -31,7 +31,7 @@ export const TraceModal = ({ isOpen, onClose, character }: TraceModalProps) => {
                 ctx.strokeStyle = '#3b82f6'; // Blue-500
 
                 // Clear any previous state
-                setHasDrawn(false);
+                requestAnimationFrame(() => setHasDrawn(false));
             }
         }
     }, [isOpen]);

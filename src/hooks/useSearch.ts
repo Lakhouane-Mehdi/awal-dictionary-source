@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { dictionaryData } from '../data/dictionary';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+// Imports
 
 // Normalize specific Berber sounds for fuzzy search
 // 7 -> h, 9 -> q, etc.

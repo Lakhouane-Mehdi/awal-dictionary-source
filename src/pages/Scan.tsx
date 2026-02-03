@@ -3,6 +3,10 @@ import { RefreshCw, ArrowLeft, ScanLine } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
 import { motion } from 'framer-motion';
+import { useSearch } from '../hooks/useSearch';
+import { WordCard } from '../components/WordCard';
+import { useScript } from '../context/ScriptContext';
+import type { DictionaryEntry } from '../data/dictionary';
 
 export const CalculatorOCR = () => {
     const navigate = useNavigate();
@@ -11,6 +15,20 @@ export const CalculatorOCR = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [result, setResult] = useState<string | null>(null);
     const [cameraActive, setCameraActive] = useState(true);
+
+    // Search Integration
+    const { setQuery, results } = useSearch();
+    const { script } = useScript(); // For WordCard display
+    const [bestMatch, setBestMatch] = useState<DictionaryEntry | null>(null);
+
+    // When results change AND we have a scan result, update best match
+    useEffect(() => {
+        if (result && results.length > 0) {
+            setBestMatch(results[0]);
+        } else {
+            setBestMatch(null);
+        }
+    }, [result, results]);
 
     const startCamera = async () => {
         try {
@@ -26,10 +44,13 @@ export const CalculatorOCR = () => {
 
     useEffect(() => {
         if (cameraActive) startCamera();
+        const videoEl = videoRef.current;
+
         return () => {
-            if (videoRef.current?.srcObject) {
-                const stream = videoRef.current.srcObject as MediaStream;
-                stream.getTracks().forEach(track => track.stop());
+            if (videoEl && videoEl.srcObject) {
+                const stream = videoEl.srcObject as MediaStream;
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
             }
         };
     }, [cameraActive]);
@@ -50,8 +71,15 @@ export const CalculatorOCR = () => {
             const worker = await Tesseract.createWorker('eng');
             const { data: { text } } = await worker.recognize(canvas);
             await worker.terminate();
-            setResult(text || "No text detected.");
-        } catch (err) {
+
+            const cleanedText = text.trim();
+            setResult(cleanedText || "No text detected.");
+
+            if (cleanedText) {
+                // Trigger search
+                setQuery(cleanedText);
+            }
+        } catch {
             setResult("Error scanning text.");
         } finally {
             setIsScanning(false);
@@ -62,6 +90,8 @@ export const CalculatorOCR = () => {
     const reset = () => {
         setResult(null);
         setCameraActive(true);
+        // Restart camera
+        startCamera().catch(() => setResult('Could not restart camera.'));
     };
 
     return (
@@ -114,31 +144,58 @@ export const CalculatorOCR = () => {
             )}
 
             {/* Result Modal */}
+            {/* Result Modal */}
             {!cameraActive && result && (
-                <div className="absolute inset-0 z-30 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                <div className="absolute inset-0 z-30 flex flex-col justify-end sm:justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
                     <motion.div
                         initial={{ y: 100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="bg-white text-slate-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl"
+                        className="w-full max-w-md mx-auto flex flex-col gap-4"
                     >
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
-                                <ScanLine size={20} />
+                        {/* OCR Text Debug/Confirmation */}
+                        <div className="bg-white/10 rounded-xl p-3 border border-white/10 flex items-center justify-between">
+                            <div className="flex flex-col">
+                                <span className="text-[10px] uppercase text-white/50 tracking-wider font-bold">Scanned Text</span>
+                                <span className="font-mono text-sm text-white/90 truncate max-w-[200px]">{result}</span>
                             </div>
-                            <h3 className="text-xl font-bold">Detected Text</h3>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={reset}
+                                    className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                                >
+                                    <RefreshCw size={16} />
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 min-h-[80px]">
-                            <p className="font-mono text-sm text-slate-700 leading-relaxed">{result}</p>
-                        </div>
+                        {bestMatch ? (
+                            <div className="relative">
+                                <span className="absolute -top-3 left-4 z-10 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+                                    BEST MATCH FOUND
+                                </span>
+                                <WordCard
+                                    entry={bestMatch}
+                                    dialect="all"
+                                    script={script}
+                                    onConjugate={() => { }}
+                                    onTrace={() => { }}
+                                    onRoot={() => { }}
+                                />
+                            </div>
+                        ) : (
+                            <div className="bg-white text-slate-900 rounded-3xl p-6 shadow-2xl text-center">
+                                <p className="text-slate-500 mb-4">No dictionary match found for "{result}".</p>
+                                <button
+                                    onClick={reset}
+                                    className="w-full py-3 bg-blue-100 text-blue-700 rounded-xl font-bold hover:bg-blue-200 transition-colors"
+                                >
+                                    Try Again
+                                </button>
+                            </div>
+                        )}
 
-                        <button
-                            onClick={reset}
-                            className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-600/30"
-                        >
-                            <RefreshCw size={20} />
-                            Scan Another
-                        </button>
+                        {/* Space at bottom for scrolling */}
+                        <div className="h-4"></div>
                     </motion.div>
                 </div>
             )}

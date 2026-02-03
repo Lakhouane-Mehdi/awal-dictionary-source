@@ -4,18 +4,16 @@ import { get, set } from 'idb-keyval';
 export const useFavorites = () => {
     const [favorites, setFavorites] = useState<string[]>([]);
 
-    // BroadcastChannel for cross-tab sync
-    const channel = new BroadcastChannel('awal_favorites_sync');
-
-    // Load favorites from IDB
-    const loadFavorites = () => {
-        get('favorites').then((val) => {
-            if (val) setFavorites(val);
-        });
-    };
-
     // Initial load & Listener
     useEffect(() => {
+        const channel = new BroadcastChannel('awal_favorites_sync');
+
+        const loadFavorites = () => {
+            get('favorites').then((val) => {
+                if (val) setFavorites(val);
+            });
+        };
+
         loadFavorites();
 
         channel.onmessage = (event) => {
@@ -39,7 +37,9 @@ export const useFavorites = () => {
             // Persist to IDB
             set('favorites', newFavs).then(() => {
                 // Notify other tabs
+                const channel = new BroadcastChannel('awal_favorites_sync');
                 channel.postMessage('UPDATE');
+                channel.close();
             });
 
             return newFavs;

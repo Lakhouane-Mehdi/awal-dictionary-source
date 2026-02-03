@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuiz } from '../hooks/useQuiz';
+import { useGamification } from '../hooks/useGamification';
 
 export const Quiz = () => {
     const navigate = useNavigate();
     const { questions, loading, generateQuestions } = useQuiz(5);
+    const { completeDailyTask, trackAction } = useGamification();
 
+    // Game State
     // Game State
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -15,16 +18,14 @@ export const Quiz = () => {
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [isAnswered, setIsAnswered] = useState(false);
 
-    // Reset game state when new questions are generated
-    useEffect(() => {
-        if (!loading && questions.length > 0) {
-            setCurrentIndex(0);
-            setScore(0);
-            setShowScore(false);
-            setSelectedOption(null);
-            setIsAnswered(false);
-        }
-    }, [questions, loading]);
+    // No useEffect for reset - manual control is safer
+    const resetState = () => {
+        setCurrentIndex(0);
+        setScore(0);
+        setShowScore(false);
+        setSelectedOption(null);
+        setIsAnswered(false);
+    };
 
     const handleAnswer = (index: number) => {
         if (isAnswered) return;
@@ -42,13 +43,19 @@ export const Quiz = () => {
                 setIsAnswered(false);
             } else {
                 setShowScore(true);
+                trackAction('QUIZ'); // Track completion
+                if (score > 0 || index === questions[currentIndex].correct) {
+                    completeDailyTask();
+                }
             }
         }, 1500);
     };
 
     const restart = () => {
-        generateQuestions(); // Fetches new random questions
-        // State reset is handled by useEffect above
+        // Reset local state
+        resetState();
+        // Generate new questions
+        generateQuestions();
     };
 
     if (loading) {

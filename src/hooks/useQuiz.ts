@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { dictionaryData } from '../data/dictionary';
 import type { DictionaryEntry } from '../data/dictionary';
 
@@ -10,7 +10,7 @@ export interface Question {
     originalEntry: DictionaryEntry;
 }
 
-// Fisher-Yates Shuffle Algorithm for unbiased randomization
+// Fisher-Yates Shuffle Algorithm
 function shuffleArray<T>(array: T[]): T[] {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -21,59 +21,48 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const getRandomDistractors = (correctEntry: DictionaryEntry, count: number): string[] => {
-    // Filter out the correct answer
     const candidates = dictionaryData.filter(e => e.id !== correctEntry.id);
-
-    // Shuffle candidates securely
     const shuffled = shuffleArray(candidates);
-
-    // Take first 'count' items and return their definitions or terms depending on mode
-    // For now, let's assume standard mode: Question = Tifinagh/Latin, Options = Definition (English)
     return shuffled.slice(0, count).map(e => e.definition);
 };
 
+const generateQuizSet = (count: number): Question[] => {
+    const shuffledData = shuffleArray(dictionaryData);
+    const targets = shuffledData.slice(0, count);
+
+    return targets.map((entry, index) => {
+        const distractors = getRandomDistractors(entry, 3);
+        const correctAnswer = entry.definition;
+        const allOptions = shuffleArray([...distractors, correctAnswer]);
+        const correctIndex = allOptions.indexOf(correctAnswer);
+
+        return {
+            id: index,
+            question: `What does "${entry.term_latin}" (${entry.term_tifinagh}) mean?`,
+            options: allOptions,
+            correct: correctIndex,
+            originalEntry: entry
+        };
+    });
+};
+
 export const useQuiz = (questionCount: number = 5) => {
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [loading, setLoading] = useState(true);
+    // Initialize synchronously
+    const [questions, setQuestions] = useState<Question[]>(() => generateQuizSet(questionCount));
+    const [loading, setLoading] = useState(false);
 
     const generateQuestions = useCallback(() => {
         setLoading(true);
+        // Small delay purely for UX (feeling of "loading" a new set), optional but nice
+        // But we can make it purely synchronous if preferred. 
+        // Let's keep a tiny 100ms delay to allow UI to show "resetting" state if needed,
+        // or just set immediately. Let's set immediately but maybe toggle loading to force reset?
 
-        // 1. Shuffle full dictionary securely
-        const shuffledData = shuffleArray(dictionaryData);
-
-        // 2. Select target words
-        const targets = shuffledData.slice(0, questionCount);
-
-        const newQuestions: Question[] = targets.map((entry, index) => {
-            // Generate 3 wrong answers
-            const distractors = getRandomDistractors(entry, 3);
-            const correctAnswer = entry.definition;
-
-            // Combine and shuffle options
-            const allOptions = shuffleArray([...distractors, correctAnswer]);
-            const correctIndex = allOptions.indexOf(correctAnswer);
-
-            return {
-                id: index,
-                question: `What does "${entry.term_latin}" (${entry.term_tifinagh}) mean?`,
-                options: allOptions,
-                correct: correctIndex, // Index of the correct definition
-                originalEntry: entry
-            };
-        });
-
-        // Add a small delay to simulate processing and ensure state creates a perception of "refresh"
-        setTimeout(() => {
-            setQuestions(newQuestions);
-            setLoading(false);
-        }, 100);
-
+        // Actually, preventing state-in-effect issues is easier if we just update state.
+        const newSet = generateQuizSet(questionCount);
+        setQuestions(newSet);
+        setLoading(false);
     }, [questionCount]);
-
-    useEffect(() => {
-        generateQuestions();
-    }, [generateQuestions]);
 
     return { questions, loading, generateQuestions };
 };
