@@ -37,7 +37,7 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
 
                             <ShieldCheck size={48} className="text-white mx-auto mb-4 opacity-90" />
                             <h2 className="text-3xl font-black text-white tracking-tight mb-1">Awal Dictionary</h2>
-                            <p className="text-blue-100 font-medium">Version 1.0.0 (Alpha)</p>
+                            <p className="text-blue-100 font-medium">Version 0.1.0 (Beta)</p>
                         </div>
 
                         <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">

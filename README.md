@@ -1,4 +1,4 @@
-# Awal Tamazight-English Dictionary (Source Code)
+# Awal Tamazight-English Dictionary (v0.1.0)
 
 ## Restricted Access
 This repository contains the **private source code** for the Awal Dictionary PWA.
@@ -13,10 +13,17 @@ Awal is a modern, offline-first Progressive Web Application (PWA) designed to br
 ### Key Features
 - **Multi-Script Support**: Seamlessly handles Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), and Arabic (أزول) inputs.
 - **Smart Transliteration**: Real-time script conversion engine.
+- **Gamified Learning**:
+    - **Leagues & Levels**: Earn XP and badge rewards for your learning streaks.
+    - **Interactive Quizzes**: Test your vocabulary with randomized challenges.
+    - **Achievements**: Unlock trophies like "Novice Explorer" and "Daily Devotee".
+- **Progressive Onboarding**: "Magic Eye" tour guides new users through unique features.
 - **Advanced Tools**:
-    - **Verb Conjugator**: Complete conjugation tables for all tenses.
-    - **Trace Mode**: Interactive canvas for learning to write Tifinagh.
-    - **Gamified Quiz**: Fisher-Yates randomized vocabulary challenges.
+    - **Verb Conjugator**: Complete conjugation tables.
+    - **Trace Mode**: Learn to write Tifinagh characters.
+    - **Text-to-Speech**: Listen to correct pronunciations.
+- **Contribution System**: Community-driven corrections and additions.
+- **Social Sharing**: Share wisdom (Proverbs) as beautiful image cards.
 - **Offline Capabilities**: Full dictionary access without internet; Favorites sync via `idb-keyval`.
 
 ## Tech Stack
