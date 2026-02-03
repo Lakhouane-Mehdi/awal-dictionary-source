@@ -126,9 +126,20 @@ export const OnboardingTour = () => {
                             scale: 1,
                             ...(targetRect ? {
                                 position: 'absolute',
-                                left: currentStep.position === 'left' ? targetRect.left - 320 :
-                                    currentStep.position === 'right' ? targetRect.right + 20 :
-                                        (targetRect.left + targetRect.width / 2) - 160,
+                                // Clamp left position to ensure tooltip stays within viewport
+                                left: (() => {
+                                    // Default centered position
+                                    let leftPos = (targetRect.left + targetRect.width / 2) - 160;
+
+                                    // Override for specific sides
+                                    if (currentStep.position === 'left') leftPos = targetRect.left - 320;
+                                    if (currentStep.position === 'right') leftPos = targetRect.right + 20;
+
+                                    // Safety clamp (20px padding)
+                                    const maxLeft = window.innerWidth - 320;
+                                    const minLeft = 20;
+                                    return Math.min(maxLeft, Math.max(minLeft, leftPos));
+                                })(),
                                 top: currentStep.position === 'top' ? targetRect.top - 180 :
                                     currentStep.position === 'bottom' ? targetRect.bottom + 20 :
                                         targetRect.top
