@@ -22,7 +22,7 @@ export const Home = () => {
     const { query, setQuery, results, dialectFilter, setDialectFilter } = useSearch();
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
-    const { streak } = useGamification();
+    const { stats, trackAction } = useGamification();
 
     // Modal State
     const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -40,10 +40,12 @@ export const Home = () => {
     const handleShuffle = () => {
         const idx = Math.floor(Math.random() * results.length);
         setRandomWord(results[idx]);
+        trackAction('VIEW');
     };
 
     const handleTrace = (char: string) => {
         setTraceCharacter(char);
+        trackAction('VIEW');
     };
 
     // Helper to find related words
@@ -89,8 +91,8 @@ export const Home = () => {
                         <Eye size={24} strokeWidth={2.5} />
                     </button>
                     <div className="w-12 h-12 glass-panel flex flex-col items-center justify-center text-orange-500 shadow-lg" title="Daily Streak">
-                        <Flame size={20} className={streak > 0 ? "fill-orange-500 animate-pulse" : ""} />
-                        <span className="text-[10px] font-bold">{streak}</span>
+                        <Flame size={20} className={stats.streak > 0 ? "fill-orange-500 animate-pulse" : ""} />
+                        <span className="text-[10px] font-bold">{stats.streak}</span>
                     </div>
                 </div>
             </header>

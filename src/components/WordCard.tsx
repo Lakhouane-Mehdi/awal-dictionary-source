@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Heart, Volume2, PenTool, BookOpen, Network, Sparkles } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
-import { useAudio } from '../hooks/useAudio';
+import { useTTS } from '../hooks/useTTS';
 import { convertScript } from '../utils/scriptConverter';
 import type { DictionaryEntry } from '../data/dictionary';
 
@@ -27,7 +27,7 @@ const getCategoryColor = (category?: string) => {
 
 export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot }: WordCardProps) => {
     const { isFavorite, toggleFavorite } = useFavorites();
-    const { speak } = useAudio();
+    const { speak, speaking } = useTTS();
     const dialectTerm = (dialect !== 'all' && entry.dialects?.[dialect as keyof typeof entry.dialects])
         ? entry.dialects[dialect as keyof typeof entry.dialects]
         : entry.term_latin;
@@ -90,10 +90,13 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                 {/* Interaction Row */}
                 <div className="flex flex-wrap gap-2 mt-4">
                     <button
-                        onClick={(e) => { e.stopPropagation(); speak(entry.term_latin); }}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-bold text-xs hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!speaking) speak(entry.term_latin);
+                        }}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs transition-colors ${speaking ? 'bg-blue-100 text-blue-700 cursor-default' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-100 cursor-pointer'}`}
                     >
-                        <Volume2 size={16} /> LISTEN
+                        <Volume2 size={16} className={speaking ? "animate-pulse" : ""} /> {speaking ? 'PLAYING...' : 'LISTEN'}
                     </button>
 
                     <button

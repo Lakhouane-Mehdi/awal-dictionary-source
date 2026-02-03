@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,8 +8,9 @@ import { useGamification } from '../hooks/useGamification';
 export const Quiz = () => {
     const navigate = useNavigate();
     const { questions, loading, generateQuestions } = useQuiz(5);
-    const { completeDailyTask } = useGamification();
+    const { completeDailyTask, trackAction } = useGamification();
 
+    // Game State
     // Game State
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
@@ -17,18 +18,14 @@ export const Quiz = () => {
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [isAnswered, setIsAnswered] = useState(false);
 
-    // Reset game state when new questions are generated
-    useEffect(() => {
-        if (!loading && questions.length > 0) {
-            setTimeout(() => {
-                setCurrentIndex(0);
-                setScore(0);
-                setShowScore(false);
-                setSelectedOption(null);
-                setIsAnswered(false);
-            }, 0);
-        }
-    }, [questions, loading]);
+    // No useEffect for reset - manual control is safer
+    const resetState = () => {
+        setCurrentIndex(0);
+        setScore(0);
+        setShowScore(false);
+        setSelectedOption(null);
+        setIsAnswered(false);
+    };
 
     const handleAnswer = (index: number) => {
         if (isAnswered) return;
@@ -46,8 +43,7 @@ export const Quiz = () => {
                 setIsAnswered(false);
             } else {
                 setShowScore(true);
-                // Award streak if score is decent (e.g. at least 1 correct? or just participation?)
-                // Let's just award it for finishing for now, or maybe if score > 0
+                trackAction('QUIZ'); // Track completion
                 if (score > 0 || index === questions[currentIndex].correct) {
                     completeDailyTask();
                 }
@@ -56,8 +52,10 @@ export const Quiz = () => {
     };
 
     const restart = () => {
-        generateQuestions(); // Fetches new random questions
-        // State reset is handled by useEffect above
+        // Reset local state
+        resetState();
+        // Generate new questions
+        generateQuestions();
     };
 
     if (loading) {

@@ -1,12 +1,16 @@
-import { Outlet } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import { Home, Heart, Grid, GraduationCap, Eye } from 'lucide-react'; // Added Eye, GraduationCap
-import { Link } from 'react-router-dom';
+import { Outlet, NavLink, Link } from 'react-router-dom';
+import { Home, Heart, Grid, GraduationCap, Eye, PenLine, Trophy } from 'lucide-react'; // Added Trophy
+import { useState } from 'react';
 import { useScript } from '../context/ScriptContext';
 import { CookieBanner } from './legal/CookieBanner';
+import { ContributionModal } from './ContributionModal';
+import { AchievementsModal } from './AchievementsModal';
+import { OnboardingTour } from './OnboardingTour';
 
 export const Layout = () => {
     const { script, toggleScript } = useScript();
+    const [isContributionOpen, setIsContributionOpen] = useState(false);
+    const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
 
     // Helper to get script label
     const getScriptLabel = () => {
@@ -29,15 +33,39 @@ export const Layout = () => {
                 </div>
             </div>
 
-            {/* Script Toggle Button (Fixed Top Right) */}
+            {/* Top Right Controls Group */}
+            <div className="fixed top-3 right-3 z-[100] flex flex-col gap-2">
+                {/* Script Toggle */}
+                <button
+                    id="tour-script-toggle"
+                    onClick={toggleScript}
+                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-slate-600 dark:text-slate-300"
+                    title="Switch Script"
+                    aria-label={`Switch script. Current: ${getScriptLabel()}`}
+                >
+                    <Eye size={18} />
+                    <span className="text-[8px] font-bold mt-[-2px]">{getScriptLabel()}</span>
+                </button>
+
+                {/* Achievements Toggle */}
+                <button
+                    id="tour-achievements"
+                    onClick={() => setIsAchievementsOpen(true)}
+                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-amber-500 dark:text-amber-400"
+                    title="Achievements"
+                >
+                    <Trophy size={18} />
+                </button>
+            </div>
+
+            {/* Contribution FAB (Fixed Bottom Right, above Nav) */}
             <button
-                onClick={toggleScript}
-                className="fixed top-3 right-3 z-[100] glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-slate-600 dark:text-slate-300"
-                title="Switch Script"
-                aria-label={`Switch script. Current: ${getScriptLabel()}`}
+                id="tour-contribute"
+                onClick={() => setIsContributionOpen(true)}
+                className="fixed bottom-24 right-4 z-[90] bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-xl shadow-blue-600/30 active:scale-95 transition-all animate-in zoom-in duration-500"
+                title="Suggest Edit / Contribute"
             >
-                <Eye size={18} />
-                <span className="text-[8px] font-bold mt-[-2px]">{getScriptLabel()}</span>
+                <PenLine size={20} />
             </button>
 
             {/* Main Content Area with padding for Nav */}
@@ -57,10 +85,20 @@ export const Layout = () => {
                     >
                         Cookie Settings
                     </button>
+                    <span>•</span>
+                    <button
+                        onClick={() => setIsContributionOpen(true)}
+                        className="hover:text-blue-500 transition-colors cursor-pointer font-bold"
+                    >
+                        Contribute
+                    </button>
                 </footer>
             </main>
 
             <CookieBanner />
+            <ContributionModal isOpen={isContributionOpen} onClose={() => setIsContributionOpen(false)} />
+            <AchievementsModal isOpen={isAchievementsOpen} onClose={() => setIsAchievementsOpen(false)} />
+            <OnboardingTour />
 
             {/* Floating Dock Navigation */}
             <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-md glass-panel h-16 flex items-center justify-around z-50 px-2 shadow-2xl shadow-blue-900/10">
