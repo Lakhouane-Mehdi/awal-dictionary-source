@@ -47,5 +47,9 @@
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
     "vitest": "^4.0.16"
+  },
+  "overrides": {
+    "@isaacs/brace-expansion": "^5.0.1",
+    "serialize-javascript": "^7.0.4"
   }
 }
