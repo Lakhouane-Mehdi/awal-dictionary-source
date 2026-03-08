@@ -1,3 +1,12 @@
+/* Locally bundled Tifinagh font for offline-first rendering */
+@font-face {
+  font-family: 'Noto Sans Tifinagh';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/NotoSansTifinagh-Regular.ttf') format('truetype');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -19,7 +19,7 @@ import { WordCard } from '../components/WordCard';
 
 
 export const Home = () => {
-    const { query, setQuery, results, dialectFilter, setDialectFilter } = useSearch();
+    const { query, setQuery, results, suggestions, dialectFilter, setDialectFilter } = useSearch();
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
     const { stats, trackAction } = useGamification();
@@ -168,6 +168,22 @@ export const Home = () => {
                                 >
                                     <p className="text-lg font-medium">No words found.</p>
                                     <p className="text-sm">Try searching for "Bread" or "Water"</p>
+                                    {suggestions.length > 0 && (
+                                        <div className="mt-6 glass-panel p-4 max-w-xs mx-auto">
+                                            <p className="text-sm font-bold text-blue-500 dark:text-blue-400 mb-2">Did you mean?</p>
+                                            <div className="flex flex-wrap gap-2 justify-center">
+                                                {suggestions.map((s) => (
+                                                    <button
+                                                        key={s}
+                                                        onClick={() => setQuery(s)}
+                                                        className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-sm font-semibold hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors active:scale-95"
+                                                    >
+                                                        {s}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </motion.div>
                             ) : (
                                 results.map((entry) => (

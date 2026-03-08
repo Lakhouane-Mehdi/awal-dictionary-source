@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { dictionaryData } from '../data/dictionary';
+import { getSpellSuggestions } from '../utils/spellChecker';
 // Imports
 
 // Normalize specific Berber sounds for fuzzy search
@@ -61,11 +62,19 @@ export const useSearch = () => {
         }
     }, [query, fuse]);
 
+    // Spell suggestions: only compute when there are no results and query is non-empty
+    const suggestions = useMemo(() => {
+        if (!query || results.length > 0) return [];
+        return getSpellSuggestions(query);
+    }, [query, results]);
+
     return {
         query,
         setQuery: handleSetQuery,
         results,
+        suggestions,
         dialectFilter,
         setDialectFilter
     };
 };
+

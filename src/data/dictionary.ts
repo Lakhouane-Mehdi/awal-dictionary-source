@@ -1,5 +1,12 @@
 import importedData from './dictionary.json';
+import ircamVerbData from './ircam_verbs.json';
 import { convertScript } from '../utils/scriptConverter';
+
+// Type for the IRCAM verb JSON entries
+interface IrcamVerb {
+    tifinagh: string;
+    english: string;
+}
 
 export interface DictionaryEntry {
     id: string;
@@ -254,9 +261,32 @@ const manualEntries: DictionaryEntry[] = [
     { id: 'adj6', term_latin: 'Iggut', term_tifinagh: 'ⵉⴳⴳⵓⵜ', definition: 'Many / Much', category: 'Adjectives' }
 ];
 
+// Convert IRCAM verb data into DictionaryEntry format
+const ircamEntries: DictionaryEntry[] = (ircamVerbData as IrcamVerb[]).map((verb, index) => {
+    const latinForm = convertScript(verb.tifinagh, 'latin');
+    return {
+        id: `ircam_v_${index}`,
+        term_latin: latinForm || verb.tifinagh,
+        term_tifinagh: verb.tifinagh,
+        term_arabic: convertScript(verb.tifinagh, 'arabic'),
+        definition: verb.english,
+        category: 'Verbs',
+        source: 'IRCAM'
+    };
+}).filter(entry => entry.definition.length > 0);
+
+// Deduplicate: prefer manual entries over imported, then imported over IRCAM
+const existingTifinagh = new Set([
+    ...manualEntries.map(e => e.term_tifinagh),
+    ...importedEntries.map(e => e.term_tifinagh)
+]);
+
+const uniqueIrcamEntries = ircamEntries.filter(e => !existingTifinagh.has(e.term_tifinagh));
+
 export const fullDictionaryData: DictionaryEntry[] = [
     ...manualEntries,
-    ...importedEntries
+    ...importedEntries,
+    ...uniqueIrcamEntries
 ];
 
 export const dictionaryData = fullDictionaryData;
