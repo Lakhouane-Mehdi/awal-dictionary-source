@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Learn } from './pages/Learn'; // Import
 import { Home } from './pages/Home';
+import { WordPage } from './pages/WordPage';
 import { Tools } from './pages/Tools';
 import { VerbConjugator } from './pages/VerbConjugator';
 import { CalculatorOCR } from './pages/Scan';
@@ -17,6 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="word/:id" element={<WordPage />} />
         <Route path="favorites" element={<Favorites />} />
         <Route path="learn" element={<Learn />} />
         <Route path="tools" element={<Tools />} />

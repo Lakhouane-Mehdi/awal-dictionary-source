@@ -9,9 +9,9 @@ interface WordCardProps {
     entry: DictionaryEntry;
     dialect: string;
     script: 'latin' | 'tifinagh' | 'arabic';
-    onConjugate: () => void;
-    onTrace: () => void;
-    onRoot: () => void;
+    onConjugate?: () => void;
+    onTrace?: () => void;
+    onRoot?: () => void;
 }
 
 const getCategoryColor = (category?: string) => {
@@ -99,14 +99,16 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                         <Volume2 size={16} className={speaking ? "animate-pulse" : ""} /> {speaking ? 'PLAYING...' : 'LISTEN'}
                     </button>
 
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onTrace(); }}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-                    >
-                        <PenTool size={16} /> TRACE
-                    </button>
+                    {onTrace && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onTrace(); }}
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        >
+                            <PenTool size={16} /> TRACE
+                        </button>
+                    )}
 
-                    {entry.conjugation && (
+                    {entry.conjugation && onConjugate && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onConjugate(); }}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300 font-bold text-xs hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
@@ -115,7 +117,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                         </button>
                     )}
 
-                    {entry.root && (
+                    {entry.root && onRoot && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onRoot(); }}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"

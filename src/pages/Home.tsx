@@ -15,6 +15,9 @@ import { RootExplorerModal } from '../components/RootExplorerModal';
 import { AboutModal } from '../components/AboutModal';
 import { dictionaryData } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
+import { ContributionModal } from '../components/ContributionModal';
+import { PenLine } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -23,12 +26,14 @@ export const Home = () => {
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
     const { stats, trackAction } = useGamification();
+    const navigate = useNavigate();
 
     // Modal State
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [conjugationEntry, setConjugationEntry] = useState<DictionaryEntry | null>(null);
     const [traceCharacter, setTraceCharacter] = useState<string | null>(null);
     const [rootEntry, setRootEntry] = useState<DictionaryEntry | null>(null);
+    const [isContributionOpen, setIsContributionOpen] = useState(false);
 
     // Smart Discovery Logic
     const [randomWord, setRandomWord] = useState<DictionaryEntry | null>(() => {
@@ -103,12 +108,31 @@ export const Home = () => {
                     value={query}
                     onChange={setQuery}
                     onClear={() => setQuery('')}
+                    results={query ? results.slice(0, 8) : []}
+                    onSelect={(entry) => navigate(`/word/${entry.id}`)}
                 />
             </div>
 
             {/* Content Switcher: Search Results vs Discovery */}
             {!query ? (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    {/* Hero Section */}
+                    <div className="mb-10 text-center glass-panel p-8">
+                        <h2 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-slate-100 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                            Welcome to Awal
+                        </h2>
+                        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-6 text-lg">
+                            Professional Tamazight-English Dictionary. Translate words, learn the Tifinagh script, and explore the Amazigh language and culture.
+                        </p>
+                        <button
+                            onClick={() => setIsContributionOpen(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 mx-auto"
+                        >
+                            <PenLine size={20} />
+                            Submit a New Word
+                        </button>
+                    </div>
+
                     <div className="mb-8">
                         <ProverbCard />
                     </div>
@@ -232,6 +256,11 @@ export const Home = () => {
             <AboutModal
                 isOpen={isAboutOpen}
                 onClose={() => setIsAboutOpen(false)}
+            />
+
+            <ContributionModal
+                isOpen={isContributionOpen}
+                onClose={() => setIsContributionOpen(false)}
             />
         </div>
     );
