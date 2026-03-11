@@ -69,6 +69,24 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                                             Building upon the foundational linguistic research conducted by Peace Corps volunteers in Morocco.
                                         </p>
                                     </div>
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <h4 className="font-bold text-slate-800 dark:text-slate-200">IRCAM Verb Database</h4>
+                                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">Apache-2.0</span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                            Verb conjugation data from the Institut Royal de la Culture Amazighe (IRCAM). Licensed under Apache License 2.0.
+                                        </p>
+                                    </div>
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <h4 className="font-bold text-slate-800 dark:text-slate-200">Wiktionary</h4>
+                                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">CC-BY-SA 4.0</span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                            300+ word definitions sourced from Wiktionary's Central Atlas Tamazight and Kabyle lemma categories. Licensed under CC-BY-SA 4.0 / GFDL.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 

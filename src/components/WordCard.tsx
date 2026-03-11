@@ -20,7 +20,19 @@ const getCategoryColor = (category?: string) => {
         case 'culture': return 'from-purple-400 to-pink-400';
         case 'nature': return 'from-green-400 to-emerald-400';
         case 'people': return 'from-blue-400 to-cyan-400';
+        case 'family': return 'from-blue-400 to-cyan-400';
         case 'verbs': return 'from-amber-400 to-orange-500';
+        case 'colors': return 'from-pink-400 to-violet-400';
+        case 'body': return 'from-rose-400 to-red-400';
+        case 'weather': return 'from-sky-400 to-blue-400';
+        case 'places': return 'from-teal-400 to-green-400';
+        case 'time': return 'from-indigo-400 to-purple-400';
+        case 'numbers': return 'from-cyan-400 to-blue-400';
+        case 'adjectives': return 'from-lime-400 to-green-500';
+        case 'clothing': return 'from-fuchsia-400 to-pink-400';
+        case 'animals': return 'from-yellow-400 to-orange-400';
+        case 'greetings': return 'from-emerald-400 to-teal-400';
+        case 'pronouns': return 'from-violet-400 to-indigo-400';
         default: return 'from-slate-400 to-gray-400';
     }
 };

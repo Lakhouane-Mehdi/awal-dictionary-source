@@ -121,9 +121,14 @@ export const Home = () => {
                         <h2 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-slate-100 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
                             Welcome to Awal
                         </h2>
-                        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-6 text-lg">
+                        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-4 text-lg">
                             Professional Tamazight-English Dictionary. Translate words, learn the Tifinagh script, and explore the Amazigh language and culture.
                         </p>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 font-bold text-sm mb-6">
+                            <Sparkles size={16} />
+                            {dictionaryData.length.toLocaleString()}+ Words
+                        </div>
+                        <br />
                         <button
                             onClick={() => setIsContributionOpen(true)}
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 mx-auto"
@@ -165,7 +170,7 @@ export const Home = () => {
                             Explore Categories
                         </h3>
                         <div className="flex flex-wrap gap-3">
-                            {['Nature', 'Family', 'Food', 'Animals', 'Verbs'].map(cat => (
+                            {['Nature', 'Family', 'Food', 'Animals', 'Verbs', 'Colors', 'Body', 'Weather', 'Places', 'Time', 'Numbers', 'Adjectives', 'Culture', 'Clothing'].map(cat => (
                                 <button
                                     key={cat}
                                     onClick={() => setQuery(cat)}
