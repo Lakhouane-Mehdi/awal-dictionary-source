@@ -14,17 +14,20 @@ const normalizeQuery = (query: string) => {
         .replace(/3/g, 'aa'); // '3in' -> 'aain' typically
 };
 
+const BROWSE_PAGE_SIZE = 24;
+
 export const useSearch = () => {
     const [query, setQuery] = useState('');
     const [dialectFilter, setDialectFilter] = useState<'all' | 'tarifit' | 'kabyle' | 'tashelhit'>('all');
+    const [browseCount, setBrowseCount] = useState(BROWSE_PAGE_SIZE);
 
-    // Security: Input Sanitization & Limiting
     const handleSetQuery = (input: string) => {
-        // Prevent huge strings (DoS)
         if (input.length > 50) return;
-        // Basic sanitization (react handles escaping, but we trim)
         setQuery(input);
+        setBrowseCount(BROWSE_PAGE_SIZE); // reset pagination on new query
     };
+
+    const loadMore = () => setBrowseCount(prev => prev + BROWSE_PAGE_SIZE);
 
     const fuse = useMemo(() => {
         return new Fuse(dictionaryData, {
@@ -47,24 +50,28 @@ export const useSearch = () => {
         try {
             let items = dictionaryData;
 
-            if (!query) {
-                items = dictionaryData.slice(0, 100);
-            } else {
+            if (query) {
                 const normalized = normalizeQuery(query);
                 const searchInput = query.match(/[793]/) ? normalized : query;
-                items = fuse.search(searchInput).slice(0, 100).map(r => r.item);
+                // No hard cap on search — Fuse already ranks by relevance
+                items = fuse.search(searchInput).map(r => r.item);
             }
 
             if (dialectFilter !== 'all') {
                 items = items.filter(e => !!e.dialects?.[dialectFilter]);
             }
 
-            return items;
+            // For browse (no query), slice to current page; for search, return all
+            return query ? items : items.slice(0, browseCount);
         } catch (error) {
             console.error("Search failed:", error);
             return [];
         }
-    }, [query, fuse, dialectFilter]);
+    }, [query, fuse, dialectFilter, browseCount]);
+
+    const hasMore = !query && results.length < (dialectFilter === 'all'
+        ? dictionaryData.length
+        : dictionaryData.filter(e => !!e.dialects?.[dialectFilter]).length);
 
     // Spell suggestions: only compute when there are no results and query is non-empty
     const suggestions = useMemo(() => {
@@ -78,7 +85,9 @@ export const useSearch = () => {
         results,
         suggestions,
         dialectFilter,
-        setDialectFilter
+        setDialectFilter,
+        loadMore,
+        hasMore,
     };
 };
 

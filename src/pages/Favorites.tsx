@@ -38,15 +38,18 @@ export const Favorites = () => {
                                 exit={{ opacity: 0, scale: 0.9 }}
                                 className="glass-panel p-4 flex justify-between items-center"
                             >
-                                <div>
-                                    <h2 className={`text-xl font-bold text-slate-800 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                                <Link to={`/word/${entry.id}`} className="flex-1 min-w-0 pr-2">
+                                    <h2 className={`text-xl font-bold text-slate-800 dark:text-slate-100 truncate ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
                                         {convertScript(entry.term_latin, script)}
                                     </h2>
-                                    <p className="text-slate-500 text-sm">{entry.definition}</p>
-                                </div>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm truncate">{entry.definition}</p>
+                                </Link>
                                 <button
+                                    type="button"
                                     onClick={() => toggleFavorite(entry.id)}
-                                    className="p-2 text-red-500 hover:bg-red-50 rounded-full"
+                                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full shrink-0"
+                                    title="Remove from favorites"
+                                    aria-label="Remove from favorites"
                                 >
                                     <Heart size={20} className="fill-current" />
                                 </button>

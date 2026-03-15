@@ -71,6 +71,16 @@ export default defineConfig({
     open: true
   },
   build: {
-    sourcemap: false // Security: Do not expose source code in production
+    sourcemap: false, // Security: Do not expose source code in production
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-pdf': ['pdfjs-dist'],
+          'vendor-ocr': ['tesseract.js'],
+        }
+      }
+    }
   }
 });

@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export const Home = () => {
-    const { query, setQuery, results, suggestions, dialectFilter, setDialectFilter } = useSearch();
+    const { query, setQuery, results, suggestions, dialectFilter, setDialectFilter, loadMore, hasMore } = useSearch();
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
     const { stats, trackAction } = useGamification();
@@ -227,6 +227,16 @@ export const Home = () => {
                                 ))
                             )}
                         </AnimatePresence>
+
+                        {hasMore && (
+                            <button
+                                type="button"
+                                onClick={loadMore}
+                                className="w-full py-3 glass-panel text-sm font-bold text-blue-500 dark:text-blue-400 hover:text-blue-600 active:scale-95 transition-all"
+                            >
+                                Load more words
+                            </button>
+                        )}
                     </div>
                 </>
             )}

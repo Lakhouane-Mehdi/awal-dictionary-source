@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2, Type } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuiz } from '../hooks/useQuiz';
@@ -137,22 +137,28 @@ export const Quiz = () => {
                         exit={{ opacity: 0, x: -50 }}
                         className="flex-1 flex flex-col"
                     >
-                        <div className="glass-panel p-8 mb-8 min-h-[180px] flex items-center justify-center text-center rounded-3xl border-2 border-white/60 shadow-xl shadow-blue-900/5">
-                            <h2 className="text-3xl font-black text-slate-800 leading-tight">{currentQ.question}</h2>
+                        <div className="glass-panel p-8 mb-8 min-h-[180px] flex flex-col items-center justify-center text-center rounded-3xl border-2 border-white/60 shadow-xl shadow-blue-900/5">
+                            {currentQ.type === 'tifinagh' && (
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-3 flex items-center gap-1">
+                                    <Type size={12} /> Tifinagh Recognition
+                                </span>
+                            )}
+                            <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100 leading-tight">{currentQ.question}</h2>
                         </div>
 
                         <div className="space-y-4">
                             {currentQ.options.map((option, index) => {
                                 const isSelected = selectedOption === index;
                                 const isCorrect = index === currentQ.correct;
+                                const isTifinaghOption = currentQ.type === 'tifinagh';
 
-                                let stateClasses = 'bg-white/60 hover:bg-white border-white/40 hover:border-blue-300 text-slate-700'; // Default
+                                let stateClasses = 'bg-white/60 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-700 border-white/40 hover:border-blue-300 text-slate-700 dark:text-slate-200';
                                 if (isAnswered) {
-                                    if (isCorrect) stateClasses = 'bg-green-100 border-green-500 text-green-800 ring-2 ring-green-200';
-                                    else if (isSelected) stateClasses = 'bg-red-50 border-red-500 text-red-800 ring-2 ring-red-100';
-                                    else stateClasses = 'bg-slate-50 opacity-50'; // Dim others
+                                    if (isCorrect) stateClasses = 'bg-green-100 dark:bg-green-900/40 border-green-500 text-green-800 dark:text-green-300 ring-2 ring-green-200';
+                                    else if (isSelected) stateClasses = 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-800 dark:text-red-300 ring-2 ring-red-100';
+                                    else stateClasses = 'bg-slate-50 dark:bg-slate-800/30 opacity-50';
                                 } else if (isSelected) {
-                                    stateClasses = 'bg-blue-50 border-blue-500 text-blue-800';
+                                    stateClasses = 'bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-800 dark:text-blue-300';
                                 }
 
                                 return (
@@ -162,7 +168,7 @@ export const Quiz = () => {
                                         whileTap={!isAnswered ? { scale: 0.98 } : {}}
                                         onClick={() => handleAnswer(index)}
                                         disabled={isAnswered}
-                                        className={`w-full p-5 rounded-2xl border-2 text-left font-bold text-lg transition-all flex justify-between items-center shadow-sm ${stateClasses}`}
+                                        className={`w-full p-5 rounded-2xl border-2 text-left font-bold text-lg transition-all flex justify-between items-center shadow-sm ${stateClasses} ${isTifinaghOption ? 'tifinagh-text' : ''}`}
                                     >
                                         {option}
                                         {isAnswered && isCorrect && <CheckCircle size={24} className="text-green-600" fill="currentColor" />}
