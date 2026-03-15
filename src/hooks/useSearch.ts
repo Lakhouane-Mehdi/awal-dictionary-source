@@ -45,22 +45,26 @@ export const useSearch = () => {
 
     const results = useMemo(() => {
         try {
-            // If query is empty, return a subset to avoid rendering heavy lists immediately
-            // Or typically users expect some list. Let's return the first 100 items if empty?
-            // Original code returned *all*.
-            if (!query) return dictionaryData.slice(0, 100);
+            let items = dictionaryData;
 
-            const normalized = normalizeQuery(query);
-            const searchInput = query.match(/[793]/) ? normalized : query;
+            if (!query) {
+                items = dictionaryData.slice(0, 100);
+            } else {
+                const normalized = normalizeQuery(query);
+                const searchInput = query.match(/[793]/) ? normalized : query;
+                items = fuse.search(searchInput).slice(0, 100).map(r => r.item);
+            }
 
-            const searchResults = fuse.search(searchInput);
-            // Limit to 100 results to prevent UI freezing/crashing on generic queries
-            return searchResults.slice(0, 100).map(result => result.item);
+            if (dialectFilter !== 'all') {
+                items = items.filter(e => !!e.dialects?.[dialectFilter]);
+            }
+
+            return items;
         } catch (error) {
             console.error("Search failed:", error);
             return [];
         }
-    }, [query, fuse]);
+    }, [query, fuse, dialectFilter]);
 
     // Spell suggestions: only compute when there are no results and query is non-empty
     const suggestions = useMemo(() => {

@@ -2,14 +2,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { dictionaryData } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { useScript } from '../context/ScriptContext';
+import { useTTS } from '../hooks/useTTS';
 import { ArrowLeft, Volume2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import tatoebaExamples from '../data/tatoeba_examples.json';
 
 export const WordPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { script } = useScript();
-    const [isPlaying, setIsPlaying] = useState(false);
+    const { speak, speaking } = useTTS();
 
     const entry = dictionaryData.find(e => e.id === id);
 
@@ -23,12 +25,6 @@ export const WordPage = () => {
         }
     }, [entry]);
 
-    const handlePlayAudio = () => {
-        setIsPlaying(true);
-        // Placeholder for real audio playback
-        setTimeout(() => setIsPlaying(false), 1500);
-    };
-
     if (!entry) {
         return (
             <div className="p-8 text-center text-slate-500">
@@ -38,17 +34,10 @@ export const WordPage = () => {
         );
     }
 
-    // Mock example sentences
-    const examples = [
-        { 
-            tamazight: `Ifulki ${entry.term_latin} ad.`,
-            english: `This ${entry.definition.toLowerCase()} is good.`
-        },
-        {
-            tamazight: `Ssendiy ${entry.term_latin} s rwaqt.`,
-            english: `I saw the ${entry.definition.toLowerCase()} early.`
-        }
-    ];
+    // Real Tatoeba example sentences — filter for sentences containing this word
+    const examples = (tatoebaExamples as { tamazight: string; english: string }[])
+        .filter(ex => ex.tamazight.toLowerCase().includes(entry.term_latin.toLowerCase()))
+        .slice(0, 3);
 
     return (
         <div className="max-w-3xl mx-auto w-full pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -71,12 +60,12 @@ export const WordPage = () => {
             <div className="glass-panel p-6 mb-6">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest text-sm text-blue-500">Script Variants</h3>
-                    <button 
-                        onClick={handlePlayAudio}
-                        className={`p-3 rounded-full transition-all ${isPlaying ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 scale-110' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'}`}
+                    <button
+                        onClick={() => speak(entry.term_latin)}
+                        className={`p-3 rounded-full transition-all ${speaking ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 scale-110' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'}`}
                         title="Pronounce Word"
                     >
-                        <Volume2 size={24} className={isPlaying ? 'animate-pulse' : ''} />
+                        <Volume2 size={24} className={speaking ? 'animate-pulse' : ''} />
                     </button>
                 </div>
                 

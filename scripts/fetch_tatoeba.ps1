@@ -55,12 +55,10 @@ Write-Host "`nTotal English-Kabyle pairs found: $($allEngPairs.Count)"
 
 # Deduplicate by target string and extract unique words
 $uniqueWords = @{}
-$examples = @{}
 
 foreach ($pair in $allEngPairs) {
     $tam = $pair.tamazight.Trim()
     $eng = $pair.english.Trim()
-    
     # Extract individual words from Tamazight sentence for dictionary entries
     $words = $tam -split '\s+' | Where-Object { $_.Length -ge 2 }
     
@@ -89,14 +87,12 @@ foreach ($pair in $allEngPairs) {
 
 # Build word entries JSON
 $entries = @()
-$idx = 0
 foreach ($key in $uniqueWords.Keys | Sort-Object) {
     $w = $uniqueWords[$key]
     $entries += @{
         tamazight = $w.tamazight
         examples = $w.sentences
     }
-    $idx++
 }
 
 # Build examples JSON (sentence pairs for example display)

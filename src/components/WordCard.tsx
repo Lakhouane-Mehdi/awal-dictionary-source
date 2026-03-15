@@ -65,7 +65,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
             {entry.cultural_image && (
                 <div
                     className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-20 blur-sm pointer-events-none transition-opacity group-hover:opacity-15 dark:group-hover:opacity-30"
-                    style={{ backgroundImage: `url(${entry.cultural_image})` }}
+                    style={{ backgroundImage: `url(${entry.cultural_image})` }} /* dynamic URL — inline style required */
                 />
             )}
 
@@ -92,6 +92,8 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                     <button
                         onClick={(e) => { e.stopPropagation(); toggleFavorite(entry.id); }}
                         className={`p-2 rounded-full transition-colors ${favorite ? 'bg-red-50 text-red-500' : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-red-500'}`}
+                        title={favorite ? 'Remove from favorites' : 'Add to favorites'}
+                        aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
                     >
                         <Heart size={20} className={favorite ? "fill-current" : ""} strokeWidth={2} />
                     </button>

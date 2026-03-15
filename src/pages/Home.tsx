@@ -35,16 +35,15 @@ export const Home = () => {
     const [rootEntry, setRootEntry] = useState<DictionaryEntry | null>(null);
     const [isContributionOpen, setIsContributionOpen] = useState(false);
 
-    // Smart Discovery Logic
-    const [randomWord, setRandomWord] = useState<DictionaryEntry | null>(() => {
-        if (results.length === 0) return null;
-        const idx = Math.floor(Math.random() * results.length);
-        return results[idx];
+    // Smart Discovery Logic — always draw from full dictionary, not the search slice
+    const [randomWord, setRandomWord] = useState<DictionaryEntry>(() => {
+        const idx = Math.floor(Math.random() * dictionaryData.length);
+        return dictionaryData[idx];
     });
 
     const handleShuffle = () => {
-        const idx = Math.floor(Math.random() * results.length);
-        setRandomWord(results[idx]);
+        const idx = Math.floor(Math.random() * dictionaryData.length);
+        setRandomWord(dictionaryData[idx]);
         trackAction('VIEW');
     };
 
