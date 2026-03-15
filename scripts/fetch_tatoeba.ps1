@@ -5,13 +5,14 @@
 $outputFile = Join-Path $PSScriptRoot "..\src\data\tatoeba_words.json"
 $examplesFile = Join-Path $PSScriptRoot "..\src\data\tatoeba_examples.json"
 $batchSize = 100
-$maxBatches = 200  # Up to 20,000 rows to scan
+$startOffset = 390000  # English-Kabyle pairs start around row 400,000
+$maxBatches = 200      # Scan up to 20,000 rows from that point
 $allEngPairs = @()
 
 Write-Host "Fetching Tatoeba English-Kabyle pairs from HuggingFace..."
 
 for ($i = 0; $i -lt $maxBatches; $i++) {
-    $offset = $i * $batchSize
+    $offset = $startOffset + ($i * $batchSize)
     $url = "https://datasets-server.huggingface.co/rows?dataset=Tamazight-NLP%2FTatoeba-Translations&config=default&split=train&offset=$offset&length=$batchSize"
     
     try {
