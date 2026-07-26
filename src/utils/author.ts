@@ -10,7 +10,7 @@ export const AUTHOR = {
 } as const;
 
 /** The dictionary's own source repository, distinct from the author profile. */
-export const PROJECT_REPO = 'https://github.com/Amazigh24/awal-dictionary-source';
+export const PROJECT_REPO = 'https://github.com/Lakhouane-Mehdi/awal-dictionary-source';
 
 /**
  * Contributions are routed to GitHub issues rather than email, so there is no
