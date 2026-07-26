@@ -10,12 +10,14 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Awal Dictionary',
+        name: 'Awal — Tamazight-English Dictionary',
         short_name: 'Awal',
-        description: 'Professional Offline Tamazight-English Dictionary',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        description: 'Offline Tamazight-English dictionary across Tifinagh, Latin, and Arabic scripts.',
+        theme_color: '#2B3A67',
+        background_color: '#F5F1E8',
         display: 'standalone',
+        start_url: '/',
+        categories: ['education', 'books', 'reference'],
         icons: [
           {
             src: 'pwa-192x192.png',
