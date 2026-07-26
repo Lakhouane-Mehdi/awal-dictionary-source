@@ -1,11 +1,13 @@
 import { Outlet, NavLink, Link } from 'react-router-dom';
-import { Home, Heart, Grid, GraduationCap, PenLine } from 'lucide-react';
+import { Home, Heart, Grid, GraduationCap, PenLine, Globe } from 'lucide-react';
+import { GithubIcon } from './icons/GithubIcon';
 import { useState } from 'react';
 import { CookieBanner } from './legal/CookieBanner';
 import { ContributionModal } from './ContributionModal';
 import { AchievementsModal } from './AchievementsModal';
 import { OnboardingTour } from './OnboardingTour';
 import { SiteHeader } from './SiteHeader';
+import { AUTHOR } from '../utils/author';
 
 const FOOTER_SECTIONS: { title: string; links: { to: string; label: string }[] }[] = [
     {
@@ -96,23 +98,58 @@ export const Layout = () => {
                         ))}
                     </div>
 
-                    <div className="pt-6 border-t border-indigo-700/10 dark:border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3">
-                        <p className="text-xs text-indigo-400 dark:text-indigo-300">
-                            Awal · Made by Mehdi Lakhouane · © {new Date().getFullYear()}
-                        </p>
-                        <div className="flex gap-4 text-xs text-indigo-400 dark:text-indigo-300">
-                            <button
-                                onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
-                                className="hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
-                            >
-                                Cookie Settings
-                            </button>
-                            <button
-                                onClick={() => setIsContributionOpen(true)}
-                                className="font-semibold hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
-                            >
-                                Contribute
-                            </button>
+                    {/* Author credit */}
+                    <div className="pt-6 border-t border-indigo-700/10 dark:border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div className="text-center sm:text-left">
+                            <p className="text-sm text-indigo-600 dark:text-indigo-100">
+                                Made by{' '}
+                                <a
+                                    href={AUTHOR.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-semibold text-indigo-700 dark:text-sand-100 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                >
+                                    {AUTHOR.name}
+                                </a>
+                            </p>
+                            <div className="flex items-center justify-center sm:justify-start gap-3 mt-1.5">
+                                <a
+                                    href={AUTHOR.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                >
+                                    <Globe size={13} /> {AUTHOR.websiteLabel}
+                                </a>
+                                <a
+                                    href={AUTHOR.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                >
+                                    <GithubIcon size={13} /> {AUTHOR.githubLabel}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col items-center sm:items-end gap-1.5">
+                            <div className="flex gap-4 text-xs text-indigo-400 dark:text-indigo-300">
+                                <button
+                                    onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+                                    className="hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                >
+                                    Cookie Settings
+                                </button>
+                                <button
+                                    onClick={() => setIsContributionOpen(true)}
+                                    className="font-semibold hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                >
+                                    Contribute
+                                </button>
+                            </div>
+                            <p className="text-xs text-indigo-400 dark:text-indigo-300">
+                                © {new Date().getFullYear()} Awal Project
+                            </p>
                         </div>
                     </div>
                 </div>

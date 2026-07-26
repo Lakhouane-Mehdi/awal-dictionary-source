@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Mail } from 'lucide-react';
+import { Mail, Globe, Code2 } from 'lucide-react';
+import { GithubIcon } from '../components/icons/GithubIcon';
+import { AUTHOR, PROJECT_REPO } from '../utils/author';
 import { PageHeader } from '../components/PageHeader';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { totalEntries, categories, rootFamilies } from '../data/taxonomy';
@@ -151,10 +153,49 @@ export const About = () => {
                 </div>
             </section>
 
+            {/* Author */}
+            <section className="glass-panel p-6 mb-6">
+                <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 rule-accent mb-4">
+                    Who made this
+                </h2>
+                <p className="font-display text-xl font-bold text-indigo-800 dark:text-sand-100">
+                    {AUTHOR.name}
+                </p>
+                <p className="text-sm text-indigo-500 dark:text-indigo-200 mt-1 mb-4 leading-relaxed">
+                    Awal is designed, built, and maintained as an independent project.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                    <a
+                        href={AUTHOR.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                    >
+                        <Globe size={15} /> {AUTHOR.websiteLabel}
+                    </a>
+                    <a
+                        href={AUTHOR.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                    >
+                        <GithubIcon size={15} /> {AUTHOR.githubLabel}
+                    </a>
+                    <a
+                        href={PROJECT_REPO}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                    >
+                        <Code2 size={15} /> Project source
+                    </a>
+                </div>
+            </section>
+
             {/* Legal */}
             <section className="text-center py-6">
                 <p className="text-xs text-indigo-400 dark:text-indigo-300 leading-relaxed">
-                    Produced by Mehdi Lakhouane · Version 0.1.0
+                    Version 0.1.0
                     <br />
                     © {new Date().getFullYear()} Awal Project. All rights reserved.
                 </p>

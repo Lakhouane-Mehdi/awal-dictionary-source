@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShieldCheck, ScrollText, Users, Mail } from 'lucide-react';
+import { X, ShieldCheck, ScrollText, Users, Mail, Globe } from 'lucide-react';
+import { GithubIcon } from './icons/GithubIcon';
+import { AUTHOR } from '../utils/author';
 
 interface AboutModalProps {
     isOpen: boolean;
@@ -98,8 +100,30 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                                     </div>
                                     <div>
                                         <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">Produced By</p>
-                                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Mehdi Lakhouane</p>
+                                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{AUTHOR.name}</p>
                                     </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <a
+                                        href={AUTHOR.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 rounded-lg text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+                                        title={AUTHOR.websiteLabel}
+                                        aria-label={`Website: ${AUTHOR.websiteLabel}`}
+                                    >
+                                        <Globe size={16} />
+                                    </a>
+                                    <a
+                                        href={AUTHOR.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 rounded-lg text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+                                        title={AUTHOR.githubLabel}
+                                        aria-label={`GitHub: ${AUTHOR.githubLabel}`}
+                                    >
+                                        <GithubIcon size={16} />
+                                    </a>
                                 </div>
                             </div>
 
