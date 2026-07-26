@@ -40,21 +40,34 @@ export interface DictionaryEntry {
     source?: string;
 }
 
+// The PDF text extraction mangled the Tamazight letter "ɛ" (ayn) into stray
+// Arabic glyphs — either the presentation-form ligature U+FE49 or the plain
+// U+0639, usually padded with spaces ("rb ﻉع ta" instead of "rbɛta").
+// This affects ~645 entries, including every number from 10 upward.
+const repairAyn = (text: string): string =>
+    text
+        .replace(/\s*ﻉ\s*ع\s*/g, 'ɛ')
+        .replace(/\s*[ﻉع]\s*/g, 'ɛ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
 const importedEntries: DictionaryEntry[] = importedData.map((item: Record<string, string | undefined>, index: number) => {
     // Determine Latin term and Definition based on section usually, but our JSON normalized it:
     // english col -> definition, tamazight col -> term_latin
     // Note: The PDF parser output puts 'english' key as English text and 'tamazight' key as Tamazight text
 
-    const termLatin = (item.tamazight || '').trim();
+    const termLatin = repairAyn(item.tamazight || '');
     const def = (item.english || '').trim();
 
     // Determine source section for potential category inference
     const section = item.section || 'General';
     const dialect = item.dialect || 'General';
 
-    let category = 'General';
-    if (section === 'eng-tam') category = 'English-Tamazight';
-    else if (section === 'tam-eng') category = 'Tamazight-English';
+    // The raw sections ('eng-tam'/'tam-eng') only describe which half of the
+    // PDF a row came from — they are meaningless as browsable categories, so
+    // infer a real one from the definition instead.
+    let category: string;
+    if (section === 'eng-tam' || section === 'tam-eng') category = categorizeWord(def);
     else category = section; // 'Verbs', 'Countries', 'God Phrases', etc.
 
     return {
@@ -282,8 +295,9 @@ const ircamEntries: DictionaryEntry[] = (ircamVerbData as IrcamVerb[]).map((verb
     };
 }).filter(entry => entry.definition.length > 0);
 
-// Auto-categorize Wiktionary definitions
-const categorizeWord = (definition: string): string => {
+// Auto-categorize an entry from its English definition.
+// Declared as a function so it is hoisted above the imported-entry mapping.
+function categorizeWord(definition: string): string {
     const d = definition.toLowerCase();
     if (/\b(color|colour)\b/.test(d)) return 'Colors';
     if (/\b(red|blue|green|yellow|white|black|brown|grey|gray|orange|pink|purple)\b/.test(d) && d.length < 30) return 'Colors';
@@ -297,11 +311,13 @@ const categorizeWord = (definition: string): string => {
     if (/\b(house|road|wall|village|market|school|mosque|city|town|airport|village|portal|door|gate)\b/.test(d)) return 'Places';
     if (/\b(big|small|old|new|long|short|round|wide|wet|smooth|bad|honest|complex|national|left|right)\b/.test(d) && !d.includes('to ') && d.length < 50) return 'Adjectives';
     if (/\b(one|two|three|four|five|six|seven|eight|nine|ten|twenty|hundred|thousand|zero|number)\b/.test(d) && d.length < 30) return 'Numbers';
+    // Bare numerals ("10", "24") — the PDF's numbers section stores them this way
+    if (/^\d+(st|nd|rd|th)?$/.test(d.trim())) return 'Numbers';
     if (d.startsWith('to ')) return 'Verbs';
     if (/\b(garment|wool|cloth|cape|robe|dress|shoe|hat|cap)\b/.test(d)) return 'Clothing';
     if (/\b(king|flag|people|assembly|rope|smoke|fire|seed|silver|health|word)\b/.test(d)) return 'Culture';
     return 'General';
-};
+}
 
 // Convert Wiktionary data into DictionaryEntry format
 // Source: Wiktionary (CC-BY-SA 4.0 / GFDL)
@@ -325,10 +341,20 @@ const wiktionaryEntries: DictionaryEntry[] = (wiktionaryData as WiktionaryWord[]
         };
     });
 
+// The PDF import contains rows repeated across its two halves, so collapse
+// entries that share both a term and a definition before merging sources.
+const seenImported = new Set<string>();
+const uniqueImportedEntries = importedEntries.filter(e => {
+    const key = `${e.term_tifinagh}|${e.definition.toLowerCase()}`;
+    if (seenImported.has(key)) return false;
+    seenImported.add(key);
+    return true;
+});
+
 // Deduplicate: prefer manual > imported > IRCAM > Wiktionary
 const existingTifinagh = new Set([
     ...manualEntries.map(e => e.term_tifinagh),
-    ...importedEntries.map(e => e.term_tifinagh)
+    ...uniqueImportedEntries.map(e => e.term_tifinagh)
 ]);
 
 const uniqueIrcamEntries = ircamEntries.filter(e => !existingTifinagh.has(e.term_tifinagh));
@@ -343,7 +369,7 @@ const uniqueWiktionaryEntries = wiktionaryEntries.filter(e => !allExistingTifina
 
 export const fullDictionaryData: DictionaryEntry[] = [
     ...manualEntries,
-    ...importedEntries,
+    ...uniqueImportedEntries,
     ...uniqueIrcamEntries,
     ...uniqueWiktionaryEntries
 ];

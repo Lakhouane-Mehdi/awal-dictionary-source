@@ -14,6 +14,7 @@ const CalculatorOCR = lazy(() => import('./pages/Scan').then(m => ({ default: m.
 // Placeholder imports
 import { Favorites } from './pages/Favorites';
 import { Community } from './pages/Community';
+import { NotFound } from './pages/NotFound';
 import { PrivacyPolicy } from './pages/legal/PrivacyPolicy'; // Legal
 import { Imprint } from './pages/legal/Imprint'; // Legal
 
@@ -31,6 +32,8 @@ function App() {
         <Route path="tools/community" element={<Community />} />
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="imprint" element={<Imprint />} />
+        {/* Catch-all: unknown URLs render a 404 inside the app shell */}
+        <Route path="*" element={<NotFound />} />
       </Route>
       {/* Standalone route for Camera — lazy loaded */}
       <Route path="/tools/scan" element={

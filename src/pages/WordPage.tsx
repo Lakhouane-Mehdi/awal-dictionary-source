@@ -3,9 +3,10 @@ import { dictionaryData } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { useScript } from '../context/ScriptContext';
 import { useTTS } from '../hooks/useTTS';
-import { ArrowLeft, Volume2 } from 'lucide-react';
+import { ArrowLeft, Volume2, MessageSquareDashed } from 'lucide-react';
 import { useEffect } from 'react';
 import tatoebaExamples from '../data/tatoeba_examples.json';
+import { SITE_URL, DEFAULT_TITLE, DEFAULT_DESCRIPTION } from '../utils/seo';
 
 export const WordPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -16,13 +17,25 @@ export const WordPage = () => {
     const entry = dictionaryData.find(e => e.id === id);
 
     useEffect(() => {
+        const metaDescription = document.querySelector('meta[name="description"]');
+        const canonical = document.querySelector('link[rel="canonical"]');
+
         if (entry) {
             document.title = `${entry.term_latin} (${entry.definition}) - Awal Dictionary`;
-            const metaDescription = document.querySelector('meta[name="description"]');
-            if (metaDescription) {
-                metaDescription.setAttribute('content', `Learn about ${entry.term_latin} in Tamazight. Meaning: ${entry.definition}. Tifinagh: ${entry.term_tifinagh}.`);
-            }
+            metaDescription?.setAttribute(
+                'content',
+                `Learn about ${entry.term_latin} in Tamazight. Meaning: ${entry.definition}. Tifinagh: ${entry.term_tifinagh}.`
+            );
+            canonical?.setAttribute('href', `${SITE_URL}/word/${entry.id}`);
         }
+
+        // Restore the site-wide defaults when leaving the page, otherwise the
+        // tab and meta tags keep advertising the last word that was viewed.
+        return () => {
+            document.title = DEFAULT_TITLE;
+            metaDescription?.setAttribute('content', DEFAULT_DESCRIPTION);
+            canonical?.setAttribute('href', `${SITE_URL}/`);
+        };
     }, [entry]);
 
     if (!entry) {
@@ -88,12 +101,24 @@ export const WordPage = () => {
             <div className="glass-panel p-6">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 uppercase tracking-widest text-sm text-blue-500 mb-4">Example Sentences</h3>
                 <div className="space-y-4">
-                    {examples.map((ex, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border-l-4 border-blue-500">
-                            <p className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1 italic">"{ex.tamazight}"</p>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">{ex.english}</p>
+                    {examples.length === 0 ? (
+                        <div className="text-center py-6">
+                            <MessageSquareDashed size={32} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                            <p className="text-slate-500 dark:text-slate-400 font-medium">
+                                No example sentences yet for this word.
+                            </p>
+                            <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
+                                Know one? Use the contribute button to help expand the dictionary.
+                            </p>
                         </div>
-                    ))}
+                    ) : (
+                        examples.map((ex, idx) => (
+                            <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border-l-4 border-blue-500">
+                                <p className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-1 italic">"{ex.tamazight}"</p>
+                                <p className="text-sm text-slate-600 dark:text-slate-400">{ex.english}</p>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>
