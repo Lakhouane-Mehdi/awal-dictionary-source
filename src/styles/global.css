@@ -11,111 +11,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Amazigh heritage theme.
+  Colour tokens live in tailwind.config.js; this file wires them to the
+  page surfaces so components never hardcode a hex value.
+*/
 :root {
-  /* Brand Colors - Sophisticated Amazigh Tone */
-  --color-primary: #0099cc;
-  /* Vivid Blue */
-  --color-secondary: #95d600;
-  /* Vibrant Green */
-  --color-accent: #ffb81c;
-  /* Warm Yellow */
-  --color-danger: #e74c3c;
+  --surface-base: #F5F1E8;
+  /* sand-200 */
+  --surface-panel: 255 255 255;
+  --surface-panel-alpha: 0.78;
+  --text-main: #1A2440;
+  /* indigo-800 */
+  --text-muted: #5C6FA8;
+  /* indigo-400 */
+  --hairline: 34 48 82;
+  /* indigo-700 */
+  --hairline-alpha: 0.10;
+}
 
-  --color-bg-base: #f0f2f5;
-  --color-text-main: #1e293b;
-  --color-text-muted: #64748b;
+.dark {
+  --surface-base: #12121A;
+  /* night-900 */
+  --surface-panel: 26 26 36;
+  /* night-800 */
+  --surface-panel-alpha: 0.72;
+  --text-main: #F9F6EF;
+  --text-muted: #AEBAD9;
+  --hairline: 255 255 255;
+  --hairline-alpha: 0.08;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  color: var(--color-text-main);
-  /* Mesh Gradient Background */
-  background:
-    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
-  background-color: #1e293b;
-  /* Fallback Dark Slate */
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main);
+  background-color: var(--surface-base);
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Light Mode Override for better contrast if preferred, 
-   but for "Premium" often Dark/Colorful is better. 
-   Let's stick to a rich Dark/Light hybrid or just Dark mode for "World Class" app feel.
-   Let's go with a specific "App Shell" container style. 
+/*
+  App shell.
+  Light: warm sand paper with a soft indigo wash at the top.
+  Dark:  deep night with restrained indigo/saffron light sources.
+  Both avoid the saturated magenta of the previous theme.
 */
-
 .app-shell {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-color: var(--surface-base);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(43, 58, 103, 0.10), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(232, 163, 61, 0.08), transparent 70%);
+  background-attachment: fixed;
   min-height: 100vh;
-  transition: background 0.5s ease-in-out;
+  transition: background-color 0.4s ease;
 }
 
 .dark .app-shell {
-  background:
-    radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%),
-    linear-gradient(to bottom, #0f172a, #020617);
-  background-size: 200% 200%;
-  animation: subtle-shift 30s ease infinite;
-}
-
-@keyframes subtle-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(63, 81, 137, 0.28), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 100% 5%, rgba(193, 102, 63, 0.12), transparent 70%);
 }
 
 @layer utilities {
+
+  /*
+    Panel surface. Softer blur and a hairline border rather than the heavy
+    white glass of the previous theme, so text stays the focus.
+  */
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl rounded-2xl transition-colors duration-300;
+    background-color: rgb(var(--surface-panel) / var(--surface-panel-alpha));
+    border: 1px solid rgb(var(--hairline) / var(--hairline-alpha));
+    @apply backdrop-blur-xl shadow-panel rounded-2xl transition-colors duration-300;
   }
 
   :is(.dark .glass-panel) {
-    @apply bg-slate-900/60 border-white/10 text-white shadow-none;
+    @apply shadow-none;
   }
 
   .glass-header {
-    @apply bg-white/80 backdrop-blur-md border-b border-white/20 sticky top-0 z-40 transition-colors duration-300;
-  }
-
-  :is(.dark .glass-header) {
-    @apply bg-slate-900/80 border-white/5;
+    background-color: rgb(var(--surface-panel) / 0.85);
+    border-bottom: 1px solid rgb(var(--hairline) / var(--hairline-alpha));
+    @apply backdrop-blur-md sticky top-0 z-40 transition-colors duration-300;
   }
 
   .tifinagh-text {
     font-family: 'Noto Sans Tifinagh', sans-serif;
   }
 
+  /* Saffron rule used under section headings */
+  .rule-accent::after {
+    content: '';
+    @apply block w-10 h-[3px] rounded-full bg-saffron-400 mt-2;
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
-  /* Custom Scrollbar */
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 dark:bg-slate-700/50 rounded-full;
+    @apply bg-sand-400 dark:bg-night-700 rounded-full;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-400 dark:bg-slate-600;
+    @apply bg-sand-500 dark:bg-indigo-800;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -22,28 +22,18 @@ export const Layout = () => {
     };
 
     return (
-        <div className="app-shell flex flex-col min-h-screen relative font-sans text-slate-800 selection:bg-blue-200">
-            {/* Creative Top Creator Badge (Always Visible) */}
-            <div className="fixed top-2 left-1/2 -translate-x-1/2 z-[100] w-auto pointer-events-none">
-                <div className="glass-panel px-4 py-1.5 rounded-full shadow-2xl border border-white/40 dark:border-white/10 backdrop-blur-md animate-in slide-in-from-top-4 duration-700 pointer-events-auto hover:scale-105 transition-transform flex items-center gap-2">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-slate-400 dark:text-slate-500">Made by</span>
-                    <span className="text-[10px] font-black tracking-widest bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-yellow-200 dark:to-yellow-500 bg-clip-text text-transparent">
-                        MEHDI LAKHOUANE
-                    </span>
-                </div>
-            </div>
-
+        <div className="app-shell flex flex-col min-h-screen relative font-sans selection:bg-saffron-200 selection:text-indigo-900">
             {/* Top Right Controls Group */}
             <div className="fixed top-3 right-3 z-[100] flex flex-col gap-2">
                 {/* Script Toggle */}
                 <button
                     id="tour-script-toggle"
                     onClick={toggleScript}
-                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-slate-600 dark:text-slate-300"
+                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center active:scale-95 transition-all text-indigo-600 dark:text-indigo-200 hover:text-saffron-500"
                     title="Switch Script"
                     aria-label={`Switch script. Current: ${getScriptLabel()}`}
                 >
-                    <Eye size={18} />
+                    <Eye size={17} />
                     <span className="text-[8px] font-bold mt-[-2px]">{getScriptLabel()}</span>
                 </button>
 
@@ -51,10 +41,11 @@ export const Layout = () => {
                 <button
                     id="tour-achievements"
                     onClick={() => setIsAchievementsOpen(true)}
-                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center shadow-lg active:scale-95 transition-all text-amber-500 dark:text-amber-400"
+                    className="glass-panel w-10 h-10 rounded-full flex flex-col items-center justify-center active:scale-95 transition-all text-saffron-500 dark:text-saffron-400 hover:text-saffron-600"
                     title="Achievements"
+                    aria-label="Achievements"
                 >
-                    <Trophy size={18} />
+                    <Trophy size={17} />
                 </button>
             </div>
 
@@ -62,36 +53,41 @@ export const Layout = () => {
             <button
                 id="tour-contribute"
                 onClick={() => setIsContributionOpen(true)}
-                className="fixed bottom-24 right-4 z-[90] bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-xl shadow-blue-600/30 active:scale-95 transition-all animate-in zoom-in duration-500"
+                className="fixed bottom-24 right-4 z-[90] bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-panel-lg active:scale-95 transition-all"
                 title="Suggest Edit / Contribute"
+                aria-label="Suggest an edit or contribute a word"
             >
-                <PenLine size={20} />
+                <PenLine size={19} />
             </button>
 
             {/* Main Content Area with padding for Nav */}
-            <main className="flex-1 pb-28 px-4 pt-14 max-w-lg mx-auto w-full">
+            <main className="flex-1 pb-28 px-4 pt-6 max-w-lg mx-auto w-full">
                 <Outlet />
 
-                {/* Legal Footer */}
-                <footer className="mt-12 mb-4 flex justify-center gap-4 text-xs text-slate-400">
-                    <Link to="/privacy" className="hover:text-slate-600 transition-colors">Privacy</Link>
-                    <span>•</span>
-                    <Link to="/imprint" className="hover:text-slate-600 transition-colors">Imprint</Link>
-                    <span>•</span>
-                    <button
-                        onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
-                        className="hover:text-slate-600 transition-colors cursor-pointer"
-                        aria-label="Open Cookie Settings"
-                    >
-                        Cookie Settings
-                    </button>
-                    <span>•</span>
-                    <button
-                        onClick={() => setIsContributionOpen(true)}
-                        className="hover:text-blue-500 transition-colors cursor-pointer font-bold"
-                    >
-                        Contribute
-                    </button>
+                {/* Footer: attribution + legal */}
+                <footer className="mt-16 mb-4 pt-6 border-t border-indigo-700/10 dark:border-white/10 text-center">
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-indigo-400 dark:text-indigo-300 font-semibold mb-3">
+                        Made by Mehdi Lakhouane
+                    </p>
+                    <div className="flex justify-center flex-wrap gap-x-4 gap-y-2 text-xs text-indigo-400 dark:text-indigo-300">
+                        <Link to="/privacy" className="hover:text-saffron-600 dark:hover:text-saffron-400 transition-colors">Privacy</Link>
+                        <span aria-hidden="true">·</span>
+                        <Link to="/imprint" className="hover:text-saffron-600 dark:hover:text-saffron-400 transition-colors">Imprint</Link>
+                        <span aria-hidden="true">·</span>
+                        <button
+                            onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+                            className="hover:text-saffron-600 dark:hover:text-saffron-400 transition-colors cursor-pointer"
+                        >
+                            Cookie Settings
+                        </button>
+                        <span aria-hidden="true">·</span>
+                        <button
+                            onClick={() => setIsContributionOpen(true)}
+                            className="hover:text-saffron-600 dark:hover:text-saffron-400 transition-colors cursor-pointer font-semibold"
+                        >
+                            Contribute
+                        </button>
+                    </div>
                 </footer>
             </main>
 
@@ -101,7 +97,7 @@ export const Layout = () => {
             <OnboardingTour />
 
             {/* Floating Dock Navigation */}
-            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-md glass-panel h-16 flex items-center justify-around z-50 px-2 shadow-2xl shadow-blue-900/10">
+            <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-md glass-panel h-16 flex items-center justify-around z-50 px-2 shadow-panel-lg">
                 <NavItem to="/" icon={<Home strokeWidth={2.5} size={22} />} label="Search" />
                 <NavItem to="/favorites" icon={<Heart strokeWidth={2.5} size={22} />} label="Saved" />
                 <NavItem to="/learn" icon={<GraduationCap strokeWidth={2.5} size={22} />} label="Learn" />
@@ -117,7 +113,9 @@ const NavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; label
             to={to}
             className={({ isActive }) => `
                 flex flex-col items-center justify-center w-16 h-full transition-all duration-300 relative
-                ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400 hover:text-slate-600'}
+                ${isActive
+                    ? 'text-indigo-700 dark:text-saffron-300'
+                    : 'text-indigo-400/70 dark:text-indigo-300/60 hover:text-indigo-600 dark:hover:text-indigo-200'}
             `}
         >
             {({ isActive }) => (

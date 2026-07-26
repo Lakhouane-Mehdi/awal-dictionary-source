@@ -97,9 +97,9 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
         <div ref={wrapperRef} className="relative w-full z-50">
             <div
                 className={`
-                glass-panel flex items-center p-3 transition-all duration-300 transform
-                ${isFocused ? 'ring-4 ring-blue-500/20 scale-[1.01]' : 'hover:bg-white/60'}
-                ${isListening ? 'ring-4 ring-red-500/20 shadow-red-500/10' : ''}
+                glass-panel flex items-center p-3 transition-all duration-300
+                ${isFocused ? 'ring-2 ring-saffron-400/50' : ''}
+                ${isListening ? 'ring-2 ring-clay-500/50' : ''}
                 ${showDropdown ? 'rounded-b-none' : ''}
             `}
                 role="combobox"
@@ -107,7 +107,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 aria-haspopup="listbox"
                 aria-owns="search-suggestions"
             >
-                <Search className={`ml-2 transition-colors duration-300 ${isFocused ? 'text-blue-600' : 'text-slate-400'}`} size={20} />
+                <Search className={`ml-2 transition-colors duration-300 ${isFocused ? 'text-saffron-500' : 'text-indigo-300 dark:text-indigo-400'}`} size={20} />
                 <input
                     ref={inputRef}
                     type="text"
@@ -116,7 +116,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                     onFocus={() => setIsFocused(true)}
                     onKeyDown={handleKeyDown}
                     placeholder={isListening ? "Listening..." : "Search 'Argaz'..."}
-                    className="flex-1 bg-transparent border-none outline-none px-4 py-1 text-lg font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400"
+                    className="flex-1 bg-transparent border-none outline-none px-4 py-1 text-lg font-medium text-indigo-800 dark:text-sand-100 placeholder-indigo-300 dark:placeholder-indigo-400"
                     aria-label="Search the dictionary"
                     aria-autocomplete="list"
                     aria-controls="search-suggestions"
@@ -126,17 +126,17 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 {value && (
                     <button
                         onClick={onClear}
-                        className="p-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+                        className="p-2 text-indigo-300 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors"
                         aria-label="Clear search"
                         title="Clear search"
                     >
                         <X size={18} />
                     </button>
                 )}
-                <div className="w-px h-6 bg-slate-300 dark:bg-slate-700 mx-2"></div>
+                <div className="w-px h-6 bg-indigo-700/12 dark:bg-white/12 mx-2"></div>
                 <button
                     onClick={handleMicClick}
-                    className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-red-50 text-red-500 animate-pulse' : 'text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/40'}`}
+                    className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-clay-50 text-clay-600 dark:bg-clay-900/30 dark:text-clay-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-saffron-500'}`}
                     title="Voice Search"
                     aria-label={isListening ? 'Stop voice search' : 'Start voice search'}
                     aria-pressed={isListening}
@@ -147,7 +147,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
 
             {/* Autocomplete Dropdown */}
             {showDropdown && (
-                <div className="absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-t-0 border-slate-100 dark:border-slate-700 rounded-b-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full left-0 w-full bg-white dark:bg-night-800 border border-t-0 border-indigo-700/10 dark:border-white/10 rounded-b-xl shadow-panel-lg overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                     <ul
                         ref={listRef}
                         id="search-suggestions"
@@ -163,19 +163,19 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                                 aria-selected={index === activeIndex}
                                 onPointerDown={() => onSelect?.(entry)}
                                 onMouseEnter={() => setActiveIndex(index)}
-                                className={`px-4 py-3 cursor-pointer flex justify-between items-center group transition-colors ${
+                                className={`px-4 py-3 cursor-pointer flex justify-between items-center gap-3 group transition-colors ${
                                     index === activeIndex
-                                        ? 'bg-blue-50 dark:bg-slate-700/60'
-                                        : 'hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                                        ? 'bg-saffron-50 dark:bg-white/5'
+                                        : 'hover:bg-sand-100 dark:hover:bg-white/5'
                                 }`}
                             >
-                                <div className="flex flex-col">
-                                    <span className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                <div className="flex flex-col min-w-0">
+                                    <span className="font-semibold text-indigo-800 dark:text-sand-100 truncate">
                                         {entry.term_latin}
                                     </span>
-                                    <span className="text-sm text-slate-500 truncate max-w-[200px] sm:max-w-xs">{entry.definition}</span>
+                                    <span className="text-sm text-indigo-400 dark:text-indigo-300 truncate max-w-[200px] sm:max-w-xs">{entry.definition}</span>
                                 </div>
-                                <span className="font-tifinagh text-xl text-slate-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors">
+                                <span className="font-tifinagh text-xl text-saffron-500 dark:text-saffron-400 shrink-0">
                                     {entry.term_tifinagh}
                                 </span>
                             </li>

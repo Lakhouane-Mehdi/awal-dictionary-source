@@ -14,28 +14,44 @@ interface WordCardProps {
     onRoot?: () => void;
 }
 
-const getCategoryColor = (category?: string) => {
-    switch (category?.toLowerCase()) {
-        case 'food': return 'from-orange-400 to-red-400';
-        case 'culture': return 'from-purple-400 to-pink-400';
-        case 'nature': return 'from-green-400 to-emerald-400';
-        case 'people': return 'from-blue-400 to-cyan-400';
-        case 'family': return 'from-blue-400 to-cyan-400';
-        case 'verbs': return 'from-amber-400 to-orange-500';
-        case 'colors': return 'from-pink-400 to-violet-400';
-        case 'body': return 'from-rose-400 to-red-400';
-        case 'weather': return 'from-sky-400 to-blue-400';
-        case 'places': return 'from-teal-400 to-green-400';
-        case 'time': return 'from-indigo-400 to-purple-400';
-        case 'numbers': return 'from-cyan-400 to-blue-400';
-        case 'adjectives': return 'from-lime-400 to-green-500';
-        case 'clothing': return 'from-fuchsia-400 to-pink-400';
-        case 'animals': return 'from-yellow-400 to-orange-400';
-        case 'greetings': return 'from-emerald-400 to-teal-400';
-        case 'pronouns': return 'from-violet-400 to-indigo-400';
-        default: return 'from-slate-400 to-gray-400';
-    }
+// Category accents drawn from the heritage palette. Each category maps to a
+// spine colour plus a matching low-contrast chip, so cards stay legible and
+// the set reads as one family rather than a rainbow.
+const CATEGORY_STYLES: Record<string, { spine: string; chip: string }> = {
+    food: { spine: 'bg-clay-500', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    animals: { spine: 'bg-clay-400', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    body: { spine: 'bg-clay-600', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    culture: { spine: 'bg-saffron-500', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    greetings: { spine: 'bg-saffron-400', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    clothing: { spine: 'bg-saffron-600', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    colors: { spine: 'bg-saffron-300', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    verbs: { spine: 'bg-indigo-500', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    pronouns: { spine: 'bg-indigo-400', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    adjectives: { spine: 'bg-indigo-300', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    numbers: { spine: 'bg-indigo-600', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    nature: { spine: 'bg-emerald-600', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
+    weather: { spine: 'bg-emerald-500', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
+    places: { spine: 'bg-emerald-700', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
+    family: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    people: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    time: { spine: 'bg-indigo-800', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
 };
+
+const DEFAULT_CATEGORY_STYLE = {
+    spine: 'bg-sand-500 dark:bg-night-700',
+    chip: 'bg-sand-200 text-indigo-600 dark:bg-white/10 dark:text-indigo-200',
+};
+
+const getCategoryStyle = (category?: string) =>
+    CATEGORY_STYLES[category?.toLowerCase() ?? ''] ?? DEFAULT_CATEGORY_STYLE;
+
+// Card actions share one outlined style so no single action shouts louder
+// than the word and its definition.
+const ACTION_BUTTON =
+    'flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/12 dark:border-white/12 ' +
+    'text-indigo-600 dark:text-indigo-200 font-semibold text-xs ' +
+    'hover:border-saffron-400 hover:text-saffron-600 dark:hover:text-saffron-300 ' +
+    'active:scale-95 transition-all';
 
 export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot }: WordCardProps) => {
     const { isFavorite, toggleFavorite } = useFavorites();
@@ -49,7 +65,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
     const isDifferent = dialectTerm !== entry.term_latin;
 
     // Semantic Color
-    const accentGradient = getCategoryColor(entry.category);
+    const categoryStyle = getCategoryStyle(entry.category);
     const favorite = isFavorite(entry.id);
 
     return (
@@ -59,7 +75,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="group relative glass-panel p-0 overflow-hidden hover:shadow-2xl hover:shadow-blue-900/20 transition-all duration-300 border-white/60 dark:border-white/5"
+            className="group relative glass-panel p-0 overflow-hidden hover:shadow-panel-lg transition-all duration-300"
         >
             {/* Visual Cultural Background (Blurred) */}
             {entry.cultural_image && (
@@ -70,28 +86,28 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
             )}
 
             {/* Semantic Accent Line */}
-            <div className={`absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b ${accentGradient}`} />
+            <div className={`absolute top-0 left-0 w-1 h-full ${categoryStyle.spine}`} />
 
             <div className="p-5 pl-7 relative cursor-pointer z-10 w-full">
                 <div className="flex justify-between items-start mb-3 relative z-10">
                     <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r ${accentGradient} text-white shadow-sm`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className={`text-[10px] font-bold uppercase tracking-[0.12em] px-2 py-0.5 rounded ${categoryStyle.chip}`}>
                                 {entry.category || 'Term'}
                             </span>
                         </div>
-                        <h2 className={`text-3xl font-black text-slate-800 dark:text-slate-100 ${script === 'tifinagh' ? 'tifinagh-text' : ''} leading-tight tracking-tight drop-shadow-sm`}>
+                        <h2 className={`font-display text-3xl font-bold text-indigo-800 dark:text-sand-100 ${script === 'tifinagh' ? 'tifinagh-text' : ''} leading-tight tracking-tight`}>
                             {displayTitle}
                         </h2>
-                        {isDifferent && script === 'latin' && <span className="text-sm text-slate-400 dark:text-slate-400 font-medium italic">General: {entry.term_latin}</span>}
-                        <span className={`text-xl text-slate-500 dark:text-slate-300 font-medium block mt-1 ${script === 'latin' ? 'tifinagh-text' : ''} opacity-80`}>
+                        {isDifferent && script === 'latin' && <span className="text-sm text-indigo-400 dark:text-indigo-300 font-medium italic">General: {entry.term_latin}</span>}
+                        <span className={`text-xl text-indigo-500 dark:text-indigo-200 font-medium block mt-1 ${script === 'latin' ? 'tifinagh-text' : ''}`}>
                             {subtitle}
                         </span>
                     </div>
 
                     <button
                         onClick={(e) => { e.stopPropagation(); toggleFavorite(entry.id); }}
-                        className={`p-2 rounded-full transition-colors ${favorite ? 'bg-red-50 text-red-500' : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-red-500'}`}
+                        className={`p-2 rounded-full transition-colors ${favorite ? 'bg-clay-50 text-clay-600 dark:bg-clay-900/30 dark:text-clay-300' : 'hover:bg-sand-200 dark:hover:bg-white/5 text-indigo-300 dark:text-indigo-400 hover:text-clay-500'}`}
                         title={favorite ? 'Remove from favorites' : 'Add to favorites'}
                         aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
                     >
@@ -99,7 +115,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                     </button>
                 </div>
 
-                <p className="text-slate-600 dark:text-slate-200 font-medium leading-relaxed mb-4 text-lg">{entry.definition}</p>
+                <p className="text-indigo-700 dark:text-indigo-100 leading-relaxed mb-4 text-base">{entry.definition}</p>
 
                 {/* Interaction Row */}
                 <div className="flex flex-wrap gap-2 mt-4">
@@ -108,45 +124,45 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                             e.stopPropagation();
                             if (!speaking) speak(entry.term_latin);
                         }}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-bold text-xs transition-colors ${speaking ? 'bg-blue-100 text-blue-700 cursor-default' : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-100 cursor-pointer'}`}
+                        className={`${ACTION_BUTTON} ${speaking ? 'text-saffron-600 dark:text-saffron-300 border-saffron-300 cursor-default' : ''}`}
                     >
-                        <Volume2 size={16} className={speaking ? "animate-pulse" : ""} /> {speaking ? 'PLAYING...' : 'LISTEN'}
+                        <Volume2 size={15} className={speaking ? "animate-pulse" : ""} /> {speaking ? 'Playing' : 'Listen'}
                     </button>
 
                     {onTrace && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onTrace(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                            className={ACTION_BUTTON}
                         >
-                            <PenTool size={16} /> TRACE
+                            <PenTool size={15} /> Trace
                         </button>
                     )}
 
                     {entry.conjugation && onConjugate && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onConjugate(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300 font-bold text-xs hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
+                            className={ACTION_BUTTON}
                         >
-                            <BookOpen size={16} /> CONJUGATE
+                            <BookOpen size={15} /> Conjugate
                         </button>
                     )}
 
                     {entry.root && onRoot && (
                         <button
                             onClick={(e) => { e.stopPropagation(); onRoot(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+                            className={ACTION_BUTTON}
                         >
-                            <Network size={16} /> ROOT
+                            <Network size={15} /> Root
                         </button>
                     )}
                 </div>
 
                 {entry.dialects && dialect === 'all' && (
-                    <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-slate-100/50 dark:border-white/10">
+                    <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-indigo-700/10 dark:border-white/10">
                         {Object.entries(entry.dialects).map(([key, value]) => (
                             <div key={key} className="flex flex-col min-w-[60px]">
-                                <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold mb-0.5">{key}</span>
-                                <span className={`text-xs font-semibold text-slate-700 dark:text-slate-300 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                                <span className="text-[9px] uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 font-bold mb-0.5">{key}</span>
+                                <span className={`text-xs font-semibold text-indigo-700 dark:text-indigo-100 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
                                     {convertScript(value, script)}
                                 </span>
                             </div>
