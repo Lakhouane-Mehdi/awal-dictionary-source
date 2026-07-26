@@ -29,7 +29,7 @@ export const ContributionModal = ({ isOpen, onClose, initialTerm = '' }: Contrib
             notes: formData.notes
         } as ContributionData);
 
-        // Close after a slight delay to allow the mailto to trigger
+        // Close after a slight delay to allow the issue tab to open
         setTimeout(onClose, 1000);
     };
 
@@ -124,7 +124,7 @@ export const ContributionModal = ({ isOpen, onClose, initialTerm = '' }: Contrib
                                 disabled={loading}
                                 className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
                             >
-                                {loading ? 'Opening Mail...' : <>Submit via Email <Send size={18} /></>}
+                                {loading ? 'Opening GitHub...' : <>Submit on GitHub <Send size={18} /></>}
                             </button>
 
                             <p className="text-center text-[10px] text-slate-400 mt-2">

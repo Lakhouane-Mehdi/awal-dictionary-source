@@ -53,7 +53,7 @@ export const Community = () => {
                     </div>
                     <div>
                         <h3 className="font-bold text-slate-800 dark:text-slate-100">Suggest a Word</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Submit new words or corrections via email</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Submit new words or corrections on GitHub</p>
                     </div>
                 </div>
                 <button

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Mail, Globe, Code2 } from 'lucide-react';
+import { Globe, Code2 } from 'lucide-react';
 import { GithubIcon } from '../components/icons/GithubIcon';
-import { AUTHOR, PROJECT_REPO } from '../utils/author';
+import { AUTHOR, PROJECT_REPO, PROJECT_ISSUES } from '../utils/author';
 import { PageHeader } from '../components/PageHeader';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { totalEntries, categories, rootFamilies } from '../data/taxonomy';
@@ -139,10 +139,12 @@ export const About = () => {
                 </p>
                 <div className="flex flex-wrap gap-3">
                     <a
-                        href="mailto:mehdi@awaldictionary.com?subject=New Word Suggestion&body=I would like to suggest a new word for the dictionary:"
+                        href={PROJECT_ISSUES}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all active:scale-[0.98]"
                     >
-                        <Mail size={16} /> Suggest a word
+                        <GithubIcon size={16} /> Suggest a word on GitHub
                     </a>
                     <Link
                         to="/tools/community"
