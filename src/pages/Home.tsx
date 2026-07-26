@@ -5,7 +5,7 @@ import type { DictionaryEntry } from '../data/dictionary';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useScript } from '../context/ScriptContext';
-import { Eye, Sparkles, Moon, Sun, Info, Flame } from 'lucide-react';
+import { Eye, Sparkles, Moon, Sun, Flame } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useGamification } from '../hooks/useGamification';
 import { VerbConjugationModal } from '../components/VerbConjugationModal';
@@ -16,8 +16,11 @@ import { AboutModal } from '../components/AboutModal';
 import { dictionaryData } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { ContributionModal } from '../components/ContributionModal';
-import { PenLine } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { PenLine, BookOpen } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { tifinaghAlphabet } from '../data/tifinagh';
+import { categories, rootFamilies } from '../data/taxonomy';
+import { proverbs } from '../data/proverbs';
 
 
 
@@ -62,41 +65,45 @@ export const Home = () => {
         <div className="w-full h-full relative">
             {/* Header */}
             <header className="mb-8 mt-4 flex justify-between items-center">
-                <div onClick={() => setIsAboutOpen(true)} className="cursor-pointer group">
-                    <h1 className="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent flex items-center gap-2 group-hover:scale-105 transition-transform">
-                        Awal <Sparkles size={18} className="text-yellow-400" />
+                <button
+                    type="button"
+                    onClick={() => setIsAboutOpen(true)}
+                    className="text-left group"
+                    title="About & Credits"
+                >
+                    <h1 className="font-display text-3xl font-bold text-indigo-700 dark:text-sand-100 flex items-baseline gap-2 tracking-tight">
+                        Awal
+                        <span className="tifinagh-text text-lg text-saffron-500 font-normal">ⴰⵡⴰⵍ</span>
                     </h1>
-                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide mt-1 group-hover:text-blue-500 transition-colors">
-                        {script === 'latin' ? 'PREMIUM DICTIONARY' :
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-400 dark:text-indigo-300 mt-1 group-hover:text-saffron-500 transition-colors">
+                        {script === 'latin' ? 'Tamazight–English Dictionary' :
                             script === 'tifinagh' ? 'ⴰⵎⴰⵡⴰⵍ ⴰⵎⴰⵣⵉⵖ' :
                                 'القاموس الامازيغي'}
                     </p>
-                </div>
+                </button>
                 <div className="flex gap-2">
                     <button
-                        onClick={() => setIsAboutOpen(true)}
-                        className="w-12 h-12 glass-panel flex items-center justify-center text-slate-400 dark:text-slate-500 shadow-lg hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
-                        title="About & Credits"
-                    >
-                        <Info size={24} />
-                    </button>
-                    <button
                         onClick={toggleTheme}
-                        className="w-12 h-12 glass-panel flex items-center justify-center text-slate-600 dark:text-yellow-400 shadow-lg hover:rotate-12 transition-transform duration-300"
-                        title="Toggle Dark Mode"
+                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-saffron-300 hover:text-saffron-500 transition-colors"
+                        title="Toggle dark mode"
+                        aria-label="Toggle dark mode"
                     >
-                        {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
                     <button
                         onClick={toggleScript}
-                        className="w-12 h-12 glass-panel flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-lg hover:rotate-180 transition-transform duration-500"
-                        title="Toggle Script (Magic Eye)"
+                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-indigo-200 hover:text-saffron-500 transition-colors"
+                        title="Switch script"
+                        aria-label="Switch script"
                     >
-                        <Eye size={24} strokeWidth={2.5} />
+                        <Eye size={20} strokeWidth={2.2} />
                     </button>
-                    <div className="w-12 h-12 glass-panel flex flex-col items-center justify-center text-orange-500 shadow-lg" title="Daily Streak">
-                        <Flame size={20} className={stats.streak > 0 ? "fill-orange-500 animate-pulse" : ""} />
-                        <span className="text-[10px] font-bold">{stats.streak}</span>
+                    <div
+                        className="w-11 h-11 glass-panel flex flex-col items-center justify-center text-clay-500 dark:text-clay-300"
+                        title={`Daily streak: ${stats.streak} day${stats.streak === 1 ? '' : 's'}`}
+                    >
+                        <Flame size={17} className={stats.streak > 0 ? 'fill-current' : ''} />
+                        <span className="text-[10px] font-bold leading-none mt-0.5">{stats.streak}</span>
                     </div>
                 </div>
             </header>
@@ -116,25 +123,72 @@ export const Home = () => {
             {!query ? (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                     {/* Hero Section */}
-                    <div className="mb-10 text-center glass-panel p-8">
-                        <h2 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-slate-100 mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
-                            Welcome to Awal
+                    <div className="mb-10 glass-panel p-8 sm:p-10">
+                        <h2 className="font-display text-3xl sm:text-4xl font-bold text-indigo-800 dark:text-sand-100 mb-3 leading-tight tracking-tight">
+                            A living record of Tamazight
                         </h2>
-                        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-4 text-lg">
-                            Professional Tamazight-English Dictionary. Translate words, learn the Tifinagh script, and explore the Amazigh language and culture.
+                        <p className="text-indigo-500 dark:text-indigo-200 mb-6 text-base leading-relaxed max-w-prose">
+                            Search across three scripts and four dialects, learn the Tifinagh
+                            alphabet, and explore the roots behind each word — fully offline.
                         </p>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 font-bold text-sm mb-6">
-                            <Sparkles size={16} />
-                            {dictionaryData.length.toLocaleString()}+ Words
+
+                        {/* Corpus stats */}
+                        <dl className="flex flex-wrap gap-x-8 gap-y-3 mb-8 border-t border-b border-indigo-700/10 dark:border-white/10 py-4">
+                            {[
+                                { label: 'Entries', value: dictionaryData.length.toLocaleString() },
+                                { label: 'Scripts', value: '3' },
+                                { label: 'Dialects', value: '4' },
+                            ].map(stat => (
+                                <div key={stat.label}>
+                                    <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300">
+                                        {stat.label}
+                                    </dt>
+                                    <dd className="font-display text-2xl font-bold text-indigo-700 dark:text-sand-100 mt-0.5">
+                                        {stat.value}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+
+                        <div className="flex flex-wrap gap-3">
+                            <Link
+                                to="/browse"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-7 rounded-xl shadow-panel hover:shadow-panel-lg transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                            >
+                                <BookOpen size={18} />
+                                Browse the dictionary
+                            </Link>
+                            <button
+                                onClick={() => setIsContributionOpen(true)}
+                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-saffron-400 hover:text-saffron-600 transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                            >
+                                <PenLine size={18} />
+                                Contribute a word
+                            </button>
                         </div>
-                        <br />
-                        <button
-                            onClick={() => setIsContributionOpen(true)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 mx-auto"
-                        >
-                            <PenLine size={20} />
-                            Submit a New Word
-                        </button>
+                    </div>
+
+                    {/* Explore the site */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+                        {[
+                            { to: '/alphabet', label: 'Alphabet', meta: `${tifinaghAlphabet.length} letters` },
+                            { to: '/categories', label: 'Categories', meta: `${categories.length} groups` },
+                            { to: '/roots', label: 'Word roots', meta: `${rootFamilies.length} families` },
+                            { to: '/proverbs', label: 'Proverbs', meta: `${proverbs.length} sayings` },
+                        ].map(item => (
+                            <Link
+                                key={item.to}
+                                to={item.to}
+                                className="glass-panel p-4 group hover:shadow-panel-lg transition-all"
+                            >
+                                <p className="font-display font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                    {item.label}
+                                </p>
+                                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 mt-0.5">
+                                    {item.meta}
+                                </p>
+                            </Link>
+                        ))}
                     </div>
 
                     <div className="mb-8">
@@ -142,14 +196,14 @@ export const Home = () => {
                     </div>
 
                     <div className="flex justify-between items-end mb-4">
-                        <h3 className="text-lg font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                            Word of the Moment
+                        <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 rule-accent">
+                            Word of the moment
                         </h3>
                         <button
                             onClick={handleShuffle}
-                            className="text-xs font-bold text-blue-500 hover:text-blue-600 flex items-center gap-1 active:scale-95 transition-transform"
+                            className="text-xs font-bold uppercase tracking-wider text-saffron-600 dark:text-saffron-400 hover:text-saffron-500 flex items-center gap-1.5 active:scale-95 transition-all"
                         >
-                            <Sparkles size={14} /> SHUFFLE
+                            <Sparkles size={14} /> Shuffle
                         </button>
                     </div>
 
@@ -164,19 +218,28 @@ export const Home = () => {
                         />
                     )}
 
-                    <div className="mt-8">
-                        <h3 className="text-lg font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">
-                            Explore Categories
-                        </h3>
-                        <div className="flex flex-wrap gap-3">
-                            {['Nature', 'Family', 'Food', 'Animals', 'Verbs', 'Colors', 'Body', 'Weather', 'Places', 'Time', 'Numbers', 'Adjectives', 'Culture', 'Clothing'].map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setQuery(cat)}
-                                    className="px-4 py-2 glass-panel text-sm font-bold text-slate-600 dark:text-slate-300 hover:scale-105 active:scale-95 transition-all"
+                    <div className="mt-10">
+                        <div className="flex justify-between items-end mb-4">
+                            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 rule-accent">
+                                Browse by category
+                            </h3>
+                            <Link
+                                to="/categories"
+                                className="text-xs font-bold uppercase tracking-wider text-saffron-600 dark:text-saffron-400 hover:text-saffron-500 transition-colors"
+                            >
+                                See all
+                            </Link>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {categories.slice(0, 14).map(cat => (
+                                <Link
+                                    key={cat.slug}
+                                    to={`/category/${cat.slug}`}
+                                    className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-95 transition-all"
                                 >
-                                    {cat}
-                                </button>
+                                    {cat.name}
+                                    <span className="text-indigo-400 dark:text-indigo-300 ml-1.5 font-normal">{cat.count}</span>
+                                </Link>
                             ))}
                         </div>
                     </div>
@@ -192,19 +255,19 @@ export const Home = () => {
                             {results.length === 0 ? (
                                 <motion.div
                                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                    className="text-center text-slate-400 mt-12"
+                                    className="text-center mt-12"
                                 >
-                                    <p className="text-lg font-medium">No words found.</p>
-                                    <p className="text-sm">Try searching for "Bread" or "Water"</p>
+                                    <p className="text-lg font-semibold text-indigo-600 dark:text-indigo-200">No words found.</p>
+                                    <p className="text-sm text-indigo-400 dark:text-indigo-300 mt-1">Try searching for "Bread" or "Water"</p>
                                     {suggestions.length > 0 && (
                                         <div className="mt-6 glass-panel p-4 max-w-xs mx-auto">
-                                            <p className="text-sm font-bold text-blue-500 dark:text-blue-400 mb-2">Did you mean?</p>
+                                            <p className="text-xs font-bold uppercase tracking-wider text-indigo-400 dark:text-indigo-300 mb-3">Did you mean?</p>
                                             <div className="flex flex-wrap gap-2 justify-center">
                                                 {suggestions.map((s) => (
                                                     <button
                                                         key={s}
                                                         onClick={() => setQuery(s)}
-                                                        className="px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-sm font-semibold hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors active:scale-95"
+                                                        className="px-3 py-1.5 rounded-lg bg-saffron-50 dark:bg-saffron-900/25 text-saffron-700 dark:text-saffron-300 text-sm font-semibold hover:bg-saffron-100 dark:hover:bg-saffron-900/40 transition-colors active:scale-95"
                                                     >
                                                         {s}
                                                     </button>
@@ -232,7 +295,7 @@ export const Home = () => {
                             <button
                                 type="button"
                                 onClick={loadMore}
-                                className="w-full py-3 glass-panel text-sm font-bold text-blue-500 dark:text-blue-400 hover:text-blue-600 active:scale-95 transition-all"
+                                className="w-full py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-[0.99] transition-all"
                             >
                                 Load more words
                             </button>

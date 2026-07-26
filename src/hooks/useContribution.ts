@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { newIssueUrl } from '../utils/author';
 
 export interface ContributionData {
     term: string;
@@ -15,21 +16,21 @@ export const useContribution = () => {
 
         // Simulating async delay for better UX (and to show loading state)
         setTimeout(() => {
-            const subject = encodeURIComponent(`Awal Contribution: ${data.type.toUpperCase()} - ${data.term}`);
-            const body = encodeURIComponent(
-                `Type: ${data.type}
-Term: ${data.term}
-Definition: ${data.definition}
-Notes: ${data.notes || 'N/A'}
+            const title = `${data.type === 'new' ? 'New word' : 'Correction'}: ${data.term}`;
+            const body = [
+                `**Type:** ${data.type === 'new' ? 'New word' : 'Correction'}`,
+                `**Term:** ${data.term}`,
+                `**Definition:** ${data.definition}`,
+                `**Notes:** ${data.notes || '—'}`,
+                '',
+                '---',
+                'Submitted from the Awal web app.',
+            ].join('\n');
 
---
-Sent from Awal Web App`
-            );
-
-            // Open email client
-            window.location.href = `mailto:contribute@awal.app?subject=${subject}&body=${body}`;
+            // Open a prefilled GitHub issue in a new tab
+            window.open(newIssueUrl(title, body), '_blank', 'noopener,noreferrer');
             setLoading(false);
-        }, 800);
+        }, 600);
     };
 
     return { submitContribution, loading };

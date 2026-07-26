@@ -51,3 +51,10 @@ database.rules.json
 
 # Large Data Assets
 scripts/raw_content_js.txt
+
+# Report files created by npm audit, eslint, and tailwind
+audit.json
+audit.txt
+lint*.txt
+lint_errors*.txt
+test_output.css

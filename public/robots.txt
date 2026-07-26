@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://awal-dictionary-app.web.app/sitemap.xml

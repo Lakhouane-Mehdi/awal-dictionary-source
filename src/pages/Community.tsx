@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { PenLine, Github, Users, BarChart3 } from 'lucide-react';
+import { PenLine, Users, BarChart3 } from 'lucide-react';
+import { GithubIcon } from '../components/icons/GithubIcon';
 import { ContributionModal } from '../components/ContributionModal';
 import { dictionaryData } from '../data/dictionary';
+import { PROJECT_REPO } from '../utils/author';
 
 export const Community = () => {
     const [isContribOpen, setIsContribOpen] = useState(false);
@@ -51,7 +53,7 @@ export const Community = () => {
                     </div>
                     <div>
                         <h3 className="font-bold text-slate-800 dark:text-slate-100">Suggest a Word</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Submit new words or corrections via email</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Submit new words or corrections on GitHub</p>
                     </div>
                 </div>
                 <button
@@ -67,7 +69,7 @@ export const Community = () => {
             <div className="glass-panel p-6">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 shrink-0">
-                        <Github size={20} />
+                        <GithubIcon size={20} />
                     </div>
                     <div>
                         <h3 className="font-bold text-slate-800 dark:text-slate-100">Open Source</h3>
@@ -75,12 +77,12 @@ export const Community = () => {
                     </div>
                 </div>
                 <a
-                    href="https://github.com/Amazigh24/awal-dictionary-source"
+                    href={PROJECT_REPO}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 w-full border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 transition-all active:scale-95"
                 >
-                    <Github size={18} /> View on GitHub
+                    <GithubIcon size={18} /> View on GitHub
                 </a>
             </div>
 

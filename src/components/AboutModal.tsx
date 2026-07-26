@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShieldCheck, ScrollText, Users, Mail } from 'lucide-react';
+import { X, ShieldCheck, ScrollText, Users, Globe } from 'lucide-react';
+import { GithubIcon } from './icons/GithubIcon';
+import { AUTHOR, PROJECT_ISSUES } from '../utils/author';
 
 interface AboutModalProps {
     isOpen: boolean;
@@ -98,16 +100,40 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                                     </div>
                                     <div>
                                         <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">Produced By</p>
-                                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Mehdi Lakhouane</p>
+                                        <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{AUTHOR.name}</p>
                                     </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <a
+                                        href={AUTHOR.website}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 rounded-lg text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+                                        title={AUTHOR.websiteLabel}
+                                        aria-label={`Website: ${AUTHOR.websiteLabel}`}
+                                    >
+                                        <Globe size={16} />
+                                    </a>
+                                    <a
+                                        href={AUTHOR.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="p-2 rounded-lg text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 transition-colors"
+                                        title={AUTHOR.githubLabel}
+                                        aria-label={`GitHub: ${AUTHOR.githubLabel}`}
+                                    >
+                                        <GithubIcon size={16} />
+                                    </a>
                                 </div>
                             </div>
 
                             <a
-                                href="mailto:mehdi@awaldictionary.com?subject=New Word Suggestion&body=I would like to suggest a new word for the dictionary:"
+                                href={PROJECT_ISSUES}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center justify-center gap-2 w-full p-4 bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 rounded-xl font-bold hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                             >
-                                <Mail size={18} />
+                                <GithubIcon size={18} />
                                 Suggest a Missing Word
                             </a>
 
