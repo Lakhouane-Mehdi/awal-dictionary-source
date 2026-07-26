@@ -16,8 +16,11 @@ import { AboutModal } from '../components/AboutModal';
 import { dictionaryData } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { ContributionModal } from '../components/ContributionModal';
-import { PenLine } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { PenLine, BookOpen } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { tifinaghAlphabet } from '../data/tifinagh';
+import { categories, rootFamilies } from '../data/taxonomy';
+import { proverbs } from '../data/proverbs';
 
 
 
@@ -147,13 +150,45 @@ export const Home = () => {
                             ))}
                         </dl>
 
-                        <button
-                            onClick={() => setIsContributionOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-7 rounded-xl shadow-panel hover:shadow-panel-lg transition-all active:scale-[0.98] inline-flex items-center gap-2"
-                        >
-                            <PenLine size={18} />
-                            Contribute a word
-                        </button>
+                        <div className="flex flex-wrap gap-3">
+                            <Link
+                                to="/browse"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-7 rounded-xl shadow-panel hover:shadow-panel-lg transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                            >
+                                <BookOpen size={18} />
+                                Browse the dictionary
+                            </Link>
+                            <button
+                                onClick={() => setIsContributionOpen(true)}
+                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-saffron-400 hover:text-saffron-600 transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                            >
+                                <PenLine size={18} />
+                                Contribute a word
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Explore the site */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+                        {[
+                            { to: '/alphabet', label: 'Alphabet', meta: `${tifinaghAlphabet.length} letters` },
+                            { to: '/categories', label: 'Categories', meta: `${categories.length} groups` },
+                            { to: '/roots', label: 'Word roots', meta: `${rootFamilies.length} families` },
+                            { to: '/proverbs', label: 'Proverbs', meta: `${proverbs.length} sayings` },
+                        ].map(item => (
+                            <Link
+                                key={item.to}
+                                to={item.to}
+                                className="glass-panel p-4 group hover:shadow-panel-lg transition-all"
+                            >
+                                <p className="font-display font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                    {item.label}
+                                </p>
+                                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 mt-0.5">
+                                    {item.meta}
+                                </p>
+                            </Link>
+                        ))}
                     </div>
 
                     <div className="mb-8">
@@ -184,18 +219,27 @@ export const Home = () => {
                     )}
 
                     <div className="mt-10">
-                        <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 rule-accent mb-4">
-                            Browse by category
-                        </h3>
+                        <div className="flex justify-between items-end mb-4">
+                            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 rule-accent">
+                                Browse by category
+                            </h3>
+                            <Link
+                                to="/categories"
+                                className="text-xs font-bold uppercase tracking-wider text-saffron-600 dark:text-saffron-400 hover:text-saffron-500 transition-colors"
+                            >
+                                See all
+                            </Link>
+                        </div>
                         <div className="flex flex-wrap gap-2">
-                            {['Nature', 'Family', 'Food', 'Animals', 'Verbs', 'Colors', 'Body', 'Weather', 'Places', 'Time', 'Numbers', 'Adjectives', 'Culture', 'Clothing'].map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => setQuery(cat)}
+                            {categories.slice(0, 14).map(cat => (
+                                <Link
+                                    key={cat.slug}
+                                    to={`/category/${cat.slug}`}
                                     className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-95 transition-all"
                                 >
-                                    {cat}
-                                </button>
+                                    {cat.name}
+                                    <span className="text-indigo-400 dark:text-indigo-300 ml-1.5 font-normal">{cat.count}</span>
+                                </Link>
                             ))}
                         </div>
                     </div>

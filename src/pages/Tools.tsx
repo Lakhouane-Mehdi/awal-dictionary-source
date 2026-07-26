@@ -1,65 +1,77 @@
 import { useNavigate } from 'react-router-dom';
 import { Camera, BookOpen, BrainCircuit, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { PageHeader } from '../components/PageHeader';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export const Tools = () => {
     const navigate = useNavigate();
+
+    usePageMeta(
+        'Tools',
+        'Translate Tifinagh from a photo, conjugate Tamazight verbs across all tenses, and test your vocabulary.',
+        '/tools'
+    );
 
     const tools = [
         {
             id: 'scan',
             label: 'Scan to Translate',
-            icon: <Camera size={32} />,
-            desc: 'Use camera to translate Tifinagh',
-            color: 'text-blue-500',
+            icon: <Camera size={22} />,
+            desc: 'Point your camera at Tifinagh text and read it back in Latin script.',
             path: '/tools/scan'
         },
         {
             id: 'conjugator',
             label: 'Verb Conjugator',
-            icon: <BookOpen size={32} />,
-            desc: 'Conjugate verbs in all tenses',
-            color: 'text-green-500',
+            icon: <BookOpen size={22} />,
+            desc: 'Full conjugation tables for preterite, intensive, and future forms.',
             path: '/tools/conjugator'
         },
         {
             id: 'quiz',
             label: 'Daily Quiz',
-            icon: <BrainCircuit size={32} />,
-            desc: 'Test your vocabulary',
-            color: 'text-purple-500',
+            icon: <BrainCircuit size={22} />,
+            desc: 'Test your vocabulary and keep a daily streak going.',
             path: '/tools/quiz'
         },
         {
             id: 'community',
             label: 'Community',
-            icon: <Users size={32} />,
-            desc: 'Suggest words & discuss',
-            color: 'text-orange-500',
+            icon: <Users size={22} />,
+            desc: 'Suggest new words, corrections, and dialect variants.',
             path: '/tools/community'
         }
     ];
 
     return (
-        <div className="p-4 w-full max-w-md mx-auto min-h-screen">
-            <header className="mb-8 mt-2">
-                <h1 className="text-2xl font-bold mb-1 text-[var(--color-primary)]">Tools</h1>
-                <p className="text-sm text-[var(--color-text-muted)]">Advanced learning utilities</p>
-            </header>
+        <div className="animate-in fade-in duration-300">
+            <PageHeader
+                title="Tools"
+                tifinagh="ⵉⵎⴰⵙⵙⵏ"
+                description="Utilities that go beyond lookup — translate from a photo, conjugate any verb, and test what you know."
+                crumbs={[{ label: 'Home', to: '/' }, { label: 'Tools' }]}
+            />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
                 {tools.map((tool, index) => (
                     <motion.button
                         key={tool.id}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: index * 0.06 }}
                         onClick={() => navigate(tool.path)}
-                        className="glass-panel p-6 flex flex-col items-center text-center hover:scale-[1.02] transition-transform aspect-square justify-center"
+                        className="glass-panel p-6 flex items-start gap-4 text-left group hover:shadow-panel-lg transition-all"
                     >
-                        <div className={`mb-4 ${tool.color}`}>{tool.icon}</div>
-                        <h3 className="font-bold text-lg mb-1">{tool.label}</h3>
-                        <p className="text-xs text-[var(--color-text-muted)]">{tool.desc}</p>
+                        <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                            {tool.icon}
+                        </span>
+                        <div>
+                            <h2 className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                {tool.label}
+                            </h2>
+                            <p className="text-sm text-indigo-500 dark:text-indigo-200 mt-1 leading-relaxed">{tool.desc}</p>
+                        </div>
                     </motion.button>
                 ))}
             </div>
