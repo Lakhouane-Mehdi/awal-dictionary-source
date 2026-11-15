@@ -19,13 +19,13 @@ interface WordCardProps {
 // spine colour plus a matching low-contrast chip, so cards stay legible and
 // the set reads as one family rather than a rainbow.
 const CATEGORY_STYLES: Record<string, { spine: string; chip: string }> = {
-    food: { spine: 'bg-clay-500', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    animals: { spine: 'bg-clay-400', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    body: { spine: 'bg-clay-600', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    culture: { spine: 'bg-saffron-500', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
-    greetings: { spine: 'bg-saffron-400', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
-    clothing: { spine: 'bg-saffron-600', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
-    colors: { spine: 'bg-saffron-300', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    food: { spine: 'bg-ruby-500', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    animals: { spine: 'bg-ruby-400', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    body: { spine: 'bg-ruby-600', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    culture: { spine: 'bg-accent-500', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
+    greetings: { spine: 'bg-accent-400', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
+    clothing: { spine: 'bg-accent-600', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
+    colors: { spine: 'bg-accent-300', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
     verbs: { spine: 'bg-indigo-500', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     pronouns: { spine: 'bg-indigo-400', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     adjectives: { spine: 'bg-indigo-300', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
@@ -36,16 +36,16 @@ const CATEGORY_STYLES: Record<string, { spine: string; chip: string }> = {
     family: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     people: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     time: { spine: 'bg-indigo-800', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
-    health: { spine: 'bg-clay-700', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    household: { spine: 'bg-clay-300', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    'tools & materials': { spine: 'bg-clay-800', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
-    religion: { spine: 'bg-saffron-700', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
-    feelings: { spine: 'bg-saffron-200', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
-    expressions: { spine: 'bg-saffron-400', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    health: { spine: 'bg-ruby-700', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    household: { spine: 'bg-ruby-300', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    'tools & materials': { spine: 'bg-ruby-800', chip: 'bg-ruby-50 text-ruby-700 dark:bg-ruby-900/30 dark:text-ruby-200' },
+    religion: { spine: 'bg-accent-700', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
+    feelings: { spine: 'bg-accent-200', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
+    expressions: { spine: 'bg-accent-400', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
     'grammar words': { spine: 'bg-indigo-200', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     education: { spine: 'bg-indigo-900', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     society: { spine: 'bg-indigo-600', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
-    'work & money': { spine: 'bg-saffron-800', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    'work & money': { spine: 'bg-accent-800', chip: 'bg-accent-50 text-accent-800 dark:bg-accent-900/30 dark:text-accent-200' },
     farming: { spine: 'bg-emerald-400', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
     transport: { spine: 'bg-emerald-800', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
 };
@@ -63,7 +63,7 @@ const getCategoryStyle = (category?: string) =>
 const ACTION_BUTTON =
     'flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/12 dark:border-white/12 ' +
     'text-indigo-600 dark:text-indigo-200 font-semibold text-xs ' +
-    'hover:border-saffron-400 hover:text-saffron-600 dark:hover:text-saffron-300 ' +
+    'hover:border-accent-400 hover:text-accent-600 dark:hover:text-accent-300 ' +
     'active:scale-95 transition-all';
 
 export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot }: WordCardProps) => {
@@ -120,7 +120,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
 
                     <button
                         onClick={(e) => { e.stopPropagation(); toggleFavorite(entry.id); }}
-                        className={`p-2 rounded-full transition-colors ${favorite ? 'bg-clay-50 text-clay-600 dark:bg-clay-900/30 dark:text-clay-300' : 'hover:bg-sand-200 dark:hover:bg-white/5 text-indigo-300 dark:text-indigo-400 hover:text-clay-500'}`}
+                        className={`p-2 rounded-full transition-colors ${favorite ? 'bg-ruby-50 text-ruby-600 dark:bg-ruby-900/30 dark:text-ruby-300' : 'hover:bg-sand-200 dark:hover:bg-white/5 text-indigo-300 dark:text-indigo-400 hover:text-ruby-500'}`}
                         title={favorite ? 'Remove from favorites' : 'Add to favorites'}
                         aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'}
                     >
@@ -137,7 +137,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                             e.stopPropagation();
                             if (!speaking) speak(entry.term_latin);
                         }}
-                        className={`${ACTION_BUTTON} ${speaking ? 'text-saffron-600 dark:text-saffron-300 border-saffron-300 cursor-default' : ''}`}
+                        className={`${ACTION_BUTTON} ${speaking ? 'text-accent-600 dark:text-accent-300 border-accent-300 cursor-default' : ''}`}
                     >
                         <Volume2 size={15} className={speaking ? "animate-pulse" : ""} /> {speaking ? 'Playing' : 'Listen'}
                     </button>
@@ -190,7 +190,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
                     <img src={entry.cultural_image} alt={entry.term_latin} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-4">
                         <div className="flex items-center gap-2 text-white/90">
-                            <Sparkles size={16} className="text-yellow-400" />
+                            <Sparkles size={16} className="text-accent-400" />
                             <span className="text-xs font-bold uppercase tracking-wider">Cultural Insight</span>
                         </div>
                     </div>

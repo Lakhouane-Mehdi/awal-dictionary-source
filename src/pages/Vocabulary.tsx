@@ -64,7 +64,7 @@ export const Vocabulary = () => {
                     <p className={`font-display text-4xl sm:text-5xl font-bold text-indigo-800 dark:text-sand-100 mb-2 leading-tight ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
                         {displayTerm(entry, script)}
                     </p>
-                    <p className="tifinagh-text text-xl text-saffron-500 mb-8">
+                    <p className="tifinagh-text text-xl text-accent-500 mb-8">
                         {script !== 'tifinagh' ? entry.term_tifinagh : entry.term_latin}
                     </p>
 
@@ -72,7 +72,7 @@ export const Vocabulary = () => {
                         <button
                             type="button"
                             onClick={() => setRevealed(true)}
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold hover:border-saffron-400 hover:text-saffron-600 transition-all active:scale-95"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold hover:border-accent-400 hover:text-accent-600 transition-all active:scale-95"
                         >
                             <Eye size={17} /> Reveal definition
                         </button>
@@ -89,7 +89,7 @@ export const Vocabulary = () => {
                                 <button
                                     type="button"
                                     onClick={() => speak(entry.term_latin)}
-                                    className={`inline-flex items-center gap-2 text-sm font-semibold transition-colors ${speaking ? 'text-saffron-600 dark:text-saffron-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-saffron-600'}`}
+                                    className={`inline-flex items-center gap-2 text-sm font-semibold transition-colors ${speaking ? 'text-accent-600 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-600'}`}
                                 >
                                     <Volume2 size={16} className={speaking ? 'animate-pulse' : ''} />
                                     {speaking ? 'Playing' : 'Listen'}

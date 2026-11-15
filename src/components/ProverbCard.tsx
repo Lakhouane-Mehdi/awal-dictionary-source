@@ -36,7 +36,7 @@ export const ProverbCard = () => {
             // Generate Image
             const dataUrl = await toPng(cardRef.current, {
                 cacheBust: true,
-                backgroundColor: '#fff7ed', // Force light background
+                backgroundColor: '#ffffff', // Force light background
                 pixelRatio: 2,
                 skipFonts: true, // Prevent CORS "Failed to fetch" on fonts
                 filter: (node) => {
@@ -80,10 +80,10 @@ export const ProverbCard = () => {
             ref={cardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-900 border border-amber-100 dark:border-slate-700 shadow-xl"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white to-indigo-50 dark:from-slate-800 dark:to-slate-900 border border-indigo-100 dark:border-slate-700 shadow-xl"
         >
             {/* Background Decoration */}
-            <div className="absolute top-0 right-0 p-8 text-amber-500/10 dark:text-amber-500/5">
+            <div className="absolute top-0 right-0 p-8 text-accent-500/10 dark:text-accent-500/5">
                 <Quote size={120} />
             </div>
 
@@ -91,10 +91,10 @@ export const ProverbCard = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                        <div className="p-2 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
+                        <div className="p-2 rounded-full bg-accent-100 dark:bg-accent-900/30 text-accent-600 dark:text-accent-400">
                             <ScrollText size={20} />
                         </div>
-                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-500">
+                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent-600 dark:text-accent-500">
                             Inzan (Wisdom of the Day)
                         </span>
                     </div>
@@ -122,12 +122,12 @@ export const ProverbCard = () => {
                     </p>
 
                     {/* Divider */}
-                    <div className="w-12 h-1 bg-amber-300 dark:bg-amber-700/50 rounded-full my-4" />
+                    <div className="w-12 h-1 bg-accent-300 dark:bg-accent-700/50 rounded-full my-4" />
 
                     {/* Meaning */}
                     <div className="bg-white/60 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/40 dark:border-white/5">
                         <div className="flex items-start gap-3">
-                            <Sparkles size={16} className="text-amber-500 mt-1 shrink-0" />
+                            <Sparkles size={16} className="text-accent-500 mt-1 shrink-0" />
                             <div>
                                 <p className="text-sm font-bold text-slate-900 dark:text-slate-200 mb-1">
                                     {dailyProverb.translation}

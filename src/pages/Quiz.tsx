@@ -108,9 +108,9 @@ export const Quiz = () => {
                             <motion.div
                                 initial={{ scale: 0 }} animate={{ scale: 1 }}
                                 transition={{ type: "spring", delay: 0.2 }}
-                                className="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-yellow-200"
+                                className="w-24 h-24 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-accent-200"
                             >
-                                <Trophy size={48} className="text-yellow-500 drop-shadow-sm" fill="currentColor" />
+                                <Trophy size={48} className="text-accent-500 drop-shadow-sm" fill="currentColor" />
                             </motion.div>
 
                             <h2 className="text-3xl font-black text-slate-800 mb-2">Quiz Complete!</h2>
@@ -118,7 +118,7 @@ export const Quiz = () => {
 
                             <div className="flex justify-center gap-2 mb-8">
                                 {[...Array(questions.length)].map((_, i) => (
-                                    <Star key={i} size={32} className={`${i < score ? 'text-yellow-400 fill-current' : 'text-slate-200'} transition-colors`} />
+                                    <Star key={i} size={32} className={`${i < score ? 'text-accent-400 fill-current' : 'text-slate-200'} transition-colors`} />
                                 ))}
                             </div>
 

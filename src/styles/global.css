@@ -17,8 +17,8 @@
   page surfaces so components never hardcode a hex value.
 */
 :root {
-  --surface-base: #F5F1E8;
-  /* sand-200 */
+  --surface-base: #FAFBFD;
+  /* near white */
   --surface-panel: 255 255 255;
   --surface-panel-alpha: 0.78;
   --text-main: #1A2440;
@@ -36,7 +36,7 @@
   --surface-panel: 26 26 36;
   /* night-800 */
   --surface-panel-alpha: 0.72;
-  --text-main: #F9F6EF;
+  --text-main: #F4F6FB;
   --text-muted: #AEBAD9;
   --hairline: 255 255 255;
   --hairline-alpha: 0.08;
@@ -55,15 +55,15 @@ body {
 
 /*
   App shell.
-  Light: warm sand paper with a soft indigo wash at the top.
-  Dark:  deep night with restrained indigo/saffron light sources.
-  Both avoid the saturated magenta of the previous theme.
+  Light: clean white with a soft indigo wash at the top.
+  Dark:  deep night with restrained indigo and green light sources.
+  No orange in either.
 */
 .app-shell {
   background-color: var(--surface-base);
   background-image:
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(43, 58, 103, 0.10), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(232, 163, 61, 0.08), transparent 70%);
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(58, 159, 52, 0.06), transparent 70%);
   background-attachment: fixed;
   min-height: 100vh;
   transition: background-color 0.4s ease;
@@ -72,7 +72,7 @@ body {
 .dark .app-shell {
   background-image:
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(63, 81, 137, 0.28), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 100% 5%, rgba(193, 102, 63, 0.12), transparent 70%);
+    radial-gradient(ellipse 50% 40% at 100% 5%, rgba(58, 159, 52, 0.10), transparent 70%);
 }
 
 @layer utilities {
@@ -104,7 +104,7 @@ body {
   /* Saffron rule used under section headings */
   .rule-accent::after {
     content: '';
-    @apply block w-10 h-[3px] rounded-full bg-saffron-400 mt-2;
+    @apply block w-10 h-[3px] rounded-full bg-accent-400 mt-2;
   }
 
   .no-scrollbar::-webkit-scrollbar {

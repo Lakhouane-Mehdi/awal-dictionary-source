@@ -33,7 +33,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                         className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden"
                     >
                         {/* Header */}
-                        <div className="relative h-40 bg-gradient-to-br from-yellow-300 to-amber-500 flex flex-col items-center justify-center text-white overflow-hidden shadow-sm">
+                        <div className="relative h-40 bg-gradient-to-br from-accent-400 to-accent-700 flex flex-col items-center justify-center text-white overflow-hidden shadow-sm">
                             <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse-slow"></div>
                             <button
                                 onClick={onClose}
@@ -87,7 +87,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                                     return (
                                         <div
                                             key={achievement.id}
-                                            className={`flex items-center gap-4 p-3 rounded-2xl border-2 transition-all ${isUnlocked ? 'border-amber-100 bg-amber-50/50 dark:border-amber-900/30 dark:bg-amber-900/10' : 'border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/50 opacity-60'}`}
+                                            className={`flex items-center gap-4 p-3 rounded-2xl border-2 transition-all ${isUnlocked ? 'border-accent-100 bg-accent-50/50 dark:border-accent-900/30 dark:bg-accent-900/10' : 'border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/50 opacity-60'}`}
                                         >
                                             <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-inner ${isUnlocked ? 'bg-white dark:bg-slate-800' : 'bg-slate-200 dark:bg-slate-700 grayscale'}`}>
                                                 {isUnlocked ? achievement.icon : <Lock size={18} className="text-slate-400" />}

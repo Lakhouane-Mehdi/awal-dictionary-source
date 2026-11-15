@@ -53,7 +53,7 @@ export const Layout = () => {
     const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
 
     return (
-        <div className="app-shell flex flex-col min-h-screen relative font-sans selection:bg-saffron-200 selection:text-indigo-900">
+        <div className="app-shell flex flex-col min-h-screen relative font-sans selection:bg-accent-200 selection:text-indigo-900">
             <SiteHeader onOpenAchievements={() => setIsAchievementsOpen(true)} />
 
             {/* Contribution FAB (Fixed Bottom Right, above Nav) */}
@@ -88,7 +88,7 @@ export const Layout = () => {
                                         <li key={link.to}>
                                             <Link
                                                 to={link.to}
-                                                className="text-sm text-indigo-500 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                                className="text-sm text-indigo-500 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                             >
                                                 {link.label}
                                             </Link>
@@ -108,7 +108,7 @@ export const Layout = () => {
                                     href={AUTHOR.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-semibold text-indigo-700 dark:text-sand-100 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                    className="font-semibold text-indigo-700 dark:text-sand-100 hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                 >
                                     {AUTHOR.name}
                                 </a>
@@ -118,7 +118,7 @@ export const Layout = () => {
                                     href={AUTHOR.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                 >
                                     <Globe size={13} /> {AUTHOR.websiteLabel}
                                 </a>
@@ -126,7 +126,7 @@ export const Layout = () => {
                                     href={AUTHOR.github}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 dark:text-indigo-300 hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                 >
                                     <GithubIcon size={13} /> {AUTHOR.githubLabel}
                                 </a>
@@ -137,13 +137,13 @@ export const Layout = () => {
                             <div className="flex gap-4 text-xs text-indigo-400 dark:text-indigo-300">
                                 <button
                                     onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
-                                    className="hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                    className="hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                 >
                                     Cookie Settings
                                 </button>
                                 <button
                                     onClick={() => setIsContributionOpen(true)}
-                                    className="font-semibold hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors"
+                                    className="font-semibold hover:text-accent-600 dark:hover:text-accent-300 transition-colors"
                                 >
                                     Contribute
                                 </button>
@@ -182,7 +182,7 @@ const NavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; label
             className={({ isActive }) => `
                 flex flex-col items-center justify-center w-16 h-full transition-all duration-300 relative
                 ${isActive
-                    ? 'text-indigo-700 dark:text-saffron-300'
+                    ? 'text-indigo-700 dark:text-accent-300'
                     : 'text-indigo-400/70 dark:text-indigo-300/60 hover:text-indigo-600 dark:hover:text-indigo-200'}
             `}
         >

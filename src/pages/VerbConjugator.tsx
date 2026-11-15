@@ -75,7 +75,7 @@ export const VerbConjugator = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-6"
                 >
-                    <div className="glass-panel p-6 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-900 border-amber-100 dark:border-slate-700">
+                    <div className="glass-panel p-6 bg-gradient-to-br from-accent-50 to-accent-50 dark:from-slate-800 dark:to-slate-900 border-accent-100 dark:border-slate-700">
                         <div className="text-center mb-6">
                             <h2 className={`text-4xl font-black mb-2 ${script === 'tifinagh' ? 'tifinagh-text' : ''} text-slate-800 dark:text-slate-100`}>
                                 {displayTerm(selectedVerb, script)}
@@ -144,8 +144,8 @@ const ConjugationTable = ({ title, value, script }: { title: string, value: stri
 
     return (
         <div className="relative">
-            <h3 className="text-xs font-bold uppercase text-amber-600 dark:text-amber-500 mb-2 tracking-wider flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {title}
+            <h3 className="text-xs font-bold uppercase text-accent-600 dark:text-accent-500 mb-2 tracking-wider flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-500"></span> {title}
             </h3>
             <div className="glass-panel p-4 bg-white/50 dark:bg-black/20 text-center">
                 <span className={`text-xl font-bold text-slate-800 dark:text-slate-200 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>

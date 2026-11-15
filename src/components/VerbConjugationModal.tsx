@@ -61,7 +61,7 @@ export const VerbConjugationModal = ({ isOpen, onClose, verbName, conjugation, s
                                 {conjugation.preterite && <AspectRow label="Preterite (Past)" value={conjugation.preterite} script={script} color="blue" />}
                                 {conjugation.intensive && <AspectRow label="Intensive (Habitual)" value={conjugation.intensive} script={script} color="purple" />}
                                 {conjugation.future && <AspectRow label="Future" value={conjugation.future} script={script} color="pink" />}
-                                {conjugation.aorist && <AspectRow label="Aorist (Imperative)" value={conjugation.aorist} script={script} color="orange" />}
+                                {conjugation.aorist && <AspectRow label="Aorist (Imperative)" value={conjugation.aorist} script={script} color="green" />}
                             </div>
                         </motion.div>
                     </motion.div>
@@ -76,7 +76,7 @@ const AspectRow = ({ label, value, script, color }: { label: string, value: stri
         blue: 'bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200 border-blue-200 dark:border-blue-700/50',
         purple: 'bg-purple-50 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200 border-purple-200 dark:border-purple-700/50',
         pink: 'bg-pink-50 text-pink-700 dark:bg-pink-900/40 dark:text-pink-200 border-pink-200 dark:border-pink-700/50',
-        orange: 'bg-orange-50 text-orange-700 dark:bg-orange-900/40 dark:text-orange-200 border-orange-200 dark:border-orange-700/50',
+        green: 'bg-accent-50 text-accent-700 dark:bg-accent-900/40 dark:text-accent-200 border-accent-200 dark:border-accent-700/50',
     };
 
     const selectedColor = colorClasses[color as keyof typeof colorClasses] || colorClasses.blue;

@@ -34,8 +34,8 @@ export const Roots = () => {
                             className="glass-panel p-5 group hover:shadow-panel-lg transition-all"
                         >
                             <div className="flex items-center gap-2 mb-2">
-                                <Network size={15} className="text-saffron-500" aria-hidden="true" />
-                                <span className="font-display text-xl font-bold tracking-[0.08em] text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                <Network size={15} className="text-accent-500" aria-hidden="true" />
+                                <span className="font-display text-xl font-bold tracking-[0.08em] text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                     {family.root}
                                 </span>
                             </div>

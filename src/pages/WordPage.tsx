@@ -89,7 +89,7 @@ export const WordPage = () => {
                     </Link>
                     <Link
                         to="/browse"
-                        className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         Browse A–Z
                     </Link>
@@ -113,7 +113,7 @@ export const WordPage = () => {
         <div className="max-w-3xl mx-auto w-full pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <button
                 onClick={() => navigate(-1)}
-                className="mb-6 flex flex-row items-center gap-2 text-indigo-500 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors px-4 py-2 rounded-xl w-fit font-semibold border border-indigo-700/10 dark:border-white/10"
+                className="mb-6 flex flex-row items-center gap-2 text-indigo-500 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 transition-colors px-4 py-2 rounded-xl w-fit font-semibold border border-indigo-700/10 dark:border-white/10"
             >
                 <ArrowLeft size={18} />
                 Back
@@ -132,7 +132,7 @@ export const WordPage = () => {
                 {entry.category && (
                     <Link
                         to={`/category/${slugify(entry.category)}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <Tag size={14} /> More {entry.category.toLowerCase()} words
                     </Link>
@@ -140,7 +140,7 @@ export const WordPage = () => {
                 {entry.root && (
                     <Link
                         to={`/root/${slugify(entry.root)}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <Network size={14} /> Root {entry.root}
                     </Link>
@@ -152,7 +152,7 @@ export const WordPage = () => {
                     <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300">Script variants</h2>
                     <button
                         onClick={() => speak(entry.term_latin)}
-                        className={`p-3 rounded-full transition-all ${speaking ? 'bg-saffron-50 text-saffron-600 dark:bg-saffron-900/30 dark:text-saffron-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-saffron-500'}`}
+                        className={`p-3 rounded-full transition-all ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                         title="Pronounce Word"
                         aria-label="Pronounce word"
                     >
@@ -224,7 +224,7 @@ export const WordPage = () => {
                         </div>
                     ) : (
                         examples.map((ex, idx) => (
-                            <div key={idx} className="border-l-4 border-saffron-400 bg-white/40 dark:bg-white/5 p-4 rounded-xl">
+                            <div key={idx} className="border-l-4 border-accent-400 bg-white/40 dark:bg-white/5 p-4 rounded-xl">
                                 <p className="font-display text-lg italic text-indigo-800 dark:text-sand-100 mb-1">"{ex.tamazight}"</p>
                                 <p className="text-sm text-indigo-500 dark:text-indigo-200">{ex.english}</p>
                             </div>

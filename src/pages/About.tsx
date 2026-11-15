@@ -113,7 +113,7 @@ export const About = () => {
                 </h2>
                 <div className="space-y-4">
                     {SOURCES.map(source => (
-                        <div key={source.name} className="border-l-2 border-saffron-400 pl-4">
+                        <div key={source.name} className="border-l-2 border-accent-400 pl-4">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
                                 <h3 className="font-semibold text-indigo-800 dark:text-sand-100">{source.name}</h3>
                                 {source.licence && (
@@ -148,7 +148,7 @@ export const About = () => {
                     </a>
                     <Link
                         to="/tools/community"
-                        className="inline-flex items-center gap-2 border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         Community page
                     </Link>
@@ -171,7 +171,7 @@ export const About = () => {
                         href={AUTHOR.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <Globe size={15} /> {AUTHOR.websiteLabel}
                     </a>
@@ -179,7 +179,7 @@ export const About = () => {
                         href={AUTHOR.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <GithubIcon size={15} /> {AUTHOR.githubLabel}
                     </a>
@@ -187,7 +187,7 @@ export const About = () => {
                         href={PROJECT_REPO}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <Code2 size={15} /> Project source
                     </a>
@@ -202,10 +202,10 @@ export const About = () => {
                     © {new Date().getFullYear()} Awal Project. All rights reserved.
                 </p>
                 <div className="flex justify-center gap-4 mt-3 text-xs">
-                    <Link to="/privacy" className="text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 transition-colors">
+                    <Link to="/privacy" className="text-indigo-400 dark:text-indigo-300 hover:text-accent-600 transition-colors">
                         Privacy
                     </Link>
-                    <Link to="/imprint" className="text-indigo-400 dark:text-indigo-300 hover:text-saffron-600 transition-colors">
+                    <Link to="/imprint" className="text-indigo-400 dark:text-indigo-300 hover:text-accent-600 transition-colors">
                         Imprint
                     </Link>
                 </div>

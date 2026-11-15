@@ -33,7 +33,7 @@ export const CategoryDetail = () => {
                         <Link
                             key={c.slug}
                             to={`/category/${c.slug}`}
-                            className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                            className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                         >
                             {c.name}
                         </Link>
@@ -70,7 +70,7 @@ export const CategoryDetail = () => {
                 <button
                     type="button"
                     onClick={() => setVisible(v => v + PAGE_SIZE)}
-                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-[0.99] transition-all"
+                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition-all"
                 >
                     Show more ({(entries.length - visible).toLocaleString()} remaining)
                 </button>

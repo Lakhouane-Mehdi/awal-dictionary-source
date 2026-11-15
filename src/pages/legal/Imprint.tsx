@@ -45,7 +45,7 @@ export const Imprint = () => {
                         href={PROJECT_ISSUES}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <GithubIcon size={15} /> Open an issue
                     </a>
@@ -53,7 +53,7 @@ export const Imprint = () => {
                         href={AUTHOR.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
                         <Globe size={15} /> {AUTHOR.websiteLabel}
                     </a>
@@ -75,7 +75,7 @@ export const Imprint = () => {
                 </h2>
                 <p className="text-indigo-700 dark:text-indigo-100 leading-relaxed mb-4">
                     Dictionary entries are compiled from the third-party linguistic sources
-                    credited on the <a href="/about" className="text-saffron-600 dark:text-saffron-300 font-semibold hover:underline">About page</a>,
+                    credited on the <a href="/about" className="text-accent-600 dark:text-accent-300 font-semibold hover:underline">About page</a>,
                     each under its own licence. Every effort is made to keep entries accurate,
                     but no warranty is given as to completeness or correctness. If you spot an
                     error, please report it.
@@ -96,7 +96,7 @@ export const Imprint = () => {
                         href="https://ec.europa.eu/consumers/odr/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-saffron-600 dark:text-saffron-300 font-semibold hover:underline break-all"
+                        className="text-accent-600 dark:text-accent-300 font-semibold hover:underline break-all"
                     >
                         ec.europa.eu/consumers/odr
                     </a>

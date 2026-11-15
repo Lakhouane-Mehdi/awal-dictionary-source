@@ -63,11 +63,11 @@ export const Tools = () => {
                         onClick={() => navigate(tool.path)}
                         className="glass-panel p-6 flex items-start gap-4 text-left group hover:shadow-panel-lg transition-all"
                     >
-                        <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                        <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {tool.icon}
                         </span>
                         <div>
-                            <h2 className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                            <h2 className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                 {tool.label}
                             </h2>
                             <p className="text-sm text-indigo-500 dark:text-indigo-200 mt-1 leading-relaxed">{tool.desc}</p>

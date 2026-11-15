@@ -26,7 +26,7 @@ export const ProverbDetail = () => {
                     description="That proverb does not exist."
                     crumbs={[{ label: 'Home', to: '/' }, { label: 'Proverbs', to: '/proverbs' }, { label: 'Not found' }]}
                 />
-                <Link to="/proverbs" className="text-saffron-600 dark:text-saffron-300 font-semibold hover:underline">
+                <Link to="/proverbs" className="text-accent-600 dark:text-accent-300 font-semibold hover:underline">
                     View all proverbs
                 </Link>
             </div>
@@ -60,7 +60,7 @@ export const ProverbDetail = () => {
                     <button
                         type="button"
                         onClick={() => speak(proverb.text_latin)}
-                        className={`p-3 rounded-full shrink-0 transition-all ${speaking ? 'bg-saffron-50 text-saffron-600 dark:bg-saffron-900/30 dark:text-saffron-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-saffron-500'}`}
+                        className={`p-3 rounded-full shrink-0 transition-all ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                         title="Listen"
                         aria-label="Listen to this proverb"
                     >
@@ -98,7 +98,7 @@ export const ProverbDetail = () => {
                         <p className="font-display italic text-sm text-indigo-500 dark:text-indigo-200 mb-1">
                             "{p.text_latin}"
                         </p>
-                        <p className="text-sm font-medium text-indigo-700 dark:text-indigo-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                        <p className="text-sm font-medium text-indigo-700 dark:text-indigo-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {p.translation}
                         </p>
                     </Link>

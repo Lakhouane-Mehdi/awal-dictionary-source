@@ -9,10 +9,11 @@ export default {
         extend: {
             colors: {
                 // Amazigh heritage palette.
-                // indigo  — the dye of the "blue people" of the Sahara; primary brand
-                // saffron — spice/sun tones; accent and highlights
-                // clay    — terracotta of Atlas earthen architecture; secondary accent
-                // sand    — warm paper neutral for light surfaces
+                // indigo — the dye of the "blue people" of the Sahara; primary brand
+                // accent — the green of the Amazigh flag; highlights and links
+                // ruby   — the red of the yaz on the flag; secondary accent
+                // sand   — clean cool whites for light surfaces
+                // No orange anywhere: the owner does not want it in the design.
                 // night   — warm-shifted charcoal for dark surfaces
                 indigo: {
                     50: '#EEF1F8',
@@ -27,37 +28,37 @@ export default {
                     900: '#131A2E',
                     950: '#0C1120',
                 },
-                saffron: {
-                    50: '#FEF7EC',
-                    100: '#FCEACB',
-                    200: '#F8D294',
-                    300: '#F2B95E',
-                    400: '#E8A33D',
-                    500: '#D98A22',
-                    600: '#A25D14',
-                    700: '#945318',
-                    800: '#78421A',
-                    900: '#63371A',
+                accent: {
+                    50: '#EFF8EE',
+                    100: '#D9F0D6',
+                    200: '#B4E0AE',
+                    300: '#85CC7D',
+                    400: '#56B54D',
+                    500: '#3A9F34',
+                    600: '#2E8329',
+                    700: '#276A24',
+                    800: '#22551F',
+                    900: '#1D451B',
                 },
-                clay: {
-                    50: '#FDF4F0',
-                    100: '#F7E8E0',
-                    200: '#EFCDBD',
-                    300: '#E2A98F',
-                    400: '#D28560',
-                    500: '#C1663F',
-                    600: '#A64F30',
-                    700: '#883E29',
-                    800: '#6F3426',
-                    900: '#5C2E23',
+                ruby: {
+                    50: '#FDF0EF',
+                    100: '#FADBD9',
+                    200: '#F4B5B1',
+                    300: '#EC8781',
+                    400: '#E4554D',
+                    500: '#E2231A',
+                    600: '#B91C14',
+                    700: '#961811',
+                    800: '#76150F',
+                    900: '#5E130E',
                 },
                 sand: {
-                    50: '#FDFCF9',
-                    100: '#F9F6EF',
-                    200: '#F5F1E8',
-                    300: '#EAE3D4',
-                    400: '#D9CFBA',
-                    500: '#C2B49A',
+                    50: '#FFFFFF',
+                    100: '#F8F9FC',
+                    200: '#F1F3F8',
+                    300: '#E3E7F0',
+                    400: '#CBD2E1',
+                    500: '#A7B1C7',
                 },
                 night: {
                     700: '#242430',

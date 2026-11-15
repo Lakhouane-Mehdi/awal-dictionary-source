@@ -22,7 +22,7 @@ export const PageHeader = ({ title, tifinagh, description, crumbs, meta }: PageH
                     {crumbs.map((crumb, i) => (
                         <li key={`${crumb.label}-${i}`} className="flex items-center gap-1">
                             {crumb.to ? (
-                                <Link to={crumb.to} className="hover:text-saffron-600 dark:hover:text-saffron-300 transition-colors">
+                                <Link to={crumb.to} className="hover:text-accent-600 dark:hover:text-accent-300 transition-colors">
                                     {crumb.label}
                                 </Link>
                             ) : (
@@ -40,7 +40,7 @@ export const PageHeader = ({ title, tifinagh, description, crumbs, meta }: PageH
                 {title}
             </h1>
             {tifinagh && (
-                <span className="tifinagh-text text-xl text-saffron-500" aria-hidden="true">
+                <span className="tifinagh-text text-xl text-accent-500" aria-hidden="true">
                     {tifinagh}
                 </span>
             )}

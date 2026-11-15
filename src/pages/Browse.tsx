@@ -52,7 +52,7 @@ export const Browse = () => {
                                     ? 'bg-indigo-600 text-white shadow-panel'
                                     : count === 0
                                         ? 'text-indigo-300/40 dark:text-indigo-400/25 cursor-not-allowed'
-                                        : 'text-indigo-600 dark:text-indigo-200 hover:bg-saffron-50 dark:hover:bg-white/5 hover:text-saffron-600'
+                                        : 'text-indigo-600 dark:text-indigo-200 hover:bg-accent-50 dark:hover:bg-white/5 hover:text-accent-600'
                             }`}
                             title={`${count} word${count === 1 ? '' : 's'}`}
                         >
@@ -84,7 +84,7 @@ export const Browse = () => {
                 <button
                     type="button"
                     onClick={() => setVisible(v => v + PAGE_SIZE)}
-                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-[0.99] transition-all"
+                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition-all"
                 >
                     Show more ({(entries.length - visible).toLocaleString()} remaining)
                 </button>

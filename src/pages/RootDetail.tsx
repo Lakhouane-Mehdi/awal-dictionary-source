@@ -24,7 +24,7 @@ export const RootDetail = () => {
                     description="That root family does not exist."
                     crumbs={[{ label: 'Home', to: '/' }, { label: 'Roots', to: '/roots' }, { label: 'Not found' }]}
                 />
-                <Link to="/roots" className="text-saffron-600 dark:text-saffron-300 font-semibold hover:underline">
+                <Link to="/roots" className="text-accent-600 dark:text-accent-300 font-semibold hover:underline">
                     View all root families
                 </Link>
             </div>
@@ -48,7 +48,7 @@ export const RootDetail = () => {
             />
 
             {notes.length > 0 && (
-                <div className="glass-panel p-6 mb-6 border-l-4 border-l-saffron-400">
+                <div className="glass-panel p-6 mb-6 border-l-4 border-l-accent-400">
                     <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-3">
                         Etymology
                     </h2>
@@ -87,7 +87,7 @@ export const RootDetail = () => {
                         <Link
                             key={r.slug}
                             to={`/root/${r.slug}`}
-                            className="px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold tracking-wider text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 transition-all"
+                            className="px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold tracking-wider text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                         >
                             {r.root}
                         </Link>

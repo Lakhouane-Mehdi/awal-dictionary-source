@@ -14,7 +14,7 @@ export default defineConfig({
         short_name: 'Awal',
         description: 'Offline Tamazight-English dictionary across Tifinagh, Latin, and Arabic scripts.',
         theme_color: '#2B3A67',
-        background_color: '#F5F1E8',
+        background_color: '#FFFFFF',
         display: 'standalone',
         start_url: '/',
         categories: ['education', 'books', 'reference'],

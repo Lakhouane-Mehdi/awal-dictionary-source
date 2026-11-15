@@ -101,8 +101,8 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
             <div
                 className={`
                 glass-panel flex items-center p-3 transition-all duration-300
-                ${isFocused ? 'ring-2 ring-saffron-400/50' : ''}
-                ${isListening ? 'ring-2 ring-clay-500/50' : ''}
+                ${isFocused ? 'ring-2 ring-accent-400/50' : ''}
+                ${isListening ? 'ring-2 ring-ruby-500/50' : ''}
                 ${showDropdown ? 'rounded-b-none' : ''}
             `}
                 role="combobox"
@@ -110,7 +110,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 aria-haspopup="listbox"
                 aria-owns="search-suggestions"
             >
-                <Search className={`ml-2 transition-colors duration-300 ${isFocused ? 'text-saffron-500' : 'text-indigo-300 dark:text-indigo-400'}`} size={20} />
+                <Search className={`ml-2 transition-colors duration-300 ${isFocused ? 'text-accent-500' : 'text-indigo-300 dark:text-indigo-400'}`} size={20} />
                 <input
                     ref={inputRef}
                     type="text"
@@ -139,7 +139,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 <div className="w-px h-6 bg-indigo-700/12 dark:bg-white/12 mx-2"></div>
                 <button
                     onClick={handleMicClick}
-                    className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-clay-50 text-clay-600 dark:bg-clay-900/30 dark:text-clay-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-saffron-500'}`}
+                    className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-ruby-50 text-ruby-600 dark:bg-ruby-900/30 dark:text-ruby-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                     title="Voice Search"
                     aria-label={isListening ? 'Stop voice search' : 'Start voice search'}
                     aria-pressed={isListening}
@@ -168,7 +168,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                                 onMouseEnter={() => setActiveIndex(index)}
                                 className={`px-4 py-3 cursor-pointer flex justify-between items-center gap-3 group transition-colors ${
                                     index === activeIndex
-                                        ? 'bg-saffron-50 dark:bg-white/5'
+                                        ? 'bg-accent-50 dark:bg-white/5'
                                         : 'hover:bg-sand-100 dark:hover:bg-white/5'
                                 }`}
                             >
@@ -178,7 +178,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                                     </span>
                                     <span className="text-sm text-indigo-400 dark:text-indigo-300 truncate max-w-[200px] sm:max-w-xs">{entry.definition}</span>
                                 </div>
-                                <span className="font-tifinagh text-xl text-saffron-500 dark:text-saffron-400 shrink-0">
+                                <span className="font-tifinagh text-xl text-accent-500 dark:text-accent-400 shrink-0">
                                     {entry.term_tifinagh}
                                 </span>
                             </li>

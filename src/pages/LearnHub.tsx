@@ -88,11 +88,11 @@ export const LearnHub = () => {
                         className="glass-panel p-6 group hover:shadow-panel-lg transition-all"
                     >
                         <div className="flex items-start gap-4">
-                            <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                            <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                 {path.icon}
                             </span>
                             <div className="min-w-0">
-                                <h2 className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                <h2 className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                     {path.label}
                                 </h2>
                                 <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 mt-0.5">

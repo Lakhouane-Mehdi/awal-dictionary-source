@@ -33,7 +33,7 @@ export const Proverbs = () => {
                         <p className="font-display italic text-indigo-500 dark:text-indigo-200 mb-3">
                             "{proverb.text_latin}"
                         </p>
-                        <p className="text-indigo-700 dark:text-indigo-100 font-medium mt-auto group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                        <p className="text-indigo-700 dark:text-indigo-100 font-medium mt-auto group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {proverb.translation}
                         </p>
                         {proverb.region && (

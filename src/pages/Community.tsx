@@ -19,8 +19,8 @@ export const Community = () => {
         <div className="w-full pb-20 pt-4">
             <header className="mb-8">
                 <div className="flex items-center gap-3 mb-1">
-                    <Users className="text-orange-500" size={28} />
-                    <h1 className="text-3xl font-black bg-gradient-to-r from-orange-500 to-rose-500 bg-clip-text text-transparent">
+                    <Users className="text-accent-500" size={28} />
+                    <h1 className="text-3xl font-black bg-gradient-to-r from-accent-500 to-accent-700 bg-clip-text text-transparent">
                         Community
                     </h1>
                 </div>

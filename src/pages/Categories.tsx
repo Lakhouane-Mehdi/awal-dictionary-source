@@ -27,7 +27,7 @@ export const Categories = () => {
                         to={`/category/${cat.slug}`}
                         className="glass-panel p-5 group hover:shadow-panel-lg transition-all"
                     >
-                        <p className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                        <p className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {cat.name}
                         </p>
                         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 mt-1">

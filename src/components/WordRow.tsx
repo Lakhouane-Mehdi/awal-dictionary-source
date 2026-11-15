@@ -17,7 +17,7 @@ export const WordRow = ({ entry }: { entry: DictionaryEntry }) => {
         >
             <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className={`font-semibold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                    <span className={`font-semibold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
                         {displayTerm(entry, script)}
                     </span>
                     {entry.category && (
@@ -30,7 +30,7 @@ export const WordRow = ({ entry }: { entry: DictionaryEntry }) => {
                     {entry.definition}
                 </p>
             </div>
-            <span className="tifinagh-text text-lg text-saffron-500/80 shrink-0" aria-hidden="true">
+            <span className="tifinagh-text text-lg text-accent-500/80 shrink-0" aria-hidden="true">
                 {entry.term_tifinagh}
             </span>
         </Link>

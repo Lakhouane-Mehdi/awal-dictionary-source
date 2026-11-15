@@ -79,9 +79,9 @@ export const Home = () => {
                 >
                     <h1 className="font-display text-3xl font-bold text-indigo-700 dark:text-sand-100 flex items-baseline gap-2 tracking-tight">
                         Awal
-                        <span className="tifinagh-text text-lg text-saffron-500 font-normal">ⴰⵡⴰⵍ</span>
+                        <span className="tifinagh-text text-lg text-accent-500 font-normal">ⴰⵡⴰⵍ</span>
                     </h1>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-400 dark:text-indigo-300 mt-1 group-hover:text-saffron-500 transition-colors">
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-400 dark:text-indigo-300 mt-1 group-hover:text-accent-500 transition-colors">
                         {script === 'latin' ? 'Tamazight–English Dictionary' :
                             script === 'tifinagh' ? 'ⴰⵎⴰⵡⴰⵍ ⴰⵎⴰⵣⵉⵖ' :
                                 'القاموس الامازيغي'}
@@ -90,7 +90,7 @@ export const Home = () => {
                 <div className="flex gap-2">
                     <button
                         onClick={toggleTheme}
-                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-saffron-300 hover:text-saffron-500 transition-colors"
+                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-accent-300 hover:text-accent-500 transition-colors"
                         title="Toggle dark mode"
                         aria-label="Toggle dark mode"
                     >
@@ -98,14 +98,14 @@ export const Home = () => {
                     </button>
                     <button
                         onClick={toggleScript}
-                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-indigo-200 hover:text-saffron-500 transition-colors"
+                        className="w-11 h-11 glass-panel flex items-center justify-center text-indigo-600 dark:text-indigo-200 hover:text-accent-500 transition-colors"
                         title="Switch script"
                         aria-label="Switch script"
                     >
                         <Eye size={20} strokeWidth={2.2} />
                     </button>
                     <div
-                        className="w-11 h-11 glass-panel flex flex-col items-center justify-center text-clay-500 dark:text-clay-300"
+                        className="w-11 h-11 glass-panel flex flex-col items-center justify-center text-ruby-500 dark:text-ruby-300"
                         title={`Daily streak: ${stats.streak} day${stats.streak === 1 ? '' : 's'}`}
                     >
                         <Flame size={17} className={stats.streak > 0 ? 'fill-current' : ''} />
@@ -166,7 +166,7 @@ export const Home = () => {
                             </Link>
                             <button
                                 onClick={() => setIsContributionOpen(true)}
-                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-saffron-400 hover:text-saffron-600 transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all active:scale-[0.98] inline-flex items-center gap-2"
                             >
                                 <PenLine size={18} />
                                 Contribute a word
@@ -187,7 +187,7 @@ export const Home = () => {
                                 to={item.to}
                                 className="glass-panel p-4 group hover:shadow-panel-lg transition-all"
                             >
-                                <p className="font-display font-bold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors">
+                                <p className="font-display font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                     {item.label}
                                 </p>
                                 <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300 mt-0.5">
@@ -207,7 +207,7 @@ export const Home = () => {
                         </h3>
                         <button
                             onClick={handleShuffle}
-                            className="text-xs font-bold uppercase tracking-wider text-saffron-600 dark:text-saffron-400 hover:text-saffron-500 flex items-center gap-1.5 active:scale-95 transition-all"
+                            className="text-xs font-bold uppercase tracking-wider text-accent-600 dark:text-accent-400 hover:text-accent-500 flex items-center gap-1.5 active:scale-95 transition-all"
                         >
                             <Sparkles size={14} /> Shuffle
                         </button>
@@ -231,7 +231,7 @@ export const Home = () => {
                             </h3>
                             <Link
                                 to="/categories"
-                                className="text-xs font-bold uppercase tracking-wider text-saffron-600 dark:text-saffron-400 hover:text-saffron-500 transition-colors"
+                                className="text-xs font-bold uppercase tracking-wider text-accent-600 dark:text-accent-400 hover:text-accent-500 transition-colors"
                             >
                                 See all
                             </Link>
@@ -241,7 +241,7 @@ export const Home = () => {
                                 <Link
                                     key={cat.slug}
                                     to={`/category/${cat.slug}`}
-                                    className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-saffron-400 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-95 transition-all"
+                                    className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 dark:hover:text-accent-300 active:scale-95 transition-all"
                                 >
                                     {cat.name}
                                     <span className="text-indigo-400 dark:text-indigo-300 ml-1.5 font-normal">{cat.count}</span>
@@ -273,7 +273,7 @@ export const Home = () => {
                                                     <button
                                                         key={s}
                                                         onClick={() => setQuery(s)}
-                                                        className="px-3 py-1.5 rounded-lg bg-saffron-50 dark:bg-saffron-900/25 text-saffron-700 dark:text-saffron-300 text-sm font-semibold hover:bg-saffron-100 dark:hover:bg-saffron-900/40 transition-colors active:scale-95"
+                                                        className="px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-900/25 text-accent-700 dark:text-accent-300 text-sm font-semibold hover:bg-accent-100 dark:hover:bg-accent-900/40 transition-colors active:scale-95"
                                                     >
                                                         {s}
                                                     </button>
@@ -301,7 +301,7 @@ export const Home = () => {
                             <button
                                 type="button"
                                 onClick={loadMore}
-                                className="w-full py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300 active:scale-[0.99] transition-all"
+                                className="w-full py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition-all"
                             >
                                 Load more words
                             </button>

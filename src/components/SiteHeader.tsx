@@ -29,8 +29,8 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
     const linkClass = ({ isActive }: { isActive: boolean }) =>
         `px-3 py-2 text-sm font-semibold rounded-lg transition-colors ${
             isActive
-                ? 'text-saffron-700 dark:text-saffron-300 bg-saffron-50 dark:bg-saffron-900/20'
-                : 'text-indigo-500 dark:text-indigo-200 hover:text-saffron-600 dark:hover:text-saffron-300'
+                ? 'text-accent-700 dark:text-accent-300 bg-accent-50 dark:bg-accent-900/20'
+                : 'text-indigo-500 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300'
         }`;
 
     return (
@@ -43,7 +43,7 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                         <span className="font-display text-2xl font-bold text-indigo-700 dark:text-sand-100 tracking-tight">
                             Awal
                         </span>
-                        <span className="tifinagh-text text-base text-saffron-500 group-hover:text-saffron-600 transition-colors">
+                        <span className="tifinagh-text text-base text-accent-500 group-hover:text-accent-600 transition-colors">
                             ⴰⵡⴰⵍ
                         </span>
                     </Link>
@@ -61,7 +61,7 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                     <div className="flex items-center gap-1 shrink-0">
                         <button
                             onClick={toggleScript}
-                            className="w-9 h-9 rounded-lg flex flex-col items-center justify-center text-indigo-500 dark:text-indigo-200 hover:text-saffron-500 transition-colors"
+                            className="w-9 h-9 rounded-lg flex flex-col items-center justify-center text-indigo-500 dark:text-indigo-200 hover:text-accent-500 transition-colors"
                             title="Switch script"
                             aria-label={`Switch script. Current: ${scriptLabel}`}
                         >
@@ -70,7 +70,7 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                         </button>
                         <button
                             onClick={onOpenAchievements}
-                            className="w-9 h-9 rounded-lg flex items-center justify-center text-saffron-500 hover:text-saffron-600 transition-colors"
+                            className="w-9 h-9 rounded-lg flex items-center justify-center text-accent-500 hover:text-accent-600 transition-colors"
                             title="Achievements"
                             aria-label="Achievements"
                         >
@@ -78,7 +78,7 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                         </button>
                         <button
                             onClick={toggleTheme}
-                            className="w-9 h-9 rounded-lg flex items-center justify-center text-indigo-500 dark:text-saffron-300 hover:text-saffron-500 transition-colors"
+                            className="w-9 h-9 rounded-lg flex items-center justify-center text-indigo-500 dark:text-accent-300 hover:text-accent-500 transition-colors"
                             title="Toggle dark mode"
                             aria-label="Toggle dark mode"
                         >
