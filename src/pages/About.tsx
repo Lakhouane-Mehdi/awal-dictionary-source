@@ -12,12 +12,12 @@ const SOURCES = [
     {
         name: 'Atlas Cultural Foundation',
         licence: null,
-        text: 'Linguistic data adapted from the field work of the Atlas Cultural Foundation and their Tamazight English Dictionary of the Zaouiat Ahansal region.',
+        text: 'Core vocabulary adapted from the Tamazight–English Dictionary of the Zaouiat Ahansal dialect (2016), compiled by Cloe M. Erickson and Ismail Barda with the residents of Zaouiat Ahansal, whose foreword invites others to adapt it.',
     },
     {
         name: 'Peace Corps Morocco',
         licence: null,
-        text: 'Building upon the foundational linguistic research conducted by Peace Corps volunteers in Morocco.',
+        text: 'That dictionary builds on the work of Peace Corps Volunteer Stacy Alboher, which was itself adapted from the dictionary compiled by Laurel Groh and Eric Poolman.',
     },
     {
         name: 'IRCAM Verb Database',
@@ -31,7 +31,7 @@ const SOURCES = [
     },
     {
         name: 'Tatoeba',
-        licence: 'CC-BY 2.0',
+        licence: 'CC-BY 2.0 FR',
         text: 'Example sentences drawn from the Tatoeba corpus of Kabyle–English sentence pairs.',
     },
 ];

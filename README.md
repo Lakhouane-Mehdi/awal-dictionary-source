@@ -3,7 +3,8 @@
 An offline-first PWA for looking up Tamazight (Berber) words in English, and the
 other way round.
 
-© Mehdi Lakhouane. Not open source — see LICENSE.
+© Mehdi Lakhouane. Source-available, not open source. The dictionary data comes
+from third-party sources under their own licences; see LICENSE.
 
 ## Scripts
 
@@ -31,7 +32,7 @@ data download on first use.
 
 React 19, TypeScript, Vite, Tailwind, Framer Motion. Hosted on Firebase.
 
-Requires Node 24 (the version CI uses).
+Requires Node 24 or newer (CI uses 24).
 
 ```bash
 npm install

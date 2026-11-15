@@ -1,11 +1,45 @@
-Copyright (c) 2026 Mehdi Lakhouane. ALL RIGHTS RESERVED.
+Copyright (c) 2026 Mehdi Lakhouane. All rights reserved.
 
-STRICTLY PROPRIETARY AND CONFIDENTIAL.
+SOURCE-AVAILABLE, NOT OPEN SOURCE
 
-1.  USAGE FORBIDDEN: You may NOT download, install, use, copy, modify, merge, publish, distribute, sublicense, or sell copies of this Software without explicit, prior written permission from the author (Mehdi Lakhouane).
+The source code of Awal is published so it can be read and reviewed. No
+licence is granted to use, copy, modify, merge, publish, distribute,
+sublicense, or sell the code, in whole or in part, without prior written
+permission from the author (Mehdi Lakhouane). Viewing the code, and forking
+it on GitHub as GitHub's Terms of Service allow, does not grant any of
+these rights.
 
-2.  NO PERMISSION GRANTED: This repository is for private archival and exhibition purposes only. The presence of this source code on any platform (e.g., GitHub, GitLab) does not imply a license to use it.
+This applies to everything in this repository except the third-party data
+listed below, which remains under its own terms.
 
-3.  CLONING PROHIBITED: Cloning this repository is strictly prohibited unless you have received direct authorization.
+THIRD-PARTY DATA
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. THE AUTHOR DISCLAIMS ALL LIABILITY FOR ANY DAMAGES ARISING FROM ILLEGAL OR UNAUTHORIZED USE OF THIS SOFTWARE.
+The dictionary content is built on the work of others. Those materials are
+not covered by the copyright notice above and stay under the terms set by
+their authors:
+
+  src/data/dictionary.json, dictionary.pdf
+      Adapted from the Tamazight-English Dictionary of the Zaouiat Ahansal
+      dialect (2016), by Cloe M. Erickson and Ismail Barda of the Atlas
+      Cultural Foundation, building on the work of Stacy Alboher, Laurel
+      Groh and Eric Poolman. Its authors invite others to adapt it.
+
+  src/data/wiktionary_words.json
+      From Wiktionary, licensed under CC BY-SA 4.0
+      (https://creativecommons.org/licenses/by-sa/4.0/). This file and any
+      changes made to it are shared under the same licence.
+
+  src/data/tatoeba_examples.json, src/data/tatoeba_words.json
+      From the Tatoeba corpus (https://tatoeba.org), licensed under
+      CC BY 2.0 FR (https://creativecommons.org/licenses/by/2.0/fr/).
+
+  src/data/ircam_verbs.json
+      Verb conjugation data from the Institut Royal de la Culture Amazighe
+      (IRCAM), under the Apache License 2.0.
+
+  src/assets/NotoSansTifinagh-Regular.ttf
+      Noto Sans Tifinagh, licensed under the SIL Open Font License 1.1.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
