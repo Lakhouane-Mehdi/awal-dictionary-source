@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "set BROWSER=msedge && vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "lint": "eslint .",
     "sitemap": "vite-node scripts/generate_sitemap.mjs",
     "preview": "vite preview",
