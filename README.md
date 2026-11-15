@@ -42,6 +42,7 @@ npm run dev     # local dev server
 npm test        # unit tests
 npm run build   # production build into dist/
 npm run sitemap # regenerate public/sitemap.xml
+python scripts/make_icons.py  # redraw the app icons in public/ (needs Pillow)
 ```
 
 ## Dictionary data

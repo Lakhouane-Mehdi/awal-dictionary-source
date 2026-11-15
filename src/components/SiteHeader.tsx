@@ -38,7 +38,8 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
             <div className="max-w-6xl mx-auto px-4">
                 <div className="flex items-center justify-between h-16 gap-4">
                     {/* Wordmark */}
-                    <Link to="/" className="flex items-baseline gap-2 shrink-0 group">
+                    <Link to="/" className="flex items-center gap-2 shrink-0 group">
+                        <img src="/favicon.svg" alt="" width={28} height={28} className="w-7 h-7" />
                         <span className="font-display text-2xl font-bold text-indigo-700 dark:text-sand-100 tracking-tight">
                             Awal
                         </span>

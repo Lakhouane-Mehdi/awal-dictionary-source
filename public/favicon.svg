@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>Awal</title>
+  <clipPath id="tile"><rect width="512" height="512" rx="112"/></clipPath>
+  <g clip-path="url(#tile)">
+    <rect width="512" height="171" fill="#0B72B9"/>
+    <rect y="171" width="512" height="170" fill="#3AA935"/>
+    <rect y="341" width="512" height="171" fill="#F6D90F"/>
+  </g>
+  <g fill="none" stroke="#E2231A" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M180 128Q180 200 256 200Q332 200 332 128"/>
+    <path d="M256 200V312"/>
+    <path d="M180 384Q180 312 256 312Q332 312 332 384"/>
+  </g>
+</svg>
