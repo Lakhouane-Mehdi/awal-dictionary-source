@@ -31,7 +31,7 @@ export const Roots = () => {
                         <Link
                             key={family.slug}
                             to={`/root/${family.slug}`}
-                            className="glass-panel p-5 group hover:shadow-panel-lg transition-all"
+                            className="glass-panel p-5 group hover:shadow-panel-lg transition"
                         >
                             <div className="flex items-center gap-2 mb-2">
                                 <Network size={15} className="text-accent-500" aria-hidden="true" />

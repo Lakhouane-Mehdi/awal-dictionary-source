@@ -142,13 +142,13 @@ export const About = () => {
                         href={PROJECT_ISSUES}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all active:scale-[0.98]"
+                        className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl transition active:scale-[0.98]"
                     >
                         <GithubIcon size={16} /> Suggest a word on GitHub
                     </a>
                     <Link
                         to="/tools/community"
-                        className="inline-flex items-center gap-2 border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-2 border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         Community page
                     </Link>
@@ -171,7 +171,7 @@ export const About = () => {
                         href={AUTHOR.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         <Globe size={15} /> {AUTHOR.websiteLabel}
                     </a>
@@ -179,7 +179,7 @@ export const About = () => {
                         href={AUTHOR.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         <GithubIcon size={15} /> {AUTHOR.githubLabel}
                     </a>
@@ -187,7 +187,7 @@ export const About = () => {
                         href={PROJECT_REPO}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-700/15 dark:border-white/15 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         <Code2 size={15} /> Project source
                     </a>

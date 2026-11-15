@@ -34,7 +34,7 @@ export const TifinaghKeyboard = ({ onKey, onBackspace }: TifinaghKeyboardProps) 
                 onClick={() => onKey(key.char)}
                 aria-label={`${key.name} (${key.hint})`}
                 title={`${key.name} — ${key.hint}`}
-                className="flex flex-col items-center justify-center h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-accent-50 dark:hover:bg-accent-900/30 active:scale-95 transition-all"
+                className="flex flex-col items-center justify-center h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-accent-50 dark:hover:bg-accent-900/30 active:scale-95 transition"
             >
                 <span className="font-tifinagh text-xl leading-none text-indigo-800 dark:text-sand-100">{key.char}</span>
                 <span className="text-[10px] leading-none mt-1 text-indigo-400 dark:text-indigo-300">{key.hint}</span>
@@ -46,7 +46,7 @@ export const TifinaghKeyboard = ({ onKey, onBackspace }: TifinaghKeyboardProps) 
             onClick={onBackspace}
             aria-label="Delete the letter before the cursor"
             title="Backspace"
-            className="col-span-3 sm:col-span-4 h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-ruby-50 dark:hover:bg-ruby-900/30 flex items-center justify-center text-indigo-500 dark:text-indigo-300 active:scale-95 transition-all"
+            className="col-span-3 sm:col-span-4 h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-ruby-50 dark:hover:bg-ruby-900/30 flex items-center justify-center text-indigo-500 dark:text-indigo-300 active:scale-95 transition"
         >
             <Delete size={18} />
         </button>
@@ -55,7 +55,7 @@ export const TifinaghKeyboard = ({ onKey, onBackspace }: TifinaghKeyboardProps) 
             onPointerDown={keepFocus}
             onClick={() => onKey(' ')}
             aria-label="Space"
-            className="col-span-full h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-accent-50 dark:hover:bg-accent-900/30 text-xs font-semibold text-indigo-500 dark:text-indigo-300 active:scale-95 transition-all"
+            className="col-span-full h-12 rounded-lg bg-sand-100 dark:bg-white/5 hover:bg-accent-50 dark:hover:bg-accent-900/30 text-xs font-semibold text-indigo-500 dark:text-indigo-300 active:scale-95 transition"
         >
             space
         </button>

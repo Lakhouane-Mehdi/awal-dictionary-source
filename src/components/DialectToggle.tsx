@@ -25,7 +25,7 @@ export const DialectToggle = ({ current, onChange }: DialectToggleProps) => {
                         key={d.id}
                         onClick={() => onChange(d.id)}
                         className={clsx(
-                            'relative px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap z-0',
+                            'relative px-5 py-2.5 rounded-full text-sm font-bold transition duration-300 whitespace-nowrap z-0',
                             isActive ? 'text-white shadow-lg shadow-blue-500/30' : 'text-slate-500 hover:bg-white/40 hover:text-slate-700'
                         )}
                     >

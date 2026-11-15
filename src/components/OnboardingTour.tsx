@@ -110,7 +110,7 @@ export const OnboardingTour = () => {
                 {targetRect && (
                     <motion.div
                         layoutId="spotlight"
-                        className="absolute rounded-full border-4 border-white/50 shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] pointer-events-none transition-all duration-500 ease-out"
+                        className="absolute rounded-full border-4 border-white/50 shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] pointer-events-none transition-[left,top,width,height] duration-500 ease-out"
                         style={{
                             left: targetRect.left - 8,
                             top: targetRect.top - 8,
@@ -175,7 +175,7 @@ export const OnboardingTour = () => {
                                 {steps.map((_, i) => (
                                     <div
                                         key={i}
-                                        className={`h-1.5 rounded-full transition-all ${i === stepIndex ? 'w-6 bg-accent-500' : 'w-1.5 bg-slate-200 dark:bg-slate-700'}`}
+                                        className={`h-1.5 rounded-full transition-[width,background-color] ${i === stepIndex ? 'w-6 bg-accent-500' : 'w-1.5 bg-slate-200 dark:bg-slate-700'}`}
                                     />
                                 ))}
                             </div>

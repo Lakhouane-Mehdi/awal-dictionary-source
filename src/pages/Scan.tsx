@@ -157,7 +157,9 @@ export const CalculatorOCR = () => {
                             </div>
                             <div className="flex gap-2">
                                 <button
+                                    type="button"
                                     onClick={reset}
+                                    aria-label="Scan again"
                                     className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
                                 >
                                     <RefreshCw size={16} />
@@ -201,12 +203,14 @@ export const CalculatorOCR = () => {
             {cameraActive && (
                 <div className="absolute bottom-0 left-0 right-0 py-10 flex justify-center z-20 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
                     <button
+                        type="button"
                         onClick={captureAndScan}
+                        aria-label={isScanning ? 'Scanning…' : 'Take a photo and scan it'}
                         disabled={isScanning}
                         className="group relative"
                     >
                         <div className={`w-20 h-20 rounded-full border-4 border-white/80 flex items-center justify-center transition-transform ${isScanning ? 'scale-95' : 'group-active:scale-90'}`}>
-                            <div className={`w-16 h-16 bg-white rounded-full transition-all duration-300 ${isScanning ? 'scale-75 animate-pulse bg-blue-500' : ''}`} />
+                            <div className={`w-16 h-16 bg-white rounded-full transition duration-300 ${isScanning ? 'scale-75 animate-pulse bg-blue-500' : ''}`} />
                         </div>
                     </button>
                 </div>

@@ -49,22 +49,25 @@ export const VerbConjugator = () => {
     return (
         <div className="p-4 w-full max-w-md mx-auto min-h-screen pb-20">
             <header className="mb-6 mt-2 flex items-center gap-3">
-                <button onClick={() => navigate('/tools')} className="p-2 hover:bg-[var(--glass-bg)] rounded-full border border-transparent hover:border-[var(--glass-border)] transition-all">
+                <button onClick={() => navigate('/tools')} className="p-2 hover:bg-[var(--glass-bg)] rounded-full border border-transparent hover:border-[var(--glass-border)] transition">
                     <ArrowLeft size={24} />
                 </button>
                 <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Verb Conjugator</h1>
             </header>
 
-            <div className="glass-panel flex items-center p-2 mb-6 focus-within:ring-2 ring-blue-500/30 transition-all">
+            <div className="glass-panel flex items-center p-2 mb-6 focus-within:ring-2 ring-blue-500/30 transition">
                 <Search className="text-slate-400 ml-2" size={20} />
                 <input
-                    type="text"
+                    type="search"
+                    name="verb"
+                    aria-label="Search for a verb"
+                    autoComplete="off"
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
                         setSelectedVerb(null); // Reset selection on search
                     }}
-                    placeholder="Search for a verb (e.g. 'Ech')..."
+                    placeholder="Search for a verb, e.g. Ech…"
                     className="flex-1 bg-transparent border-none outline-none px-3 py-2 text-lg text-slate-800 dark:text-slate-100 placeholder-slate-400"
                 />
             </div>
@@ -115,7 +118,7 @@ export const VerbConjugator = () => {
                             <button
                                 key={verb.id}
                                 onClick={() => handleSelectVerb(verb)}
-                                className="w-full glass-panel p-4 flex items-center justify-between hover:scale-[1.02] active:scale-95 transition-all text-left group"
+                                className="w-full glass-panel p-4 flex items-center justify-between hover:scale-[1.02] active:scale-95 transition text-left group"
                             >
                                 <div>
                                     <span className={`text-lg font-bold block group-hover:text-blue-600 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>

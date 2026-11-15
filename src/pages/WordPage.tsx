@@ -87,13 +87,13 @@ export const WordPage = () => {
                 <div className="flex justify-center gap-3 mt-6">
                     <Link
                         to="/"
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl transition-all active:scale-[0.98]"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-5 rounded-xl transition active:scale-[0.98]"
                     >
                         Search
                     </Link>
                     <Link
                         to="/browse"
-                        className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-2.5 px-5 rounded-xl hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         Browse A–Z
                     </Link>
@@ -140,7 +140,7 @@ export const WordPage = () => {
                 {entry.category && (
                     <Link
                         to={`/category/${slugify(entry.category)}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         <Tag size={14} /> More in {entry.category}
                     </Link>
@@ -148,7 +148,7 @@ export const WordPage = () => {
                 {family && (
                     <Link
                         to={`/root/${family.slug}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                     >
                         <Network size={14} /> Root {family.root}
                     </Link>
@@ -160,7 +160,7 @@ export const WordPage = () => {
                     <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300">Script variants</h2>
                     <button
                         onClick={() => speak(entry.term_latin)}
-                        className={`p-3 rounded-full transition-all ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
+                        className={`p-3 rounded-full transition ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                         title="Pronounce Word"
                         aria-label="Pronounce word"
                     >

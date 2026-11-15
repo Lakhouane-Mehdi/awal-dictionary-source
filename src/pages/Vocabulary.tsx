@@ -72,7 +72,7 @@ export const Vocabulary = () => {
                         <button
                             type="button"
                             onClick={() => setRevealed(true)}
-                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold hover:border-accent-400 hover:text-accent-600 transition-all active:scale-95"
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold hover:border-accent-400 hover:text-accent-600 transition active:scale-95"
                         >
                             <Eye size={17} /> Reveal definition
                         </button>
@@ -103,7 +103,7 @@ export const Vocabulary = () => {
             <button
                 type="button"
                 onClick={handleNext}
-                className="w-full flex items-center justify-center gap-2 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-panel transition-all active:scale-[0.99]"
+                className="w-full flex items-center justify-center gap-2 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-panel transition active:scale-[0.99]"
             >
                 <Shuffle size={18} /> Next word
             </button>

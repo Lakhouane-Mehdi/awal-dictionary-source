@@ -47,7 +47,7 @@ export const Browse = () => {
                             onClick={() => selectLetter(l)}
                             disabled={count === 0}
                             aria-current={isActive ? 'true' : undefined}
-                            className={`w-9 h-9 rounded-lg text-sm font-bold transition-all ${
+                            className={`w-9 h-9 rounded-lg text-sm font-bold transition ${
                                 isActive
                                     ? 'bg-indigo-600 text-white shadow-panel'
                                     : count === 0
@@ -84,7 +84,7 @@ export const Browse = () => {
                 <button
                     type="button"
                     onClick={() => setVisible(v => v + PAGE_SIZE)}
-                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition-all"
+                    className="w-full mt-4 py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition"
                 >
                     Show more ({(entries.length - visible).toLocaleString()} remaining)
                 </button>

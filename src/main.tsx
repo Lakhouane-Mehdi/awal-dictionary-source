@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
+import { MotionConfig } from 'framer-motion';
 import App from './App';
 import './styles/global.css';
 import { ScriptProvider } from './context/ScriptContext';
@@ -22,7 +23,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <ThemeProvider>
           <GamificationProvider>
             <BrowserRouter>
-              <App />
+              {/* Animations follow the visitor's reduced-motion setting */}
+              <MotionConfig reducedMotion="user">
+                <App />
+              </MotionConfig>
             </BrowserRouter>
           </GamificationProvider>
         </ThemeProvider>

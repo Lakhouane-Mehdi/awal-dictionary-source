@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles } from 'lucide-react';
+import { useDialog } from '../hooks/useDialog';
 import { convertScript } from '../utils/scriptConverter';
 import type { DictionaryEntry } from '../data/dictionary';
 
@@ -14,6 +15,7 @@ interface VerbConjugationModalProps {
 }
 
 export const VerbConjugationModal = ({ isOpen, onClose, verbName, conjugation, script }: VerbConjugationModalProps) => {
+    const panelRef = useDialog(isOpen, onClose);
     return (
         <AnimatePresence>
             {isOpen && (
@@ -32,7 +34,8 @@ export const VerbConjugationModal = ({ isOpen, onClose, verbName, conjugation, s
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 10 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full max-w-md bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden relative"
+                            ref={panelRef} role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="conjugation-title"
+                            className="focus:outline-none w-full max-w-md bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden relative"
                         >
                             {/* Header */}
                             <div className="p-6 pb-2 relative overflow-hidden">
@@ -43,12 +46,14 @@ export const VerbConjugationModal = ({ isOpen, onClose, verbName, conjugation, s
                                             <Sparkles size={14} className="text-purple-500" />
                                             <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Verb Conjugation</span>
                                         </div>
-                                        <h2 className={`text-3xl font-black text-slate-800 dark:text-white ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                                        <h2 id="conjugation-title" className={`text-3xl font-black text-slate-800 dark:text-white ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
                                             {convertScript(verbName, script)}
                                         </h2>
                                     </div>
                                     <button
+                                        type="button"
                                         onClick={onClose}
+                                        aria-label="Close"
                                         className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-400 hover:text-red-500"
                                     >
                                         <X size={20} />

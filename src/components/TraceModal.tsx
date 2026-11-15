@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eraser, Check } from 'lucide-react';
+import { useDialog } from '../hooks/useDialog';
 
 interface TraceModalProps {
     isOpen: boolean;
@@ -9,6 +10,7 @@ interface TraceModalProps {
 }
 
 export const TraceModal = ({ isOpen, onClose, character }: TraceModalProps) => {
+    const panelRef = useDialog(isOpen, onClose);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [hasDrawn, setHasDrawn] = useState(false);
@@ -93,7 +95,8 @@ export const TraceModal = ({ isOpen, onClose, character }: TraceModalProps) => {
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.9, opacity: 0 }}
-                        className="relative w-full max-w-sm aspect-square bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 overflow-hidden"
+                        ref={panelRef} role="dialog" aria-modal="true" tabIndex={-1} aria-label={`Trace the letter ${character}`}
+                        className="focus:outline-none relative w-full max-w-sm aspect-square bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border-4 border-white dark:border-slate-800 overflow-hidden"
                     >
                         {/* Background Guide Character */}
                         <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
@@ -118,15 +121,19 @@ export const TraceModal = ({ isOpen, onClose, character }: TraceModalProps) => {
                         {/* Controls Overlay */}
                         <div className="absolute bottom-6 left-0 w-full flex justify-center gap-4 px-6 pointer-events-none">
                             <button
+                                type="button"
                                 onClick={onClose}
+                                aria-label="Close"
                                 className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 shadow-lg transition-colors"
                             >
                                 <X size={24} />
                             </button>
 
                             <button
+                                type="button"
                                 onClick={clearCanvas}
-                                className="pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl shadow-blue-500/30 hover:scale-110 active:scale-95 transition-all"
+                                aria-label="Clear the drawing"
+                                className="pointer-events-auto flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl shadow-blue-500/30 hover:scale-110 active:scale-95 transition"
                             >
                                 <Eraser size={24} />
                             </button>

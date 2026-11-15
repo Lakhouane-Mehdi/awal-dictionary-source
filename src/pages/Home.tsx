@@ -171,14 +171,14 @@ export const Home = () => {
                         <div className="flex flex-wrap gap-3">
                             <Link
                                 to="/browse"
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-7 rounded-xl shadow-panel hover:shadow-panel-lg transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-7 rounded-xl shadow-panel hover:shadow-panel-lg transition active:scale-[0.98] inline-flex items-center gap-2"
                             >
                                 <BookOpen size={18} />
                                 Browse the dictionary
                             </Link>
                             <button
                                 onClick={() => setIsContributionOpen(true)}
-                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-accent-400 hover:text-accent-600 transition-all active:scale-[0.98] inline-flex items-center gap-2"
+                                className="border border-indigo-700/15 dark:border-white/15 text-indigo-600 dark:text-indigo-200 font-semibold py-3 px-7 rounded-xl hover:border-accent-400 hover:text-accent-600 transition active:scale-[0.98] inline-flex items-center gap-2"
                             >
                                 <PenLine size={18} />
                                 Contribute a word
@@ -197,7 +197,7 @@ export const Home = () => {
                             <Link
                                 key={item.to}
                                 to={item.to}
-                                className="glass-panel p-4 group hover:shadow-panel-lg transition-all"
+                                className="glass-panel p-4 group hover:shadow-panel-lg transition"
                             >
                                 <p className="font-display font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                                     {item.label}
@@ -219,7 +219,7 @@ export const Home = () => {
                         </h3>
                         <button
                             onClick={handleShuffle}
-                            className="text-xs font-bold uppercase tracking-wider text-accent-600 dark:text-accent-400 hover:text-accent-500 flex items-center gap-1.5 active:scale-95 transition-all"
+                            className="text-xs font-bold uppercase tracking-wider text-accent-600 dark:text-accent-400 hover:text-accent-500 flex items-center gap-1.5 active:scale-95 transition"
                         >
                             <Sparkles size={14} /> Shuffle
                         </button>
@@ -253,7 +253,7 @@ export const Home = () => {
                                 <Link
                                     key={cat.slug}
                                     to={`/category/${cat.slug}`}
-                                    className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 dark:hover:text-accent-300 active:scale-95 transition-all"
+                                    className="px-4 py-2 rounded-lg border border-indigo-700/10 dark:border-white/10 bg-white/50 dark:bg-white/5 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 dark:hover:text-accent-300 active:scale-95 transition"
                                 >
                                     {cat.name}
                                     <span className="text-indigo-400 dark:text-indigo-300 ml-1.5 font-normal">{cat.count}</span>
@@ -313,7 +313,7 @@ export const Home = () => {
                             <button
                                 type="button"
                                 onClick={loadMore}
-                                className="w-full py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition-all"
+                                className="w-full py-3 glass-panel text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:text-accent-600 dark:hover:text-accent-300 active:scale-[0.99] transition"
                             >
                                 Load more words
                             </button>

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, Lock } from 'lucide-react';
+import { useDialog } from '../hooks/useDialog';
 import { useGamification } from '../context/GamificationContext';
 import { ACHIEVEMENTS } from '../data/achievements';
 
@@ -9,6 +10,7 @@ interface AchievementsModalProps {
 }
 
 export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) => {
+    const panelRef = useDialog(isOpen, onClose);
     const { stats, unlocked } = useGamification();
 
     const progress = Math.round((unlocked.length / ACHIEVEMENTS.length) * 100);
@@ -31,13 +33,15 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                         initial={{ opacity: 0, scale: 0.95, y: 30 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                        className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden"
+                        ref={panelRef} role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="achievements-title"
+                        className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden focus:outline-none"
                     >
                         {/* Header */}
                         <div className="relative h-40 bg-gradient-to-br from-accent-400 to-accent-700 flex flex-col items-center justify-center text-white overflow-hidden shadow-sm">
-                            <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse-slow"></div>
                             <button
+                                type="button"
                                 onClick={onClose}
+                                aria-label="Close"
                                 className="absolute top-4 right-4 p-2 bg-black/10 hover:bg-black/20 rounded-full transition-colors z-10"
                             >
                                 <X size={20} />
@@ -50,7 +54,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                             >
                                 <Trophy size={48} className="mb-3 drop-shadow-md" />
                             </motion.div>
-                            <h2 className="text-2xl font-black tracking-tight drop-shadow-sm mb-1">Your Journey</h2>
+                            <h2 id="achievements-title" className="text-2xl font-black tracking-tight drop-shadow-sm mb-1">Your Journey</h2>
                             <p className="text-xs font-bold uppercase tracking-widest opacity-90 bg-black/10 px-3 py-1 rounded-full">Level {Math.floor(unlocked.length / 2) + 1}</p>
                         </div>
 
@@ -59,7 +63,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                             <div className="bg-white dark:bg-slate-800 p-1 rounded-full shadow-lg flex items-center gap-3">
                                 <div className="flex-1 h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-1000"
+                                        className="h-full bg-gradient-to-r from-green-400 to-emerald-500 transition-[width] duration-1000"
                                         style={{ width: `${progress}%` }}
                                     />
                                 </div>
@@ -80,7 +84,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                         </div>
 
                         {/* Achievements List */}
-                        <div className="px-6 pb-6 max-h-[300px] overflow-y-auto custom-scrollbar">
+                        <div className="px-6 pb-6 max-h-[300px] overflow-y-auto overscroll-contain custom-scrollbar">
                             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3">Badges</h3>
                             <div className="space-y-3">
                                 {ACHIEVEMENTS.map((achievement) => {
@@ -88,7 +92,7 @@ export const AchievementsModal = ({ isOpen, onClose }: AchievementsModalProps) =
                                     return (
                                         <div
                                             key={achievement.id}
-                                            className={`flex items-center gap-4 p-3 rounded-2xl border-2 transition-all ${isUnlocked ? 'border-accent-100 bg-accent-50/50 dark:border-accent-900/30 dark:bg-accent-900/10' : 'border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/50 opacity-60'}`}
+                                            className={`flex items-center gap-4 p-3 rounded-2xl border-2 transition ${isUnlocked ? 'border-accent-100 bg-accent-50/50 dark:border-accent-900/30 dark:bg-accent-900/10' : 'border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-800/50 opacity-60'}`}
                                         >
                                             <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-inner ${isUnlocked ? 'bg-white dark:bg-slate-800' : 'bg-slate-200 dark:bg-slate-700 grayscale'}`}>
                                                 {isUnlocked ? achievement.icon : <Lock size={18} className="text-slate-400" />}

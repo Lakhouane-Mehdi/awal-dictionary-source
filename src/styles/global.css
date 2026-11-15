@@ -42,6 +42,51 @@
   --hairline-alpha: 0.08;
 }
 
+/* Native scrollbars and form controls follow the theme */
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* No double-tap zoom delay on touch screens; taps show the app's own states */
+html {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Keyboard users always see where they are. :focus-visible leaves mouse
+   and touch clicks without a ring. */
+:focus-visible {
+  outline: 2px solid #2E8329; /* accent-600 */
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.dark :focus-visible {
+  outline-color: #85CC7D; /* accent-300 */
+}
+
+/* "Skip to content": hidden until a keyboard user tabs to it */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: #2B3A67;
+  color: #fff;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--text-main);

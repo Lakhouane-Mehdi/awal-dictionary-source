@@ -25,7 +25,7 @@ export const Categories = () => {
                     <Link
                         key={cat.slug}
                         to={`/category/${cat.slug}`}
-                        className="glass-panel p-5 group hover:shadow-panel-lg transition-all"
+                        className="glass-panel p-5 group hover:shadow-panel-lg transition"
                     >
                         <p className="font-display text-lg font-bold text-indigo-800 dark:text-sand-100 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {cat.name}

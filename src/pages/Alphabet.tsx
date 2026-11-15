@@ -30,7 +30,7 @@ export const Alphabet = () => {
                         key={letter.char}
                         type="button"
                         onClick={() => setTraceChar(letter.char)}
-                        className="glass-panel p-5 text-center group hover:shadow-panel-lg transition-all"
+                        className="glass-panel p-5 text-center group hover:shadow-panel-lg transition"
                         title={`Practise writing ${letter.name}`}
                     >
                         <span className="tifinagh-text block text-5xl text-indigo-800 dark:text-sand-100 leading-none mb-3 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">

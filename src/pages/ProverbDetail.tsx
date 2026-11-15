@@ -60,7 +60,7 @@ export const ProverbDetail = () => {
                     <button
                         type="button"
                         onClick={() => speak(proverb.text_latin)}
-                        className={`p-3 rounded-full shrink-0 transition-all ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
+                        className={`p-3 rounded-full shrink-0 transition ${speaking ? 'bg-accent-50 text-accent-600 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                         title="Listen"
                         aria-label="Listen to this proverb"
                     >
@@ -93,7 +93,7 @@ export const ProverbDetail = () => {
                     <Link
                         key={p.id}
                         to={`/proverb/${p.id}`}
-                        className="glass-panel p-4 group hover:shadow-panel-lg transition-all"
+                        className="glass-panel p-4 group hover:shadow-panel-lg transition"
                     >
                         <p className="font-display italic text-sm text-indigo-500 dark:text-indigo-200 mb-1">
                             "{p.text_latin}"

@@ -26,13 +26,13 @@ export const NotFound = () => {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link
                         to="/"
-                        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all active:scale-95"
+                        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition active:scale-95"
                     >
                         <Search size={18} /> Search Words
                     </Link>
                     <Link
                         to="/learn"
-                        className="flex items-center justify-center gap-2 glass-panel font-bold text-slate-600 dark:text-slate-300 py-3 px-6 rounded-xl hover:scale-105 transition-all active:scale-95"
+                        className="flex items-center justify-center gap-2 glass-panel font-bold text-slate-600 dark:text-slate-300 py-3 px-6 rounded-xl hover:scale-105 transition active:scale-95"
                     >
                         <Home size={18} /> Learning Dojo
                     </Link>

@@ -100,7 +100,9 @@ export const ProverbCard = () => {
                     </div>
 
                     <button
+                        type="button"
                         onClick={handleShare}
+                        aria-label="Share as an image"
                         disabled={isSharing}
                         className="exclude-share p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-slate-400 hover:text-blue-500 transition-colors"
                         title="Share Image"

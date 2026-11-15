@@ -64,7 +64,7 @@ const ACTION_BUTTON =
     'flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/12 dark:border-white/12 ' +
     'text-indigo-600 dark:text-indigo-200 font-semibold text-xs ' +
     'hover:border-accent-400 hover:text-accent-600 dark:hover:text-accent-300 ' +
-    'active:scale-95 transition-all';
+    'active:scale-95 transition';
 
 export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot }: WordCardProps) => {
     const { isFavorite, toggleFavorite } = useFavorites();
@@ -88,7 +88,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="group relative glass-panel p-0 overflow-hidden hover:shadow-panel-lg transition-all duration-300"
+            className="group relative glass-panel p-0 overflow-hidden hover:shadow-panel-lg transition duration-300"
         >
             {/* Visual Cultural Background (Blurred) */}
             {entry.cultural_image && (
@@ -187,7 +187,7 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
             {/* Cultural Image (Bottom Semantic Card Style - Expanded) */}
             {entry.cultural_image && (
                 <div className="relative h-40 w-full overflow-hidden mt-0">
-                    <img src={entry.cultural_image} alt={entry.term_latin} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <img src={entry.cultural_image} alt={entry.term_latin} width={640} height={160} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-4">
                         <div className="flex items-center gap-2 text-white/90">
                             <Sparkles size={16} className="text-accent-400" />

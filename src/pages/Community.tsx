@@ -59,7 +59,7 @@ export const Community = () => {
                 <button
                     type="button"
                     onClick={() => setIsContribOpen(true)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all active:scale-95"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition active:scale-95"
                 >
                     Open Contribution Form
                 </button>
@@ -80,7 +80,7 @@ export const Community = () => {
                     href={PROJECT_REPO}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 transition-all active:scale-95"
+                    className="flex items-center justify-center gap-2 w-full border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold py-3 rounded-xl hover:border-slate-400 dark:hover:border-slate-500 transition active:scale-95"
                 >
                     <GithubIcon size={18} /> View on GitHub
                 </a>

@@ -25,7 +25,7 @@ export const Proverbs = () => {
                     <Link
                         key={proverb.id}
                         to={`/proverb/${proverb.id}`}
-                        className="glass-panel p-6 group hover:shadow-panel-lg transition-all flex flex-col"
+                        className="glass-panel p-6 group hover:shadow-panel-lg transition flex flex-col"
                     >
                         <p className="tifinagh-text text-xl text-indigo-800 dark:text-sand-100 leading-relaxed mb-3">
                             {proverb.text_tifinagh}

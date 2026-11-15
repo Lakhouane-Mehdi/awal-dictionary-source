@@ -87,7 +87,7 @@ export const RootDetail = () => {
                         <Link
                             key={r.slug}
                             to={`/root/${r.slug}`}
-                            className="px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold tracking-wider text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
+                            className="px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold tracking-wider text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition"
                         >
                             {r.root}
                         </Link>

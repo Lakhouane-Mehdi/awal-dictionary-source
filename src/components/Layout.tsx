@@ -54,13 +54,14 @@ export const Layout = () => {
 
     return (
         <div className="app-shell flex flex-col min-h-screen relative font-sans selection:bg-accent-200 selection:text-indigo-900">
+            <a href="#main" className="skip-link">Skip to content</a>
             <SiteHeader onOpenAchievements={() => setIsAchievementsOpen(true)} />
 
             {/* Contribution FAB (Fixed Bottom Right, above Nav) */}
             <button
                 id="tour-contribute"
                 onClick={() => setIsContributionOpen(true)}
-                className="lg:hidden fixed bottom-24 right-4 z-[90] bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-panel-lg active:scale-95 transition-all"
+                className="lg:hidden fixed bottom-24 right-4 z-[90] bg-indigo-600 hover:bg-indigo-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-panel-lg active:scale-95 transition"
                 title="Suggest Edit / Contribute"
                 aria-label="Suggest an edit or contribute a word"
             >
@@ -68,7 +69,7 @@ export const Layout = () => {
             </button>
 
             {/* Main Content Area with padding for Nav */}
-            <main className="flex-1 pb-28 lg:pb-16 px-4 pt-8 max-w-3xl lg:max-w-5xl mx-auto w-full">
+            <main id="main" tabIndex={-1} className="flex-1 pb-28 lg:pb-16 px-4 pt-8 max-w-3xl lg:max-w-5xl mx-auto w-full scroll-mt-20 focus:outline-none">
                 <Suspense fallback={<div className="py-24 text-center text-indigo-400" role="status">Loading…</div>}>
                     <Outlet />
                 </Suspense>
@@ -180,7 +181,7 @@ const NavItem = ({ to, icon, label }: { to: string; icon: React.ReactNode; label
         <NavLink
             to={to}
             className={({ isActive }) => `
-                flex flex-col items-center justify-center w-16 h-full transition-all duration-300 relative
+                flex flex-col items-center justify-center w-16 h-full transition duration-300 relative
                 ${isActive
                     ? 'text-indigo-700 dark:text-accent-300'
                     : 'text-indigo-400/70 dark:text-indigo-300/60 hover:text-indigo-600 dark:hover:text-indigo-200'}

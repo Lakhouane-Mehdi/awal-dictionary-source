@@ -85,7 +85,7 @@ export const LearnHub = () => {
                     <Link
                         key={path.to}
                         to={path.to}
-                        className="glass-panel p-6 group hover:shadow-panel-lg transition-all"
+                        className="glass-panel p-6 group hover:shadow-panel-lg transition"
                     >
                         <div className="flex items-start gap-4">
                             <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">

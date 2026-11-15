@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShieldCheck, ScrollText, Users, Globe } from 'lucide-react';
+import { useDialog } from '../hooks/useDialog';
 import { GithubIcon } from './icons/GithubIcon';
 import { AUTHOR, PROJECT_ISSUES } from '../utils/author';
 
@@ -9,6 +10,7 @@ interface AboutModalProps {
 }
 
 export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
+    const panelRef = useDialog(isOpen, onClose);
     return (
         <AnimatePresence>
             {isOpen && (
@@ -24,25 +26,27 @@ export const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         exit={{ scale: 0.95, y: 10, opacity: 0 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+                        ref={panelRef} role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="about-title"
+                        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl focus:outline-none shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
                     >
                         {/* Header */}
                         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/moroccan-flower.png')]"></div>
-
+                            
                             <button
+                                type="button"
                                 onClick={onClose}
+                                aria-label="Close"
                                 className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/30 text-white rounded-full transition-colors z-20"
                             >
                                 <X size={20} />
                             </button>
 
                             <ShieldCheck size={48} className="text-white mx-auto mb-4 opacity-90" />
-                            <h2 className="text-3xl font-black text-white tracking-tight mb-1">Awal Dictionary</h2>
+                            <h2 id="about-title" className="text-3xl font-black text-white tracking-tight mb-1">Awal Dictionary</h2>
                             <p className="text-blue-100 font-medium">Version 0.1.0 (Beta)</p>
                         </div>
 
-                        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+                        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto overscroll-contain">
 
                             {/* Mission */}
                             <div className="text-center">

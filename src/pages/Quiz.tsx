@@ -73,7 +73,7 @@ export const Quiz = () => {
     return (
         <div className="p-4 w-full h-full flex flex-col">
             <header className="mb-6 mt-2 flex items-center gap-3 relative z-10">
-                <button onClick={() => navigate('/tools')} className="p-2 bg-white/50 hover:bg-white rounded-full transition-all text-slate-700 shadow-sm">
+                <button onClick={() => navigate('/tools')} className="p-2 bg-white/50 hover:bg-white rounded-full transition text-slate-700 shadow-sm">
                     <ArrowLeft size={24} />
                 </button>
                 <div className="flex-1">
@@ -124,7 +124,7 @@ export const Quiz = () => {
 
                             <div className="text-5xl font-black text-blue-600 mb-8 tracking-tighter shadow-blue-200 drop-shadow-lg">{score} / {questions.length}</div>
 
-                            <button onClick={restart} className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all active:scale-95">
+                            <button onClick={restart} className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition active:scale-95">
                                 Play Again
                             </button>
                         </div>
@@ -168,7 +168,7 @@ export const Quiz = () => {
                                         whileTap={!isAnswered ? { scale: 0.98 } : {}}
                                         onClick={() => handleAnswer(index)}
                                         disabled={isAnswered}
-                                        className={`w-full p-5 rounded-2xl border-2 text-left font-bold text-lg transition-all flex justify-between items-center shadow-sm ${stateClasses} ${isTifinaghOption ? 'tifinagh-text' : ''}`}
+                                        className={`w-full p-5 rounded-2xl border-2 text-left font-bold text-lg transition flex justify-between items-center shadow-sm ${stateClasses} ${isTifinaghOption ? 'tifinagh-text' : ''}`}
                                     >
                                         {option}
                                         {isAnswered && isCorrect && <CheckCircle size={24} className="text-green-600" fill="currentColor" />}

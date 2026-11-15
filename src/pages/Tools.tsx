@@ -61,7 +61,7 @@ export const Tools = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.06 }}
                         onClick={() => navigate(tool.path)}
-                        className="glass-panel p-6 flex items-start gap-4 text-left group hover:shadow-panel-lg transition-all"
+                        className="glass-panel p-6 flex items-start gap-4 text-left group hover:shadow-panel-lg transition"
                     >
                         <span className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center text-indigo-600 dark:text-indigo-200 shrink-0 group-hover:text-accent-600 dark:group-hover:text-accent-300 transition-colors">
                             {tool.icon}

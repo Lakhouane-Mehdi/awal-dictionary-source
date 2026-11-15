@@ -86,7 +86,7 @@ function App() {
 
       {/* Standalone route for Camera — full screen, outside the app shell */}
       <Route path="/tools/scan" element={
-        <Suspense fallback={<div className="flex items-center justify-center h-screen text-indigo-400">Loading scanner...</div>}>
+        <Suspense fallback={<div className="flex items-center justify-center h-screen text-indigo-400">Loading scanner…</div>}>
           <CalculatorOCR />
         </Suspense>
       } />

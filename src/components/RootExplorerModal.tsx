@@ -1,6 +1,7 @@
 // React imports removed as they were unused
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Network, Sprout, ArrowRight } from 'lucide-react';
+import { useDialog } from '../hooks/useDialog';
 import type { DictionaryEntry } from '../data/dictionary';
 
 interface RootModalProps {
@@ -11,6 +12,7 @@ interface RootModalProps {
 }
 
 export const RootExplorerModal = ({ isOpen, onClose, entry, relatedEntries }: RootModalProps) => {
+    const panelRef = useDialog(isOpen, onClose);
     if (!entry.root) return null;
 
     return (
@@ -28,7 +30,8 @@ export const RootExplorerModal = ({ isOpen, onClose, entry, relatedEntries }: Ro
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         exit={{ scale: 0.95, y: 10, opacity: 0 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-lg bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-slate-950 rounded-3xl shadow-2xl overflow-hidden border border-emerald-100 dark:border-emerald-900/30"
+                        ref={panelRef} role="dialog" aria-modal="true" tabIndex={-1} aria-labelledby="root-explorer-title"
+                        className="focus:outline-none w-full max-w-lg bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-slate-950 rounded-3xl shadow-2xl overflow-hidden border border-emerald-100 dark:border-emerald-900/30"
                     >
                         {/* Header */}
                         <div className="bg-emerald-600 dark:bg-emerald-900 p-6 relative overflow-hidden">
@@ -40,12 +43,14 @@ export const RootExplorerModal = ({ isOpen, onClose, entry, relatedEntries }: Ro
                                 <span className="inline-flex items-center gap-2 bg-black/20 text-white/90 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
                                     <Sprout size={12} /> Linguistic Root
                                 </span>
-                                <h2 className="text-4xl font-black text-white mb-1 tracking-tight">Root: {entry.root}</h2>
+                                <h2 id="root-explorer-title" className="text-4xl font-black text-white mb-1 tracking-tight">Root: {entry.root}</h2>
                                 <p className="text-emerald-100 font-medium text-sm">The DNA of the word</p>
                             </div>
 
                             <button
+                                type="button"
                                 onClick={onClose}
+                                aria-label="Close"
                                 className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/30 text-white rounded-full transition-colors z-20"
                             >
                                 <X size={20} />

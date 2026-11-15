@@ -123,7 +123,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
         <div ref={wrapperRef} className="relative w-full z-50">
             <div
                 className={`
-                glass-panel flex items-center p-3 transition-all duration-300
+                glass-panel flex items-center p-3 transition duration-300
                 ${isFocused ? 'ring-2 ring-accent-400/50' : ''}
                 ${isListening ? 'ring-2 ring-ruby-500/50' : ''}
                 ${showDropdown ? 'rounded-b-none' : ''}
@@ -141,7 +141,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                     onChange={(e) => handleChange(e.target.value)}
                     onFocus={() => setIsFocused(true)}
                     onKeyDown={handleKeyDown}
-                    placeholder={isListening ? "Listening..." : "Search 'Argaz'..."}
+                    placeholder={isListening ? "Listening…" : "Search, e.g. argaz…"}
                     className="flex-1 bg-transparent border-none outline-none px-4 py-1 text-lg font-medium text-indigo-800 dark:text-sand-100 placeholder-indigo-300 dark:placeholder-indigo-400"
                     aria-label="Search the dictionary"
                     aria-autocomplete="list"
@@ -178,7 +178,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 <button
                     type="button"
                     onClick={handleMicClick}
-                    className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-ruby-50 text-ruby-600 dark:bg-ruby-900/30 dark:text-ruby-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
+                    className={`p-2 rounded-lg transition duration-300 ${isListening ? 'bg-ruby-50 text-ruby-600 dark:bg-ruby-900/30 dark:text-ruby-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                     title="Voice Search"
                     aria-label={isListening ? 'Stop voice search' : 'Start voice search'}
                     aria-pressed={isListening}
