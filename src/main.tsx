@@ -9,8 +9,8 @@ import { ThemeProvider } from './context/ThemeContext';
 import { initMonitoring } from './utils/monitoring';
 import { ErrorFallback } from './components/ErrorFallback';
 
-// Initialize Sentry if configured
-initMonitoring();
+// Starts Sentry only if a DSN is set and the visitor consented to analytics
+void initMonitoring();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

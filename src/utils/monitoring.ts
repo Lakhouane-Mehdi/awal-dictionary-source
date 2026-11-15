@@ -1,25 +1,31 @@
 import * as Sentry from "@sentry/react";
+import { DataService } from "../services/DataService";
 
-export const initMonitoring = () => {
-    // Check for Sentry DSN in environment variables
-    // In Vite, env vars are exposed via import.meta.env
+let started = false;
+
+/**
+ * Starts Sentry only when a DSN is configured *and* the visitor has opted in
+ * to analytics in the cookie banner. Session replay and tracing collect
+ * usage data, so they must not run before consent. Safe to call repeatedly:
+ * main.tsx calls it on load, and CookieBanner calls it again when consent
+ * is granted.
+ */
+export const initMonitoring = async (): Promise<void> => {
     const dsn = import.meta.env.VITE_SENTRY_DSN;
+    if (!dsn || started) return;
 
-    if (dsn) {
-        Sentry.init({
-            dsn: dsn,
-            integrations: [
-                Sentry.browserTracingIntegration(),
-                Sentry.replayIntegration(),
-            ],
-            // Performance Monitoring
-            tracesSampleRate: 1.0, // Capture 100% of the transactions
-            // Session Replay
-            replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-            replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-        });
-        console.log("Monitoring initialized.");
-    } else {
-        console.log("Monitoring skipped: No DSN found.");
-    }
+    const consent = await DataService.getConsent();
+    if (!consent?.analytics) return;
+
+    started = true;
+    Sentry.init({
+        dsn,
+        integrations: [
+            Sentry.browserTracingIntegration(),
+            Sentry.replayIntegration(),
+        ],
+        tracesSampleRate: 1.0,
+        replaysSessionSampleRate: 0.1,
+        replaysOnErrorSampleRate: 1.0,
+    });
 };

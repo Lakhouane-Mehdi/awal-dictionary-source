@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Shield, X, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DataService } from '../../services/DataService';
+import { initMonitoring } from '../../utils/monitoring';
 
 interface CookieConsent {
     essential: boolean;
@@ -47,7 +48,7 @@ export const CookieBanner: React.FC = () => {
             timestamp: new Date().toISOString()
         };
         DataService.saveConsent(consentWithTimestamp).then(() => {
-            console.log('Consent saved asynchronously');
+            if (preferences.analytics) void initMonitoring();
         });
         setConsent(preferences);
         setIsVisible(false);

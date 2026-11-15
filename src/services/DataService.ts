@@ -20,7 +20,6 @@ class DataServiceImpl {
 
     // Async "SQL Insert" for Consent
     async saveConsent(consent: ConsentRecord): Promise<void> {
-        console.log('[DataSQL] INSERT INTO user_consent VALUES', consent);
         // Persist to IndexedDB (Async)
         await set(this.CONSENT_KEY, consent);
         // Backup to localStorage for sync access if needed (optional, keeping purely async here)
@@ -34,7 +33,6 @@ class DataServiceImpl {
 
     // Future method: Sync dictionary data to IDB
     async cacheDictionary(data: unknown): Promise<void> {
-        console.log('[DataSQL] INSERT INTO dictionary_cache ...');
         await set('dictionary-offline-cache', data);
     }
 }

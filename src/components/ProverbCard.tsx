@@ -32,7 +32,6 @@ export const ProverbCard = () => {
 
         try {
             setIsSharing(true);
-            console.log('Starting share generation...');
 
             // Generate Image
             const dataUrl = await toPng(cardRef.current, {
@@ -49,21 +48,18 @@ export const ProverbCard = () => {
                 }
             });
 
-            console.log('Image generated successfully.');
             // Use manual conversion instead of fetch(dataUrl) which can fail in some contexts
             const blob = dataURItoBlob(dataUrl);
             const file = new File([blob], `awal-wisdom-${new Date().toISOString().split('T')[0]}.png`, { type: 'image/png' });
 
             // Web Share API
             if (navigator.share && navigator.canShare({ files: [file] })) {
-                console.log('Using Web Share API');
                 await navigator.share({
                     title: 'Awal - Wisdom of the Day',
                     text: `"${dailyProverb.text_latin}" - ${dailyProverb.translation}\n\nDiscover more on Awal Dictionary.`,
                     files: [file]
                 });
             } else {
-                console.log('Web Share API not available or files not supported. Downloading...');
                 // Fallback: Download
                 const link = document.createElement('a');
                 link.download = file.name;
