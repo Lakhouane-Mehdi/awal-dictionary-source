@@ -4,7 +4,7 @@ import { dictionaryData } from '../data/dictionary';
 import { useScript } from '../context/ScriptContext';
 import { Heart, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { convertScript } from '../utils/scriptConverter';
+import { displayTerm } from '../utils/displayTerm';
 
 export const Favorites = () => {
     const { favorites, toggleFavorite } = useFavorites();
@@ -40,7 +40,7 @@ export const Favorites = () => {
                             >
                                 <Link to={`/word/${entry.id}`} className="flex-1 min-w-0 pr-2">
                                     <h2 className={`text-xl font-bold text-slate-800 dark:text-slate-100 truncate ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
-                                        {convertScript(entry.term_latin, script)}
+                                        {displayTerm(entry, script)}
                                     </h2>
                                     <p className="text-slate-500 dark:text-slate-400 text-sm truncate">{entry.definition}</p>
                                 </Link>

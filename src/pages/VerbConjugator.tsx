@@ -7,6 +7,7 @@ import { dictionaryData } from '../data/dictionary';
 // But easier here is to just use 'import type' if it's only used as type.
 import type { DictionaryEntry } from '../data/dictionary';
 import { convertScript } from '../utils/scriptConverter';
+import { displayTerm } from '../utils/displayTerm';
 import { useScript } from '../context/ScriptContext';
 
 export const VerbConjugator = () => {
@@ -60,7 +61,7 @@ export const VerbConjugator = () => {
                     <div className="glass-panel p-6 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-900 border-amber-100 dark:border-slate-700">
                         <div className="text-center mb-6">
                             <h2 className={`text-4xl font-black mb-2 ${script === 'tifinagh' ? 'tifinagh-text' : ''} text-slate-800 dark:text-slate-100`}>
-                                {convertScript(selectedVerb.term_latin, script)}
+                                {displayTerm(selectedVerb, script)}
                             </h2>
                             <p className="text-slate-500 text-lg font-medium">{selectedVerb.definition}</p>
                         </div>
@@ -110,7 +111,7 @@ export const VerbConjugator = () => {
                             >
                                 <div>
                                     <span className={`text-lg font-bold block group-hover:text-blue-600 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
-                                        {convertScript(verb.term_latin, script)}
+                                        {displayTerm(verb, script)}
                                     </span>
                                     <span className="text-sm text-slate-500">{verb.definition}</span>
                                 </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { DictionaryEntry } from '../data/dictionary';
-import { convertScript } from '../utils/scriptConverter';
+import { displayTerm } from '../utils/displayTerm';
 import { useScript } from '../context/ScriptContext';
 
 /**
@@ -18,7 +18,7 @@ export const WordRow = ({ entry }: { entry: DictionaryEntry }) => {
             <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2 flex-wrap">
                     <span className={`font-semibold text-indigo-800 dark:text-sand-100 group-hover:text-saffron-600 dark:group-hover:text-saffron-300 transition-colors ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
-                        {convertScript(entry.term_latin, script)}
+                        {displayTerm(entry, script)}
                     </span>
                     {entry.category && (
                         <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-indigo-400 dark:text-indigo-300">

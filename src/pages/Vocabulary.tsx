@@ -6,7 +6,7 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import { useGamification } from '../hooks/useGamification';
 import { useScript } from '../context/ScriptContext';
 import { useTTS } from '../hooks/useTTS';
-import { convertScript } from '../utils/scriptConverter';
+import { displayTerm } from '../utils/displayTerm';
 import { dictionaryData } from '../data/dictionary';
 
 // Cards need a real definition and a Tifinagh form to be worth reviewing.
@@ -62,7 +62,7 @@ export const Vocabulary = () => {
                     </span>
 
                     <p className={`font-display text-4xl sm:text-5xl font-bold text-indigo-800 dark:text-sand-100 mb-2 leading-tight ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
-                        {convertScript(entry.term_latin, script)}
+                        {displayTerm(entry, script)}
                     </p>
                     <p className="tifinagh-text text-xl text-saffron-500 mb-8">
                         {script !== 'tifinagh' ? entry.term_tifinagh : entry.term_latin}

@@ -8,9 +8,11 @@ from third-party sources under their own licences; see LICENSE.
 
 ## Scripts
 
-Search with Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), or Arabic (أزول) input. Latin input
-converts to Tifinagh and Arabic as you type; converting from Tifinagh or Arabic
-back to Latin is not built yet.
+Search with Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), or Arabic (أزول) input, and switch
+the whole dictionary between the three. Conversion works in every direction
+through standard IRCAM Latin, and search matches spellings across scripts and
+transcriptions: "aghyul", "aɣyul", "ⴰⵖⵢⵓⵍ" and "أغيول" all find the same word,
+and chat-style numerals (7 for ḥ, 9 for q, 3 for ɛ) work too.
 
 ## Learning
 

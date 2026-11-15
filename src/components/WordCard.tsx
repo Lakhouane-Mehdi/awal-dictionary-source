@@ -3,6 +3,7 @@ import { Heart, Volume2, PenTool, BookOpen, Network, Sparkles } from 'lucide-rea
 import { useFavorites } from '../hooks/useFavorites';
 import { useTTS } from '../hooks/useTTS';
 import { convertScript } from '../utils/scriptConverter';
+import { displayTerm } from '../utils/displayTerm';
 import type { DictionaryEntry } from '../data/dictionary';
 
 interface WordCardProps {
@@ -60,9 +61,9 @@ export const WordCard = ({ entry, dialect, script, onConjugate, onTrace, onRoot 
         ? entry.dialects[dialect as keyof typeof entry.dialects]
         : entry.term_latin;
 
-    const displayTitle = convertScript(dialectTerm || '', script);
-    const subtitle = script === 'latin' ? entry.term_tifinagh : entry.term_latin;
     const isDifferent = dialectTerm !== entry.term_latin;
+    const displayTitle = isDifferent ? convertScript(dialectTerm || '', script) : displayTerm(entry, script);
+    const subtitle = script === 'latin' ? entry.term_tifinagh : entry.term_latin;
 
     // Semantic Color
     const categoryStyle = getCategoryStyle(entry.category);
