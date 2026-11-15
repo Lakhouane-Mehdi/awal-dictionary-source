@@ -19,38 +19,37 @@ export const CalculatorOCR = () => {
     // Search Integration
     const { setQuery, results } = useSearch();
     const { script } = useScript(); // For WordCard display
-    const [bestMatch, setBestMatch] = useState<DictionaryEntry | null>(null);
+    // Best match is derived from the scan result and search results, not stored
+    const bestMatch: DictionaryEntry | null = result && results.length > 0 ? results[0] : null;
 
-    // When results change AND we have a scan result, update best match
+    // The camera runs whenever cameraActive is true; the cleanup stops it when
+    // a scan finishes (cameraActive -> false) or the page unmounts.
     useEffect(() => {
-        if (result && results.length > 0) {
-            setBestMatch(results[0]);
-        } else {
-            setBestMatch(null);
-        }
-    }, [result, results]);
-
-    const startCamera = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        } catch (err) {
-            console.error("Camera error:", err);
-            setResult("Camera access denied. Please ensure you are on HTTPS or localhost.");
-        }
-    };
-
-    useEffect(() => {
-        if (cameraActive) startCamera();
+        if (!cameraActive) return;
         const videoEl = videoRef.current;
+        let cancelled = false;
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then(stream => {
+                // Closed before the camera opened: release it straight away
+                if (cancelled || !videoEl) {
+                    stream.getTracks().forEach(track => track.stop());
+                    return;
+                }
+                videoEl.srcObject = stream;
+            })
+            .catch(err => {
+                if (cancelled) return;
+                console.error("Camera error:", err);
+                setResult("Camera access denied. Please ensure you are on HTTPS or localhost.");
+            });
 
         return () => {
+            cancelled = true;
             if (videoEl && videoEl.srcObject) {
                 const stream = videoEl.srcObject as MediaStream;
-                const tracks = stream.getTracks();
-                tracks.forEach(track => track.stop());
+                stream.getTracks().forEach(track => track.stop());
+                videoEl.srcObject = null;
             }
         };
     }, [cameraActive]);
@@ -89,9 +88,7 @@ export const CalculatorOCR = () => {
 
     const reset = () => {
         setResult(null);
-        setCameraActive(true);
-        // Restart camera
-        startCamera().catch(() => setResult('Could not restart camera.'));
+        setCameraActive(true); // the camera effect restarts the stream
     };
 
     return (
