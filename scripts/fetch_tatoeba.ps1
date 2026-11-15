@@ -2,7 +2,6 @@
 # License: CC-BY 2.0 FR (Tatoeba Project)
 # This script downloads rows in batches and filters for English source sentences
 
-$outputFile = Join-Path $PSScriptRoot "..\src\data\tatoeba_words.json"
 $examplesFile = Join-Path $PSScriptRoot "..\src\data\tatoeba_examples.json"
 $batchSize = 100
 $startOffset = 390000  # English-Kabyle pairs start around row 400,000
@@ -58,48 +57,6 @@ for ($i = 0; $i -lt $maxBatches; $i++) {
 
 Write-Host "`nTotal English-Kabyle pairs found: $($allEngPairs.Count)"
 
-# Deduplicate by target string and extract unique words
-$uniqueWords = @{}
-
-foreach ($pair in $allEngPairs) {
-    $tam = $pair.tamazight.Trim()
-    $eng = $pair.english.Trim()
-    # Extract individual words from Tamazight sentence for dictionary entries
-    $words = $tam -split '\s+' | Where-Object { $_.Length -ge 2 }
-    
-    foreach ($word in $words) {
-        $lower = $word.ToLower()
-        if (-not $uniqueWords.ContainsKey($lower)) {
-            $uniqueWords[$lower] = @{
-                tamazight = $word
-                sentences = @()
-            }
-        }
-    }
-    
-    # Store full sentence pair as example
-    # Map it to each word in the sentence
-    foreach ($word in $words) {
-        $lower = $word.ToLower()
-        if ($uniqueWords[$lower].sentences.Count -lt 3) {
-            $uniqueWords[$lower].sentences += @{
-                tamazight = $tam
-                english = $eng
-            }
-        }
-    }
-}
-
-# Build word entries JSON
-$entries = @()
-foreach ($key in $uniqueWords.Keys | Sort-Object) {
-    $w = $uniqueWords[$key]
-    $entries += @{
-        tamazight = $w.tamazight
-        examples = $w.sentences
-    }
-}
-
 # Build examples JSON (sentence pairs for example display)
 $examplesList = $allEngPairs | ForEach-Object {
     @{
@@ -109,8 +66,5 @@ $examplesList = $allEngPairs | ForEach-Object {
 } | Select-Object -First 300
 
 # Write output
-$entries | ConvertTo-Json -Depth 5 | Set-Content -Path $outputFile -Encoding UTF8
-Write-Host "Wrote $($entries.Count) word entries to $outputFile"
-
 $examplesList | ConvertTo-Json -Depth 5 | Set-Content -Path $examplesFile -Encoding UTF8
 Write-Host "Wrote $($examplesList.Count) example sentences to $examplesFile"
