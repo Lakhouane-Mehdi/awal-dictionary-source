@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "sitemap": "vite-node scripts/generate_sitemap.mjs",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "node scripts/vitest.mjs run"
   },
   "dependencies": {
     "@sentry/react": "^10.32.1",
