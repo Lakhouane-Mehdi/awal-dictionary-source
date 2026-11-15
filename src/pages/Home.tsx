@@ -24,6 +24,12 @@ import { proverbs } from '../data/proverbs';
 
 
 
+// No entry carries dialect variants yet, and the toggle used to filter on
+// mislabelled data. It appears by itself once real variants are added.
+const CONJUGATED_VERB_COUNT = dictionaryData.filter(e => e.conjugation && Object.values(e.conjugation).some(Boolean)).length;
+
+const HAS_DIALECT_DATA = dictionaryData.some(e => e.dialects && Object.values(e.dialects).some(Boolean));
+
 export const Home = () => {
     const { query, setQuery, results, suggestions, dialectFilter, setDialectFilter, loadMore, hasMore } = useSearch();
     const { script, toggleScript } = useScript();
@@ -128,8 +134,8 @@ export const Home = () => {
                             A living record of Tamazight
                         </h2>
                         <p className="text-indigo-500 dark:text-indigo-200 mb-6 text-base leading-relaxed max-w-prose">
-                            Search across three scripts and four dialects, learn the Tifinagh
-                            alphabet, and explore the roots behind each word — fully offline.
+                            Search in Latin, Tifinagh or Arabic script, conjugate
+                            {' '}{CONJUGATED_VERB_COUNT.toLocaleString()} verbs, and learn the Tifinagh alphabet — fully offline.
                         </p>
 
                         {/* Corpus stats */}
@@ -137,7 +143,7 @@ export const Home = () => {
                             {[
                                 { label: 'Entries', value: dictionaryData.length.toLocaleString() },
                                 { label: 'Scripts', value: '3' },
-                                { label: 'Dialects', value: '4' },
+                                { label: 'Verbs', value: CONJUGATED_VERB_COUNT.toLocaleString() },
                             ].map(stat => (
                                 <div key={stat.label}>
                                     <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300">
@@ -247,7 +253,7 @@ export const Home = () => {
             ) : (
                 <>
                     <div className="mb-8">
-                        <DialectToggle current={dialectFilter} onChange={setDialectFilter} />
+                        {HAS_DIALECT_DATA && <DialectToggle current={dialectFilter} onChange={setDialectFilter} />}
                     </div>
 
                     <div className="flex flex-col gap-4 pb-20">

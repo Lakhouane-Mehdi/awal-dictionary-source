@@ -12,7 +12,7 @@ export const Community = () => {
         { label: 'Words', value: dictionaryData.length.toLocaleString() },
         { label: 'Sources', value: '4' },
         { label: 'Scripts', value: '3' },
-        { label: 'Dialects', value: '4' },
+        { label: 'Verbs', value: dictionaryData.filter(e => e.conjugation && Object.values(e.conjugation).some(Boolean)).length.toLocaleString() },
     ];
 
     return (
