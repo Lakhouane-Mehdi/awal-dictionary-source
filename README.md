@@ -7,8 +7,9 @@ other way round.
 
 ## Scripts
 
-Handles Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), and Arabic (أزول) input, converting
-between them as you type. You can search in whichever script you think in.
+Search with Tifinagh (ⴰⵣⵓⵍ), Latin (Azul), or Arabic (أزول) input. Latin input
+converts to Tifinagh and Arabic as you type; converting from Tifinagh or Arabic
+back to Latin is not built yet.
 
 ## Learning
 
@@ -23,13 +24,24 @@ Proverbs can be shared as image cards.
 ## Offline
 
 The full dictionary works with no connection. Favorites persist through
-`idb-keyval`.
+`idb-keyval`. The camera scanner is the exception: its OCR engine and language
+data download on first use.
 
 ## Stack
 
-React 18, TypeScript, Vite, Tailwind, Framer Motion. Hosted on Firebase.
+React 19, TypeScript, Vite, Tailwind, Framer Motion. Hosted on Firebase.
+
+Requires Node 24 (the version CI uses).
 
 ```bash
 npm install
-npm run dev
+npm run dev     # local dev server
+npm test        # unit tests
+npm run build   # production build into dist/
+npm run sitemap # regenerate public/sitemap.xml
 ```
+
+## Monitoring
+
+Errors go to Sentry only when `VITE_SENTRY_DSN` is set at build time and the
+visitor has accepted analytics in the cookie banner.

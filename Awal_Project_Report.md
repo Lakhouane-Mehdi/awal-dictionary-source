@@ -2,7 +2,7 @@
 
 **Date:** January 11, 2026
 **Status:** Active Development (Beta)
-**Version:** 0.0.0
+**Version:** 0.1.0
 **Author:** Developed by Mehdi Lakhouane
 
 ## Executive Summary
@@ -16,20 +16,20 @@
 -   **Offline Database**: The entire dictionary is bundled locally, ensuring instant search results with zero latency.
 
 ### 2. AI Visual Translator (Scanner)
--   **OCR Integration**: Built with `Tesseract.js` to recognize English text from the camera feed purely in-browser (offline capable).
+-   **OCR Integration**: Built with `Tesseract.js` to recognize English text from the camera feed in the browser. The OCR engine and English language data download from a CDN on first use, so the scanner needs a connection the first time.
 -   **Real-time Lookup**: Instantly matches scanned English words against the Tamazight dictionary database.
 -   **Visual Overlay**: Provides an augmented reality-like experience with a focus frame and scanning animations.
 
 ### 3. Linguistic Tools
 -   **Verb Conjugator**: A dedicated module for conjugating Tamazight verbs across all tenses and forms.
 -   **Interactive Learning**:
-    -   **Trace Mode (`Learn.tsx`)**: A canvas-based tool for users to practice writing Tifinagh characters.
-    -   **Gamified Quiz (`Quiz.tsx`)**: A vocabulary testing engine using the Fisher-Yates shuffle algorithm for randomized questions.
+    -   **Trace Mode (`TraceModal.tsx`, on the Alphabet page)**: A canvas-based tool for users to practice writing Tifinagh characters.
+    -   **Gamified Quiz (`pages/Quiz.tsx`)**: A vocabulary testing engine using the Fisher-Yates shuffle algorithm for randomized questions.
 
 ## Technical Architecture
 
 ### Stack & Infrastructure
--   **Frontend**: React 18 with TypeScript for type-safe, component-based UI.
+-   **Frontend**: React 19 with TypeScript for type-safe, component-based UI.
 -   **Build System**: Vite for lightning-fast HMR and optimized production builds.
 -   **Styling**: Tailwind CSS for a utility-first, responsive design system; Framer Motion for fluid UI animations.
 -   **PWA Core**: `vite-plugin-pwa` configuration for installability and service worker caching.
