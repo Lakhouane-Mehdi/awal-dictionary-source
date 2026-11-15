@@ -9,8 +9,8 @@
 
 export type Script = 'latin' | 'tifinagh' | 'arabic';
 
-const TIFINAGH_RE = /[ⴰ-⵿]/;
-const ARABIC_RE = /[؀-ۿݐ-ݿ]/;
+const TIFINAGH_RE = /[\u2D30-\u2D7F]/;
+const ARABIC_RE = /[\u0600-\u06FF\u0750-\u077F]/;
 
 export const detectScript = (text: string): Script =>
     TIFINAGH_RE.test(text) ? 'tifinagh' : ARABIC_RE.test(text) ? 'arabic' : 'latin';
@@ -48,13 +48,18 @@ export const normalizeLatin = (text: string): string => {
     return out;
 };
 
+const PDF_EMPHATICS: Record<string, string> = { 'ş': 'ṣ', 'ţ': 'ṭ', 'ď': 'ḍ', 'Ş': 'Ṣ', 'Ţ': 'Ṭ', 'Ď': 'Ḍ' };
+
 /**
- * The PDF dictionary writes ḥ (Arabic ح) as a capital "H", as in "slHil" or
- * "lHsab". Generic conversion lowercases everything, so apply this to PDF
- * text first. All-caps words such as "ALLAH" are left alone.
+ * Rewrites the PDF dictionary's own letters as standard IRCAM Latin. It
+ * writes ḥ (Arabic ح) as a capital "H" ("slHil", "lHsab") and the emphatics
+ * as ş ţ ď. Generic conversion lowercases everything, so apply this to PDF
+ * text first. All-caps words such as "ALLAH" keep their H.
  */
 export const pdfLatinToIrcam = (text: string): string =>
-    text.replace(/\S+/g, word => (word === word.toUpperCase() ? word : word.replace(/H/g, 'ḥ')));
+    text
+        .replace(/\S+/g, word => (word === word.toUpperCase() ? word : word.replace(/H/g, 'ḥ')))
+        .replace(/[şţďŞŢĎ]/g, ch => PDF_EMPHATICS[ch]);
 
 // ---------------------------------------------------------------------------
 // Latin <-> Tifinagh
@@ -100,7 +105,7 @@ const LATIN_TO_ARABIC: Record<string, string> = {
     z: 'ز', ẓ: 'ز', ʷ: 'و',
     a: 'ا', i: 'ي', u: 'و', e: '',
 };
-const SHADDA = 'ّ';
+const SHADDA = '\u0651';
 const LATIN_VOWELS = new Set(['a', 'i', 'u', 'e']);
 // Word-initial vowels carry a hamza seat: Azul -> أزول, Imi -> إمي
 const INITIAL_VOWEL: Record<string, string> = { a: 'أ', i: 'إ', u: 'أو', e: 'أ' };
@@ -115,7 +120,7 @@ const latinToArabic = (latin: string): string => {
             out += INITIAL_VOWEL[ch];
             continue;
         }
-        // A doubled consonant becomes one letter with a shadda: dd -> دّ
+        // A doubled consonant becomes one letter with a shadda: dd -> د\u0651
         if (!LATIN_VOWELS.has(ch) && s[i + 1] === ch && LATIN_TO_ARABIC[ch]) {
             out += LATIN_TO_ARABIC[ch] + SHADDA;
             i++;
@@ -136,7 +141,7 @@ const ARABIC_TO_LATIN: Record<string, string> = {
 };
 // و and ي read as consonants (w / y) when another vowel letter follows
 const ARABIC_VOWEL_LETTERS = new Set(['ا', 'أ', 'إ', 'آ', 'ى', 'و', 'ي']);
-const ARABIC_DIACRITICS = /[ً-ِْ-ٰٟ]/g;
+const ARABIC_DIACRITICS = /[\u064B-\u0650\u0652-\u065F\u0670]/g;
 
 const arabicToLatin = (arabic: string): string => {
     const s = Array.from(arabic.replace(ARABIC_DIACRITICS, '').replace(/ـ/g, ''));
@@ -208,7 +213,7 @@ export const convertScript = (text: string, target: Script): string => {
  */
 export const searchKey = (text: string): string =>
     toLatin(text)
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .normalize('NFD').replace(/[\u0300-\u036F]/g, '')
         .replace(/ɣ/g, 'g').replace(/ǧ/g, 'j').replace(/č/g, 'c').replace(/ʷ/g, '')
         .replace(/[ɛe\s\-.'’]/g, '')
         .replace(/y/g, 'i').replace(/w/g, 'u')

@@ -7,13 +7,13 @@ const top = (q: string, n = 5) => searchEntries(q).slice(0, n).map(e => e.term_l
 
 describe('dictionary data', () => {
     it('gives every entry a real Latin spelling', () => {
-        const tifinaghInLatin = dictionaryData.filter(e => /[ⴰ-⵿]/.test(e.term_latin));
+        const tifinaghInLatin = dictionaryData.filter(e => /[\u2D30-\u2D7F]/.test(e.term_latin));
         expect(tifinaghInLatin.map(e => e.term_latin)).toEqual([]);
     });
 
     it('has no garbled characters (UTF-8 read as Windows-1252) in example sentences', () => {
         const text = JSON.stringify(tatoebaExamples);
-        expect(text.match(/[ÃÉáâ][\u0080-¿£¸]|[\u0080-\u009F]/g)).toBeNull();
+        expect(text.match(/[ÃÉáâ][\u0080-\u00BF£¸]|[\u0080-\u009F]/g)).toBeNull();
     });
 
     it('never leaves Latin letters in generated Tifinagh', () => {

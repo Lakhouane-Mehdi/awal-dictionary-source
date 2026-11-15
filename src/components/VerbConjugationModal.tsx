@@ -1,13 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles } from 'lucide-react';
 import { convertScript } from '../utils/scriptConverter';
+import type { DictionaryEntry } from '../data/dictionary';
 
-interface ConjugationData {
-    preterite: string;
-    intensive: string;
-    future: string;
-    aorist?: string;
-}
+type ConjugationData = NonNullable<DictionaryEntry['conjugation']>;
 
 interface VerbConjugationModalProps {
     isOpen: boolean;
@@ -62,12 +58,10 @@ export const VerbConjugationModal = ({ isOpen, onClose, verbName, conjugation, s
 
                             {/* Content */}
                             <div className="p-6 space-y-4">
-                                <AspectRow label="Preterite (Past)" value={conjugation.preterite} script={script} color="blue" />
-                                <AspectRow label="Intensive (Habitual)" value={conjugation.intensive} script={script} color="purple" />
-                                <AspectRow label="Future" value={conjugation.future} script={script} color="pink" />
-                                {conjugation.aorist && (
-                                    <AspectRow label="Aorist (Imperative)" value={conjugation.aorist} script={script} color="orange" />
-                                )}
+                                {conjugation.preterite && <AspectRow label="Preterite (Past)" value={conjugation.preterite} script={script} color="blue" />}
+                                {conjugation.intensive && <AspectRow label="Intensive (Habitual)" value={conjugation.intensive} script={script} color="purple" />}
+                                {conjugation.future && <AspectRow label="Future" value={conjugation.future} script={script} color="pink" />}
+                                {conjugation.aorist && <AspectRow label="Aorist (Imperative)" value={conjugation.aorist} script={script} color="orange" />}
                             </div>
                         </motion.div>
                     </motion.div>

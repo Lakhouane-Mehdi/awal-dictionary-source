@@ -6,9 +6,23 @@ import { dictionaryData } from '../data/dictionary';
 // Fix: Import DictionaryEntry as type explicitly or ensure it's exported purely as type if needed.
 // But easier here is to just use 'import type' if it's only used as type.
 import type { DictionaryEntry } from '../data/dictionary';
-import { convertScript } from '../utils/scriptConverter';
+import { convertScript, searchKey } from '../utils/scriptConverter';
 import { displayTerm } from '../utils/displayTerm';
 import { useScript } from '../context/ScriptContext';
+
+const CONJUGATION_ROWS = [
+    { key: 'preterite', title: 'Preterite (Izri) · I …' },
+    { key: 'intensive', title: 'Intensive (Urmir) · present continuous' },
+    { key: 'future', title: 'Future (Imal) · I will …' },
+    { key: 'aorist', title: 'Aorist / Imperative' },
+] as const;
+
+// Rendering every verb at once is slow; search narrows the list
+const VERB_LIST_LIMIT = 60;
+
+const CONJUGATED_VERBS = dictionaryData
+    .filter(entry => entry.conjugation && Object.values(entry.conjugation).some(Boolean))
+    .map(verb => ({ verb, spellingKey: searchKey(verb.term_latin) }));
 
 export const VerbConjugator = () => {
     const navigate = useNavigate();
@@ -16,13 +30,16 @@ export const VerbConjugator = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedVerb, setSelectedVerb] = useState<DictionaryEntry | null>(null);
 
-    // Filter for verbs that have conjugation data
+    // Only verbs that have conjugated forms can be opened. Search matches the
+    // spelling in any script (via searchKey) or the English meaning.
     const verbList = useMemo(() => {
-        return dictionaryData.filter(entry =>
-            (entry.category === 'Verbs' || !!entry.conjugation) &&
-            (entry.term_latin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                entry.term_tifinagh.includes(searchTerm))
-        );
+        const key = searchKey(searchTerm);
+        const english = searchTerm.trim().toLowerCase();
+        return CONJUGATED_VERBS.filter(entry =>
+            !english ||
+            (key && entry.spellingKey.includes(key)) ||
+            entry.verb.definition.toLowerCase().includes(english)
+        ).map(e => e.verb);
     }, [searchTerm]);
 
     const handleSelectVerb = (verb: DictionaryEntry) => {
@@ -67,28 +84,17 @@ export const VerbConjugator = () => {
                         </div>
 
                         <div className="space-y-8">
-                            <ConjugationTable
-                                title="Preterite (Izri)"
-                                value={selectedVerb.conjugation.preterite}
-                                script={script as 'latin' | 'tifinagh' | 'arabic'}
-                            />
-                            <ConjugationTable
-                                title="Intensive (Urmir)"
-                                value={selectedVerb.conjugation.intensive}
-                                script={script as 'latin' | 'tifinagh' | 'arabic'}
-                            />
-                            <ConjugationTable
-                                title="Future (Imal)"
-                                value={selectedVerb.conjugation.future}
-                                script={script as 'latin' | 'tifinagh' | 'arabic'}
-                            />
-                            {selectedVerb.conjugation.aorist && (
-                                <ConjugationTable
-                                    title="Imperative/Aorist"
-                                    value={selectedVerb.conjugation.aorist}
-                                    script={script as 'latin' | 'tifinagh' | 'arabic'}
-                                />
-                            )}
+                            {CONJUGATION_ROWS.map(({ key, title }) => {
+                                const value = selectedVerb.conjugation?.[key];
+                                return value ? (
+                                    <ConjugationTable
+                                        key={key}
+                                        title={title}
+                                        value={value}
+                                        script={script as 'latin' | 'tifinagh' | 'arabic'}
+                                    />
+                                ) : null;
+                            })}
                         </div>
                     </div>
 
@@ -101,9 +107,11 @@ export const VerbConjugator = () => {
                 </motion.div>
             ) : (
                 <div className="space-y-2">
-                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 px-2">Available Verbs</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 px-2">
+                        {verbList.length.toLocaleString()} verbs{verbList.length > VERB_LIST_LIMIT ? ` · showing ${VERB_LIST_LIMIT}, search to narrow` : ''}
+                    </p>
                     {verbList.length > 0 ? (
-                        verbList.map(verb => (
+                        verbList.slice(0, VERB_LIST_LIMIT).map(verb => (
                             <button
                                 key={verb.id}
                                 onClick={() => handleSelectVerb(verb)}

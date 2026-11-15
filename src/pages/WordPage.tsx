@@ -1,13 +1,22 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { slugify } from '../data/taxonomy';
-import { dictionaryData } from '../data/dictionary';
+import { dictionaryData, idAliases } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { useScript } from '../context/ScriptContext';
 import { useTTS } from '../hooks/useTTS';
 import { ArrowLeft, Volume2, MessageSquareDashed, Tag, Network } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import tatoebaExamples from '../data/tatoeba_examples.json';
 import { SITE_URL, DEFAULT_TITLE, DEFAULT_DESCRIPTION } from '../utils/seo';
+import { convertScript } from '../utils/scriptConverter';
+import { isLegacyId, resolveLegacyId } from '../utils/legacyIds';
+
+const CONJUGATION_LABELS = [
+    { key: 'aorist', label: 'Infinitive / Imperative' },
+    { key: 'intensive', label: 'Present continuous' },
+    { key: 'preterite', label: 'Past · I …' },
+    { key: 'future', label: 'Future · I will …' },
+] as const;
 
 export const WordPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -16,6 +25,27 @@ export const WordPage = () => {
     const { speak, speaking } = useTTS();
 
     const entry = dictionaryData.find(e => e.id === id);
+
+    // Old links used position-based IDs ("imp_123"); send them to the entry's
+    // current page. Remember a lookup that found nothing so it shows 404.
+    const isOldLink = !entry && !!id && isLegacyId(id);
+
+    // An entry merged into another one: go to the one that was kept
+    const mergedInto = !entry && id ? idAliases.get(id) : undefined;
+    useEffect(() => {
+        if (mergedInto) navigate(`/word/${mergedInto}`, { replace: true });
+    }, [mergedInto, navigate]);
+    const [unresolvedId, setUnresolvedId] = useState<string | null>(null);
+    useEffect(() => {
+        if (!isOldLink || !id) return;
+        let cancelled = false;
+        resolveLegacyId(id).then(newId => {
+            if (cancelled) return;
+            if (newId) navigate(`/word/${newId}`, { replace: true });
+            else setUnresolvedId(id);
+        });
+        return () => { cancelled = true; };
+    }, [isOldLink, id, navigate]);
 
     useEffect(() => {
         const metaDescription = document.querySelector('meta[name="description"]');
@@ -38,6 +68,10 @@ export const WordPage = () => {
             canonical?.setAttribute('href', `${SITE_URL}/`);
         };
     }, [entry]);
+
+    if (mergedInto || (isOldLink && unresolvedId !== id)) {
+        return <div className="py-24 text-center text-indigo-400" role="status">Loading…</div>;
+    }
 
     if (!entry) {
         return (
@@ -65,8 +99,14 @@ export const WordPage = () => {
     }
 
     // Real Tatoeba example sentences — filter for sentences containing this word
-    const examples = (tatoebaExamples as { tamazight: string; english: string }[])
-        .filter(ex => ex.tamazight.toLowerCase().includes(entry.term_latin.toLowerCase()))
+    // Whole-word matches only: a substring test showed sentences with
+    // "yessukkes" on the page for su (to drink)
+    const wordPattern = new RegExp(
+        `(^|[^\\p{L}])${entry.term_latin.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^\\p{L}]|$)`,
+        'u',
+    );
+    const examples = entry.term_latin.length < 2 ? [] : (tatoebaExamples as { tamazight: string; english: string }[])
+        .filter(ex => wordPattern.test(ex.tamazight.toLowerCase()))
         .slice(0, 3);
 
     return (
@@ -135,6 +175,32 @@ export const WordPage = () => {
                     </div>
                 </div>
             </div>
+
+            {entry.usage && (
+                <div className="glass-panel p-6 mb-6">
+                    <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-2">When it's used</h2>
+                    <p className="text-indigo-800 dark:text-sand-100">{entry.usage}</p>
+                </div>
+            )}
+
+            {entry.conjugation && (
+                <div className="glass-panel p-6 mb-6">
+                    <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-4">Conjugation</h2>
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {CONJUGATION_LABELS.map(({ key, label }) => {
+                            const form = entry.conjugation?.[key];
+                            return form ? (
+                                <div key={key} className="border border-indigo-700/10 dark:border-white/10 p-3 rounded-xl">
+                                    <dt className="text-[10px] font-bold text-indigo-400 dark:text-indigo-300 uppercase tracking-[0.12em]">{label}</dt>
+                                    <dd className={`text-lg font-bold text-indigo-800 dark:text-sand-100 ${script === 'tifinagh' ? 'tifinagh-text' : ''}`}>
+                                        {convertScript(form, script)}
+                                    </dd>
+                                </div>
+                            ) : null;
+                        })}
+                    </dl>
+                </div>
+            )}
 
             <div className="glass-panel p-6">
                 <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-4">Example Sentences</h3>

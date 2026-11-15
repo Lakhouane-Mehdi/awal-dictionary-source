@@ -31,61 +31,86 @@ export interface DictionaryEntry {
     cultural_image?: string;
     root?: string; // e.g. "M-Gh-R"
     etymology?: string; // Cultural explanation of the root
+    /** Conjugated forms; the 1st person singular for preterite and future. */
     conjugation?: {
-        preterite: string;
-        intensive: string;
-        future: string;
+        preterite?: string;
+        intensive?: string;
+        future?: string;
         aorist?: string;
     };
+    /** When a phrase is used (the God phrases carry these notes). */
+    usage?: string;
     source?: string;
 }
 
-// The PDF text extraction mangled the Tamazight letter "ɛ" (ayn) into stray
-// Arabic glyphs — either the presentation-form ligature U+FE49 or the plain
-// U+0639, usually padded with spaces ("rb ﻉع ta" instead of "rbɛta").
-// This affects ~645 entries, including every number from 10 upward.
-const repairAyn = (text: string): string =>
-    text
-        .replace(/\s*ﻉ\s*ع\s*/g, 'ɛ')
-        .replace(/\s*[ﻉع]\s*/g, 'ɛ')
-        .replace(/\s{2,}/g, ' ')
-        .trim();
+// Rows written by scripts/import_pdf.mjs
+interface PdfRow {
+    english: string;
+    tamazight: string;
+    section: string;
+    present?: string;
+    past?: string;
+    usage?: string;
+}
 
-const importedEntries: DictionaryEntry[] = importedData.map((item: Record<string, string | undefined>, index: number) => {
-    // Determine Latin term and Definition based on section usually, but our JSON normalized it:
-    // english col -> definition, tamazight col -> term_latin
-    // Note: The PDF parser output puts 'english' key as English text and 'tamazight' key as Tamazight text
+// Stable IDs from content (FNV-1a of section | tamazight | english), so a
+// re-import or a fix to another entry never shifts the IDs that favourites
+// and shared links rely on. legacy_pdf_ids.json maps the old position-based
+// IDs onto these; its test fails if this function ever changes.
+const fnv1a = (text: string): string => {
+    let h = 0x811c9dc5;
+    for (const ch of text) {
+        h ^= ch.codePointAt(0)!;
+        h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return h.toString(36).padStart(7, '0');
+};
+const usedPdfIds = new Set<string>();
+const pdfRowId = (row: PdfRow): string => {
+    const base = `pdf_${fnv1a(`${row.section}|${row.tamazight}|${row.english}`)}`;
+    let id = base;
+    for (let n = 2; usedPdfIds.has(id); n++) id = `${base}_${n}`;
+    usedPdfIds.add(id);
+    return id;
+};
 
-    const termLatin = repairAyn(item.tamazight || '');
-    const def = (item.english || '').trim();
+const importedEntries: DictionaryEntry[] = (importedData as PdfRow[]).map(item => {
+    // The PDF writes ḥ as capital H and the emphatics as ş ţ ď; show the
+    // standard IRCAM letters instead (lHsab -> lḥsab, şbaH -> ṣbaḥ)
+    const termLatin = pdfLatinToIrcam(item.tamazight);
+    const def = item.english.trim();
 
-    // Determine source section for potential category inference
-    const section = item.section || 'General';
-    const dialect = item.dialect || 'General';
+    // The dictionary halves ('eng-tam' / 'tam-eng') are not categories, so
+    // infer one from the meaning; the other sections are categories
+    // ('Verbs', 'Countries', 'God Phrases').
+    const category = item.section === 'eng-tam' || item.section === 'tam-eng'
+        ? categorizeWord(def)
+        : item.section;
 
-    // The raw sections ('eng-tam'/'tam-eng') only describe which half of the
-    // PDF a row came from — they are meaningless as browsable categories, so
-    // infer a real one from the definition instead.
-    let category: string;
-    if (section === 'eng-tam' || section === 'tam-eng') category = categorizeWord(def);
-    else category = section; // 'Verbs', 'Countries', 'God Phrases', etc.
+    // The verb tables give the infinitive (the aorist / imperative stem), the
+    // present continuous (intensive) and the 1st person past (preterite)
+    const conjugation = item.section === 'Verbs'
+        ? {
+            aorist: termLatin,
+            intensive: item.present ? pdfLatinToIrcam(item.present) : undefined,
+            preterite: item.past ? pdfLatinToIrcam(item.past) : undefined,
+        }
+        : undefined;
 
     return {
-        id: `imp_${index}`,
+        id: pdfRowId(item),
         term_latin: termLatin,
-        term_tifinagh: convertScript(pdfLatinToIrcam(termLatin), 'tifinagh'),
-        term_arabic: convertScript(pdfLatinToIrcam(termLatin), 'arabic'),
+        term_tifinagh: convertScript(termLatin, 'tifinagh'),
+        term_arabic: convertScript(termLatin, 'arabic'),
         definition: def,
-        category: category,
+        category,
+        conjugation,
+        usage: item.usage,
+        // Zaouiat Ahansal is a Central Atlas Tamazight variety. These words
+        // used to be labelled Tashelhit, a different language.
         source: 'PDF Import',
-        dialects: {
-            tashelhit: dialect === 'Zaouiat Ahansal' ? termLatin : undefined,
-            // proper way: maybe add a 'region' field or 'dialect_tag'. 
-            // for now, let's put it in source or a new field if interface allows.
-            // Interface has 'dialects' object. Let's just use 'source' for the dialect name to be safe without breaking types.
-        }
     };
-}).filter((item: DictionaryEntry) => item.term_latin.length > 0 && item.definition.length > 0 && item.definition !== 'English' && item.definition !== 'Tamazight');
+}).filter(item => item.term_latin.length > 0 && item.definition.length > 0);
 
 const manualEntries: DictionaryEntry[] = [
     // --- GREETINGS ---
@@ -341,14 +366,34 @@ const wiktionaryEntries: DictionaryEntry[] = (wiktionaryData as WiktionaryWord[]
         };
     });
 
-// The PDF import contains rows repeated across its two halves, so collapse
-// entries that share both a term and a definition before merging sources.
-const seenImported = new Set<string>();
+// The PDF repeats rows across its two halves and its verb tables, so
+// collapse entries that share both a term and a definition. The first copy
+// keeps its ID (old links and favourites point at it), but it takes the
+// conjugation or usage note a later copy carries, so a verb listed in the
+// dictionary half does not lose the forms from the verb tables.
+const SECTION_CATEGORIES = new Set(['Verbs', 'Countries', 'God Phrases']);
+/**
+ * IDs of entries merged into another one, mapped to the entry that was
+ * kept. The word page redirects these, so an ID never just disappears when
+ * a re-import or a better spelling makes two entries collide.
+ */
+export const idAliases = new Map<string, string>();
+
+const importedByKey = new Map<string, DictionaryEntry>();
 const uniqueImportedEntries = importedEntries.filter(e => {
     const key = `${e.term_tifinagh}|${e.definition.toLowerCase()}`;
-    if (seenImported.has(key)) return false;
-    seenImported.add(key);
-    return true;
+    const kept = importedByKey.get(key);
+    if (!kept) {
+        importedByKey.set(key, e);
+        return true;
+    }
+    idAliases.set(e.id, kept.id);
+    kept.conjugation ??= e.conjugation;
+    kept.usage ??= e.usage;
+    // A copy from the verb, country or God-phrase tables knows its category
+    // for certain; the dictionary halves only guess one from the meaning
+    if (e.category && SECTION_CATEGORIES.has(e.category)) kept.category = e.category;
+    return false;
 });
 
 // Deduplicate across sources: prefer manual > imported > IRCAM > Wiktionary.
@@ -367,18 +412,23 @@ const meaningWords = (definition: string): Set<string> =>
             .map(w => w.replace(/(ing|ed|es|s|e)$/, '')),
     );
 
-const byTifinagh = new Map<string, Set<string>[]>();
+const byTifinagh = new Map<string, { id: string; words: Set<string> }[]>();
 const remember = (e: DictionaryEntry) => {
     const list = byTifinagh.get(e.term_tifinagh) ?? [];
-    list.push(meaningWords(e.definition));
+    list.push({ id: e.id, words: meaningWords(e.definition) });
     byTifinagh.set(e.term_tifinagh, list);
 };
-const isDuplicate = (e: DictionaryEntry): boolean => {
+/** The entry this one duplicates, if any */
+const duplicateOf = (e: DictionaryEntry): string | undefined => {
     const words = meaningWords(e.definition);
-    return (byTifinagh.get(e.term_tifinagh) ?? []).some(seen => [...words].some(w => seen.has(w)));
+    return (byTifinagh.get(e.term_tifinagh) ?? []).find(seen => [...words].some(w => seen.words.has(w)))?.id;
 };
 const keepNew = (e: DictionaryEntry): boolean => {
-    if (isDuplicate(e)) return false;
+    const original = duplicateOf(e);
+    if (original) {
+        idAliases.set(e.id, original);
+        return false;
+    }
     remember(e);
     return true;
 };
