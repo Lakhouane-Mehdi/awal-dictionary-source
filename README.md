@@ -44,6 +44,23 @@ npm run build   # production build into dist/
 npm run sitemap # regenerate public/sitemap.xml
 ```
 
+## Dictionary data
+
+The core vocabulary comes from `dictionary.pdf`. To rebuild
+`src/data/dictionary.json` from it:
+
+```bash
+node scripts/import_pdf.mjs
+```
+
+The importer reads each text fragment's position on the page, so words stay
+whole, wrapped lines rejoin their entry, and every section keeps its own
+layout: both dictionary halves, the verb tables (infinitive, present
+continuous, 1st person past), countries, and God phrases with their usage
+notes. Entry IDs are derived from content, so re-running it never breaks
+saved favourites or shared links; `src/__tests__/pdfImport.test.ts` checks
+the result.
+
 ## Monitoring
 
 Errors go to Sentry only when `VITE_SENTRY_DSN` is set at build time and the
