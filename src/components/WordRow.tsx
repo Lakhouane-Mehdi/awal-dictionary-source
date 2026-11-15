@@ -13,7 +13,9 @@ export const WordRow = ({ entry }: { entry: DictionaryEntry }) => {
     return (
         <Link
             to={`/word/${entry.id}`}
-            className="group flex items-baseline justify-between gap-4 px-4 py-3 rounded-xl border border-transparent hover:border-indigo-700/10 dark:hover:border-white/10 hover:bg-white/60 dark:hover:bg-white/5 transition-all"
+            // The hover outline is a ring, not a border: list dividers recolour
+            // a row's whole border, which drew a box around every row
+            className="group flex items-baseline justify-between gap-4 px-4 py-3 rounded-xl hover:ring-1 hover:ring-inset hover:ring-indigo-700/10 dark:hover:ring-white/10 hover:bg-white/60 dark:hover:bg-white/5 transition-all"
         >
             <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2 flex-wrap">
