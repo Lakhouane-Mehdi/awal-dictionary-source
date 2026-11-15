@@ -31,7 +31,7 @@ const CONJUGATED_VERB_COUNT = dictionaryData.filter(e => e.conjugation && Object
 const HAS_DIALECT_DATA = dictionaryData.some(e => e.dialects && Object.values(e.dialects).some(Boolean));
 
 export const Home = () => {
-    const { query, setQuery, results, suggestions, dialectFilter, setDialectFilter, loadMore, hasMore } = useSearch();
+    const { query, searchedQuery, setQuery, results, suggestions, dialectFilter, setDialectFilter, loadMore, hasMore } = useSearch();
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
     const { stats, trackAction } = useGamification();
@@ -120,13 +120,13 @@ export const Home = () => {
                     value={query}
                     onChange={setQuery}
                     onClear={() => setQuery('')}
-                    results={query ? results.slice(0, 8) : []}
+                    results={searchedQuery ? results.slice(0, 8) : []}
                     onSelect={(entry) => navigate(`/word/${entry.id}`)}
                 />
             </div>
 
             {/* Content Switcher: Search Results vs Discovery */}
-            {!query ? (
+            {!searchedQuery ? (
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
                     {/* Hero Section */}
                     <div className="mb-10 glass-panel p-8 sm:p-10">

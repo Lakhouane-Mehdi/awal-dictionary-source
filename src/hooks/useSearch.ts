@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
 import Fuse, { type Expression } from 'fuse.js';
 import { dictionaryData, type DictionaryEntry } from '../data/dictionary';
 import { getSpellSuggestions } from '../utils/spellChecker';
@@ -55,38 +55,40 @@ export const useSearch = () => {
 
     const loadMore = () => setBrowseCount(prev => prev + BROWSE_PAGE_SIZE);
 
+    // The input shows each keystroke at once; the search and the result
+    // list follow at a lower priority, so typing never waits on them
+    const deferredQuery = useDeferredValue(query);
 
-    const results = useMemo(() => {
+    const matches = useMemo(() => {
         try {
             let items = dictionaryData;
-
-            // No hard cap on search — Fuse already ranks by relevance
-            if (query.trim()) items = searchEntries(query);
-
+            if (deferredQuery.trim()) items = searchEntries(deferredQuery);
             if (dialectFilter !== 'all') {
                 items = items.filter(e => !!e.dialects?.[dialectFilter]);
             }
-
-            // For browse (no query), slice to current page; for search, return all
-            return query ? items : items.slice(0, browseCount);
+            return items;
         } catch (error) {
             console.error("Search failed:", error);
             return [];
         }
-    }, [query, dialectFilter, browseCount]);
+    }, [deferredQuery, dialectFilter]);
 
-    const hasMore = !query && results.length < (dialectFilter === 'all'
-        ? dictionaryData.length
-        : dictionaryData.filter(e => !!e.dialects?.[dialectFilter]).length);
+    // One letter can match thousands of words ("a" matches about 7,000),
+    // and drawing a card for each froze the page. Searches are paged like
+    // browsing; "Load more words" shows the next page.
+    const results = useMemo(() => matches.slice(0, browseCount), [matches, browseCount]);
+    const hasMore = matches.length > results.length;
 
     // Spell suggestions: only compute when there are no results and query is non-empty
     const suggestions = useMemo(() => {
-        if (!query || results.length > 0) return [];
-        return getSpellSuggestions(query);
-    }, [query, results]);
+        if (!deferredQuery || results.length > 0) return [];
+        return getSpellSuggestions(deferredQuery);
+    }, [deferredQuery, results]);
 
     return {
         query,
+        /** The query `results` belong to; trails `query` while typing */
+        searchedQuery: deferredQuery,
         setQuery: handleSetQuery,
         results,
         suggestions,

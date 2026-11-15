@@ -19,12 +19,15 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
 
-    // Auto-update value when transcript changes
+    // Put recognised speech into the box, once per new transcript. The
+    // parent passes a new onChange on every render; with it as a dependency
+    // this re-ran on each keystroke and overwrote typing with the old
+    // transcript, so it is read through a ref instead.
+    const onChangeRef = useRef(onChange);
+    useEffect(() => { onChangeRef.current = onChange; });
     useEffect(() => {
-        if (transcript) {
-            onChange(transcript);
-        }
-    }, [transcript, onChange]);
+        if (transcript) onChangeRef.current(transcript);
+    }, [transcript]);
 
     const handleMicClick = () => {
         if (isListening) {
