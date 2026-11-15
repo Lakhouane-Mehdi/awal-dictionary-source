@@ -1,7 +1,7 @@
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import { Home, Heart, Grid, GraduationCap, PenLine, Globe } from 'lucide-react';
 import { GithubIcon } from './icons/GithubIcon';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { CookieBanner } from './legal/CookieBanner';
 import { ContributionModal } from './ContributionModal';
 import { AchievementsModal } from './AchievementsModal';
@@ -69,8 +69,9 @@ export const Layout = () => {
 
             {/* Main Content Area with padding for Nav */}
             <main className="flex-1 pb-28 lg:pb-16 px-4 pt-8 max-w-3xl lg:max-w-5xl mx-auto w-full">
-                <Outlet />
-
+                <Suspense fallback={<div className="py-24 text-center text-indigo-400" role="status">Loading…</div>}>
+                    <Outlet />
+                </Suspense>
             </main>
 
             {/* Site footer */}

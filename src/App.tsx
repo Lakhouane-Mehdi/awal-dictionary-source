@@ -1,46 +1,53 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ComponentType } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { ScrollToTop } from './components/ScrollToTop';
-import { Home } from './pages/Home';
-import { WordPage } from './pages/WordPage';
+
+// Every page is code-split. The dictionary data (~2 MB of JSON) is only
+// pulled in by the pages that search or list words, so lighter pages such
+// as About, Alphabet, Proverbs and the legal notices load without it.
+const page = <T extends string>(load: () => Promise<Record<T, ComponentType>>, name: T) =>
+  lazy(() => load().then(m => ({ default: m[name] })));
+
+const Home = page(() => import('./pages/Home'), 'Home');
+const WordPage = page(() => import('./pages/WordPage'), 'WordPage');
 
 // Dictionary browsing
-import { Browse } from './pages/Browse';
-import { Categories } from './pages/Categories';
-import { CategoryDetail } from './pages/CategoryDetail';
-import { Roots } from './pages/Roots';
-import { RootDetail } from './pages/RootDetail';
+const Browse = page(() => import('./pages/Browse'), 'Browse');
+const Categories = page(() => import('./pages/Categories'), 'Categories');
+const CategoryDetail = page(() => import('./pages/CategoryDetail'), 'CategoryDetail');
+const Roots = page(() => import('./pages/Roots'), 'Roots');
+const RootDetail = page(() => import('./pages/RootDetail'), 'RootDetail');
+const Favorites = page(() => import('./pages/Favorites'), 'Favorites');
 
 // Learning
-import { LearnHub } from './pages/LearnHub';
-import { Vocabulary } from './pages/Vocabulary';
-import { Alphabet } from './pages/Alphabet';
+const LearnHub = page(() => import('./pages/LearnHub'), 'LearnHub');
+const Vocabulary = page(() => import('./pages/Vocabulary'), 'Vocabulary');
+const Alphabet = page(() => import('./pages/Alphabet'), 'Alphabet');
 
 // Culture
-import { Proverbs } from './pages/Proverbs';
-import { ProverbDetail } from './pages/ProverbDetail';
+const Proverbs = page(() => import('./pages/Proverbs'), 'Proverbs');
+const ProverbDetail = page(() => import('./pages/ProverbDetail'), 'ProverbDetail');
 
 // Tools
-import { Tools } from './pages/Tools';
-import { VerbConjugator } from './pages/VerbConjugator';
-import { Quiz } from './pages/Quiz';
-import { Community } from './pages/Community';
+const Tools = page(() => import('./pages/Tools'), 'Tools');
+const VerbConjugator = page(() => import('./pages/VerbConjugator'), 'VerbConjugator');
+const Quiz = page(() => import('./pages/Quiz'), 'Quiz');
+const Community = page(() => import('./pages/Community'), 'Community');
+const CalculatorOCR = page(() => import('./pages/Scan'), 'CalculatorOCR');
 
-// Heavy pages — lazy loaded so pdfjs-dist + tesseract.js aren't in the main bundle
-const CalculatorOCR = lazy(() => import('./pages/Scan').then(m => ({ default: m.CalculatorOCR })));
-
-import { Favorites } from './pages/Favorites';
-import { About } from './pages/About';
-import { NotFound } from './pages/NotFound';
-import { PrivacyPolicy } from './pages/legal/PrivacyPolicy';
-import { Imprint } from './pages/legal/Imprint';
+// Project
+const About = page(() => import('./pages/About'), 'About');
+const NotFound = page(() => import('./pages/NotFound'), 'NotFound');
+const PrivacyPolicy = page(() => import('./pages/legal/PrivacyPolicy'), 'PrivacyPolicy');
+const Imprint = page(() => import('./pages/legal/Imprint'), 'Imprint');
 
 function App() {
   return (
     <>
     <ScrollToTop />
     <Routes>
+      {/* Layout wraps its <Outlet /> in Suspense, so the header stays put while a page loads */}
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
 
@@ -77,7 +84,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
 
-      {/* Standalone route for Camera — lazy loaded, full screen */}
+      {/* Standalone route for Camera — full screen, outside the app shell */}
       <Route path="/tools/scan" element={
         <Suspense fallback={<div className="flex items-center justify-center h-screen text-indigo-400">Loading scanner...</div>}>
           <CalculatorOCR />

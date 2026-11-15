@@ -79,7 +79,6 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-motion': ['framer-motion'],
-          'vendor-pdf': ['pdfjs-dist'],
           'vendor-ocr': ['tesseract.js'],
         }
       }
