@@ -1,7 +1,9 @@
-import { Search, Mic, X, MicOff } from 'lucide-react';
+import { Search, Mic, X, MicOff, Keyboard } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import type { DictionaryEntry } from '../data/dictionary';
+import { TifinaghKeyboard } from './TifinaghKeyboard';
+import { insertText, deleteBackward, type Edit } from '../utils/textEditing';
 
 interface SearchBarProps {
     value: string;
@@ -14,6 +16,7 @@ interface SearchBarProps {
 export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: SearchBarProps) => {
     const [isFocused, setIsFocused] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [keyboardOpen, setKeyboardOpen] = useState(false);
     const { isListening, transcript, startListening, stopListening, resetTranscript } = useSpeechRecognition();
     const wrapperRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -49,13 +52,33 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const showDropdown = isFocused && value.length > 0 && results.length > 0 && !!onSelect;
+    // The suggestions would cover the on-screen keyboard, so they wait until it is closed
+    const showDropdown = isFocused && !keyboardOpen && value.length > 0 && results.length > 0 && !!onSelect;
 
     // Typing changes the suggestion list, so drop the stale highlight
     const handleChange = (next: string) => {
         setActiveIndex(-1);
         onChange(next);
     };
+
+    // On-screen keyboard: edit at the caret, then put the caret back after
+    // React has written the new value into the field
+    const applyEdit = (edit: Edit) => {
+        handleChange(edit.value);
+        requestAnimationFrame(() => {
+            const input = inputRef.current;
+            if (!input) return;
+            input.focus();
+            input.setSelectionRange(edit.caret, edit.caret);
+        });
+    };
+    const selection = (): [number, number] => {
+        const input = inputRef.current;
+        const start = input?.selectionStart ?? value.length;
+        return [start, input?.selectionEnd ?? start];
+    };
+    const typeKey = (char: string) => applyEdit(insertText(value, ...selection(), char));
+    const backspace = () => applyEdit(deleteBackward(value, ...selection()));
 
     // Keep the highlighted option scrolled into view during keyboard navigation
     useEffect(() => {
@@ -125,9 +148,13 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                     aria-controls="search-suggestions"
                     aria-activedescendant={activeOptionId}
                     autoComplete="off"
+                    // While the Tifinagh keyboard is open, phones keep their
+                    // own keyboard closed so the two do not stack
+                    inputMode={keyboardOpen ? 'none' : undefined}
                 />
                 {value && (
                     <button
+                        type="button"
                         onClick={onClear}
                         className="p-2 text-indigo-300 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors"
                         aria-label="Clear search"
@@ -138,6 +165,18 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                 )}
                 <div className="w-px h-6 bg-indigo-700/12 dark:bg-white/12 mx-2"></div>
                 <button
+                    type="button"
+                    onClick={() => setKeyboardOpen(open => !open)}
+                    className={`p-2 rounded-lg transition-colors ${keyboardOpen ? 'bg-accent-50 text-accent-700 dark:bg-accent-900/30 dark:text-accent-300' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-600'}`}
+                    title="Tifinagh keyboard"
+                    aria-label={keyboardOpen ? 'Close the Tifinagh keyboard' : 'Open the Tifinagh keyboard'}
+                    aria-pressed={keyboardOpen}
+                    aria-controls="tifinagh-keyboard"
+                >
+                    <Keyboard size={20} />
+                </button>
+                <button
+                    type="button"
                     onClick={handleMicClick}
                     className={`p-2 rounded-lg transition-all duration-300 ${isListening ? 'bg-ruby-50 text-ruby-600 dark:bg-ruby-900/30 dark:text-ruby-300 animate-pulse' : 'text-indigo-500 dark:text-indigo-300 hover:text-accent-500'}`}
                     title="Voice Search"
@@ -147,6 +186,12 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                     {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                 </button>
             </div>
+
+            {keyboardOpen && (
+                <div id="tifinagh-keyboard" className="glass-panel mt-2">
+                    <TifinaghKeyboard onKey={typeKey} onBackspace={backspace} />
+                </div>
+            )}
 
             {/* Autocomplete Dropdown */}
             {showDropdown && (
