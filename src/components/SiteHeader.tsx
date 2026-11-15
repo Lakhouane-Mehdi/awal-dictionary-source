@@ -60,6 +60,8 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                     {/* Utilities */}
                     <div className="flex items-center gap-1 shrink-0">
                         <button
+                            id="tour-script-toggle"
+                            type="button"
                             onClick={toggleScript}
                             className="w-9 h-9 rounded-lg flex flex-col items-center justify-center text-indigo-500 dark:text-indigo-200 hover:text-accent-500 transition-colors"
                             title="Switch script"
@@ -69,6 +71,8 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                             <span className="text-[7px] font-bold leading-none mt-0.5">{scriptLabel}</span>
                         </button>
                         <button
+                            id="tour-achievements"
+                            type="button"
                             onClick={onOpenAchievements}
                             className="w-9 h-9 rounded-lg flex items-center justify-center text-accent-500 hover:text-accent-600 transition-colors"
                             title="Achievements"

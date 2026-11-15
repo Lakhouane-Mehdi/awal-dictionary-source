@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, X, Sparkles } from 'lucide-react';
+import { readString, writeString } from '../utils/storage';
 
 interface TourStep {
     targetId?: string;
@@ -11,7 +12,7 @@ interface TourStep {
 
 const TOUR_STEPS: TourStep[] = [
     {
-        title: "Welcome to Awal! Azul! ♓",
+        title: "Azul! ⴰⵣⵓⵍ! Welcome to Awal",
         description: "Your modern gateway to the Amazigh language. Let's take a quick tour of the unique features we've built for you.",
         targetId: undefined
     },
@@ -35,36 +36,39 @@ const TOUR_STEPS: TourStep[] = [
     }
 ];
 
+const SEEN_KEY = 'awal_has_seen_onboarding';
+
+const hasSeenTour = (): boolean => !!readString(SEEN_KEY);
+
+/** A step points at a control; skip it when that control is not on screen. */
+const isOnScreen = (targetId?: string): boolean => {
+    if (!targetId) return true;
+    const rect = document.getElementById(targetId)?.getBoundingClientRect();
+    return !!rect && rect.width > 0 && rect.height > 0;
+};
+
 export const OnboardingTour = () => {
     const [stepIndex, setStepIndex] = useState(0);
-    const [isVisible, setIsVisible] = useState(false);
+    const [steps, setSteps] = useState<TourStep[] | null>(null);
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
     useEffect(() => {
-        const hasSeen = localStorage.getItem('awal_has_seen_onboarding');
-        if (!hasSeen) {
-            const timer = setTimeout(() => setIsVisible(true), 1500);
-            return () => clearTimeout(timer);
-        }
-        return () => { };
+        if (hasSeenTour()) return undefined;
+        // Pick the steps once the page has rendered: the Contribute button only
+        // exists on phones and the header controls only on some layouts
+        const timer = setTimeout(() => setSteps(TOUR_STEPS.filter(step => isOnScreen(step.targetId))), 1500);
+        return () => clearTimeout(timer);
     }, []);
 
-    const currentStep = TOUR_STEPS[stepIndex];
+    const currentStep = steps?.[stepIndex] ?? TOUR_STEPS[0];
 
     useEffect(() => {
-        if (isVisible) {
+        if (steps) {
             const updateRect = () => {
-                const step = TOUR_STEPS[stepIndex];
-                const targetId = step.targetId;
-
-                if (targetId) {
-                    const el = document.getElementById(targetId);
-                    if (el) {
-                        setTargetRect(el.getBoundingClientRect());
-                    }
-                } else {
-                    setTargetRect(null);
-                }
+                const targetId = steps[stepIndex]?.targetId;
+                // Clear the spotlight when the target is gone, rather than
+                // leaving it on the previous step's control
+                setTargetRect(targetId ? document.getElementById(targetId)?.getBoundingClientRect() ?? null : null);
             };
 
             updateRect();
@@ -75,10 +79,10 @@ export const OnboardingTour = () => {
 
         setTargetRect(null);
         return () => { };
-    }, [stepIndex, isVisible]);
+    }, [stepIndex, steps]);
 
     const handleNext = () => {
-        if (stepIndex < TOUR_STEPS.length - 1) {
+        if (steps && stepIndex < steps.length - 1) {
             setStepIndex((prev) => prev + 1);
             return;
         }
@@ -86,11 +90,11 @@ export const OnboardingTour = () => {
     };
 
     const handleClose = () => {
-        setIsVisible(false);
-        localStorage.setItem('awal_has_seen_onboarding', 'true');
+        setSteps(null);
+        writeString(SEEN_KEY, 'true');
     };
 
-    if (!isVisible) return null;
+    if (!steps) return null;
 
     return (
         <AnimatePresence>
@@ -151,10 +155,10 @@ export const OnboardingTour = () => {
                         className="pointer-events-auto bg-white dark:bg-slate-900 w-[300px] p-6 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700"
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
+                            <div className="p-2 bg-accent-50 dark:bg-accent-900/30 rounded-full text-accent-600 dark:text-accent-300">
                                 <Sparkles size={20} />
                             </div>
-                            <button onClick={handleClose} className="text-slate-400 hover:text-slate-600">
+                            <button type="button" onClick={handleClose} aria-label="Close the tour" className="text-slate-400 hover:text-slate-600">
                                 <X size={18} />
                             </button>
                         </div>
@@ -168,18 +172,19 @@ export const OnboardingTour = () => {
 
                         <div className="flex items-center justify-between">
                             <div className="flex gap-1">
-                                {TOUR_STEPS.map((_, i) => (
+                                {steps.map((_, i) => (
                                     <div
                                         key={i}
-                                        className={`h-1.5 rounded-full transition-all ${i === stepIndex ? 'w-6 bg-blue-500' : 'w-1.5 bg-slate-200 dark:bg-slate-700'}`}
+                                        className={`h-1.5 rounded-full transition-all ${i === stepIndex ? 'w-6 bg-accent-500' : 'w-1.5 bg-slate-200 dark:bg-slate-700'}`}
                                     />
                                 ))}
                             </div>
                             <button
+                                type="button"
                                 onClick={handleNext}
-                                className="flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                                className="flex items-center gap-1 text-sm font-bold text-accent-700 hover:text-accent-800 dark:text-accent-300 transition-colors"
                             >
-                                {stepIndex === TOUR_STEPS.length - 1 ? "Finish" : "Next"} <ChevronRight size={16} />
+                                {stepIndex === steps.length - 1 ? "Finish" : "Next"} <ChevronRight size={16} />
                             </button>
                         </div>
                     </motion.div>
