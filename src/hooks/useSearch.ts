@@ -1,17 +1,43 @@
 import { useState, useMemo } from 'react';
-import Fuse from 'fuse.js';
-import { dictionaryData } from '../data/dictionary';
+import Fuse, { type Expression } from 'fuse.js';
+import { dictionaryData, type DictionaryEntry } from '../data/dictionary';
 import { getSpellSuggestions } from '../utils/spellChecker';
-// Imports
+import { detectScript, searchKey } from '../utils/scriptConverter';
 
-// Normalize specific Berber sounds for fuzzy search
-// 7 -> h, 9 -> q, etc.
-const normalizeQuery = (query: string) => {
-    return query
-        .toLowerCase()
-        .replace(/7/g, 'h')
-        .replace(/9/g, 'q')
-        .replace(/3/g, 'aa'); // '3in' -> 'aain' typically
+// One loose spelling key per entry, covering its Latin and Tifinagh forms and
+// any dialect variants. A query typed in any script or transcription is
+// reduced to the same kind of key (see searchKey), so "aghyul", "aɣyul",
+// "ⴰⵖⵢⵓⵍ" and "أغيول" all find the same word. Built once per page load.
+const spellingKeys = new Map<DictionaryEntry, string[]>(
+    dictionaryData.map(e => [
+        e,
+        [e.term_latin, e.term_tifinagh, ...Object.values(e.dialects ?? {})]
+            .filter((v): v is string => !!v)
+            .map(searchKey),
+    ]),
+);
+
+const fuse = new Fuse(dictionaryData, {
+    keys: [
+        { name: 'spelling', weight: 0.4, getFn: e => spellingKeys.get(e) ?? [] },
+        { name: 'definition', weight: 0.4 }, // English meaning
+        { name: 'category', weight: 0.2 },
+    ],
+    threshold: 0.2, // Stricter fuzzy matching
+    distance: 1000, // Find matches anywhere in the string
+    ignoreLocation: true,
+});
+
+/** Ranked dictionary matches for a query typed in any script, or in English. */
+export const searchEntries = (query: string): DictionaryEntry[] => {
+    if (!query.trim()) return [];
+    // Tamazight spelling in any script; English only for Latin input
+    const key = searchKey(query);
+    const clauses: Expression[] = key ? [{ spelling: key }] : [];
+    if (detectScript(query) === 'latin') {
+        clauses.push({ definition: query }, { category: query });
+    }
+    return clauses.length ? fuse.search({ $or: clauses }).map(r => r.item) : [];
 };
 
 const BROWSE_PAGE_SIZE = 24;
@@ -29,33 +55,13 @@ export const useSearch = () => {
 
     const loadMore = () => setBrowseCount(prev => prev + BROWSE_PAGE_SIZE);
 
-    const fuse = useMemo(() => {
-        return new Fuse(dictionaryData, {
-            keys: [
-                { name: 'term_latin', weight: 0.3 },
-                { name: 'definition', weight: 0.4 }, // Higher weight for English definition
-                { name: 'term_tifinagh', weight: 0.1 },
-                { name: 'category', weight: 0.2 }, // Added to support category searches
-                { name: 'dialects.kabyle', weight: 0.1 },
-                { name: 'dialects.tashelhit', weight: 0.1 },
-                { name: 'dialects.tarifit', weight: 0.1 }
-            ],
-            threshold: 0.2, // Stricter fuzzy matching
-            distance: 1000, // Increased distance to find matches anywhere in string
-            ignoreLocation: true // Ignore location to search full string
-        });
-    }, []);
 
     const results = useMemo(() => {
         try {
             let items = dictionaryData;
 
-            if (query) {
-                const normalized = normalizeQuery(query);
-                const searchInput = query.match(/[793]/) ? normalized : query;
-                // No hard cap on search — Fuse already ranks by relevance
-                items = fuse.search(searchInput).map(r => r.item);
-            }
+            // No hard cap on search — Fuse already ranks by relevance
+            if (query.trim()) items = searchEntries(query);
 
             if (dialectFilter !== 'all') {
                 items = items.filter(e => !!e.dialects?.[dialectFilter]);
@@ -67,7 +73,7 @@ export const useSearch = () => {
             console.error("Search failed:", error);
             return [];
         }
-    }, [query, fuse, dialectFilter, browseCount]);
+    }, [query, dialectFilter, browseCount]);
 
     const hasMore = !query && results.length < (dialectFilter === 'all'
         ? dictionaryData.length

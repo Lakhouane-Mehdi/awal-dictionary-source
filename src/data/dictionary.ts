@@ -1,7 +1,7 @@
 import importedData from './dictionary.json';
 import ircamVerbData from './ircam_verbs.json';
 import wiktionaryData from './wiktionary_words.json';
-import { convertScript } from '../utils/scriptConverter';
+import { convertScript, pdfLatinToIrcam } from '../utils/scriptConverter';
 
 // Type for the IRCAM verb JSON entries
 interface IrcamVerb {
@@ -73,8 +73,8 @@ const importedEntries: DictionaryEntry[] = importedData.map((item: Record<string
     return {
         id: `imp_${index}`,
         term_latin: termLatin,
-        term_tifinagh: convertScript(termLatin, 'tifinagh'),
-        term_arabic: convertScript(termLatin, 'arabic'),
+        term_tifinagh: convertScript(pdfLatinToIrcam(termLatin), 'tifinagh'),
+        term_arabic: convertScript(pdfLatinToIrcam(termLatin), 'arabic'),
         definition: def,
         category: category,
         source: 'PDF Import',
@@ -351,21 +351,42 @@ const uniqueImportedEntries = importedEntries.filter(e => {
     return true;
 });
 
-// Deduplicate: prefer manual > imported > IRCAM > Wiktionary
-const existingTifinagh = new Set([
-    ...manualEntries.map(e => e.term_tifinagh),
-    ...uniqueImportedEntries.map(e => e.term_tifinagh)
-]);
+// Deduplicate across sources: prefer manual > imported > IRCAM > Wiktionary.
+// Two entries are the same word only if they share a spelling AND a meaning.
+// Tamazight has many homographs (ⴰⴷⵓ "attack" vs adu "smell", ⴰⵙⵙ "be dark"
+// vs ass "day"), so matching on spelling alone would hide real words.
+const STOPWORDS = new Set(['to', 'be', 'the', 'a', 'an', 'of', 'or', 'and', 'in', 'on', 'for', 'with', 'adj', 'adv', 'neo', 'gram']);
 
-const uniqueIrcamEntries = ircamEntries.filter(e => !existingTifinagh.has(e.term_tifinagh));
+// Rough stems so "believing" ~ "believe" and "recognise" ~ "recognize"
+const meaningWords = (definition: string): Set<string> =>
+    new Set(
+        definition.toLowerCase()
+            .replace(/ise\b/g, 'ize')
+            .split(/[^a-z]+/)
+            .filter(w => w.length >= 3 && !STOPWORDS.has(w))
+            .map(w => w.replace(/(ing|ed|es|s|e)$/, '')),
+    );
 
-// Also deduplicate Wiktionary against all previous sources
-const allExistingTifinagh = new Set([
-    ...existingTifinagh,
-    ...uniqueIrcamEntries.map(e => e.term_tifinagh)
-]);
+const byTifinagh = new Map<string, Set<string>[]>();
+const remember = (e: DictionaryEntry) => {
+    const list = byTifinagh.get(e.term_tifinagh) ?? [];
+    list.push(meaningWords(e.definition));
+    byTifinagh.set(e.term_tifinagh, list);
+};
+const isDuplicate = (e: DictionaryEntry): boolean => {
+    const words = meaningWords(e.definition);
+    return (byTifinagh.get(e.term_tifinagh) ?? []).some(seen => [...words].some(w => seen.has(w)));
+};
+const keepNew = (e: DictionaryEntry): boolean => {
+    if (isDuplicate(e)) return false;
+    remember(e);
+    return true;
+};
 
-const uniqueWiktionaryEntries = wiktionaryEntries.filter(e => !allExistingTifinagh.has(e.term_tifinagh));
+manualEntries.forEach(remember);
+uniqueImportedEntries.forEach(remember);
+const uniqueIrcamEntries = ircamEntries.filter(keepNew);
+const uniqueWiktionaryEntries = wiktionaryEntries.filter(keepNew);
 
 export const fullDictionaryData: DictionaryEntry[] = [
     ...manualEntries,
