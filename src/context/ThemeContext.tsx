@@ -7,24 +7,37 @@ interface ThemeContextType {
     toggleTheme: () => void;
 }
 
+const THEME_CHOICE_KEY = 'theme-choice';
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+    // Everyone starts in light mode; dark mode is only ever the visitor's own
+    // choice. The old 'theme' key was written on every visit, copying the
+    // system setting, so it says nothing about a choice and is ignored.
     const [theme, setTheme] = useState<Theme>(() => {
-        const saved = localStorage.getItem('theme');
-        if (saved === 'dark' || saved === 'light') return saved;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        try {
+            return localStorage.getItem(THEME_CHOICE_KEY) === 'dark' ? 'dark' : 'light';
+        } catch {
+            return 'light';
+        }
     });
 
     useEffect(() => {
         const root = window.document.documentElement;
         root.classList.remove('light', 'dark');
         root.classList.add(theme);
-        localStorage.setItem('theme', theme);
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+        const next: Theme = theme === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        try {
+            localStorage.setItem(THEME_CHOICE_KEY, next);
+            localStorage.removeItem('theme');
+        } catch {
+            // Storage blocked: the choice lasts until the page is closed
+        }
     };
 
     return (
