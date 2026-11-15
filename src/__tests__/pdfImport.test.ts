@@ -1,11 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { dictionaryData } from '../data/dictionary';
+import { dictionaryData, idAliases } from '../data/dictionary';
 import rawRows from '../data/dictionary.json';
 import legacyIds from '../data/legacy_pdf_ids.json';
 import { migrateLegacyIds, resolveLegacyId } from '../utils/legacyIds';
+import { pdfLatinToIrcam } from '../utils/scriptConverter';
+import { splitGrammarNotes } from '../utils/grammarNotes';
 
 const pdf = dictionaryData.filter(e => e.source === 'PDF Import');
-const find = (definition: string) => pdf.filter(e => e.definition === definition);
+// Entries list every meaning once ("to rob; to steal"), so match any one of them
+const find = (definition: string) => pdf.filter(e => e.definition === definition || e.definition.split('; ').includes(definition));
 
 describe('PDF import (scripts/import_pdf.mjs)', () => {
     it('keeps words whole instead of splitting them at fragment boundaries', () => {
@@ -26,10 +29,27 @@ describe('PDF import (scripts/import_pdf.mjs)', () => {
     });
 
     it('reads the verb tables with all three forms', () => {
-        const absorb = find('to absorb').find(e => e.conjugation);
+        const absorb = find('to absorb').find(e => e.term_latin === 'sw');
         expect(absorb?.conjugation).toEqual({ aorist: 'sw', intensive: 'ssa', preterite: 'swigh' });
-        const verbs = dictionaryData.filter(e => e.conjugation && Object.values(e.conjugation).some(Boolean));
-        expect(verbs.length).toBeGreaterThan(1200);
+    });
+
+    it('keeps every distinct verb table from the PDF, even when meanings merge', () => {
+        const form = (text: string) => pdfLatinToIrcam(splitGrammarNotes(text).term);
+        const expected = new Set(rawRows.filter(r => r.section === 'Verbs').map(r =>
+            JSON.stringify([form(r.tamazight), 'present' in r && r.present ? form(r.present) : undefined, 'past' in r && r.past ? form(r.past) : undefined])));
+        const kept = new Set(dictionaryData.filter(e => e.conjugation).map(e =>
+            JSON.stringify([e.conjugation!.aorist, e.conjugation!.intensive, e.conjugation!.preterite])));
+        expect([...expected].filter(t => !kept.has(t))).toEqual([]);
+        expect(expected.size).toBeGreaterThan(1000);
+    });
+
+    it('lists each meaning once when one word is repeated across the PDF', () => {
+        expect(pdf.filter(e => e.term_latin === 'lkatib').map(e => e.definition)).toEqual(['author; secretary']);
+        // ...but never across different verb tables: akr is "to rob" (takur)
+        // and "to steal" (takr)
+        expect(pdf.filter(e => e.term_latin === 'akr').map(e => e.conjugation?.intensive).sort()).toEqual(['takr', 'takur']);
+        // Homographs with unrelated meanings stay apart
+        expect(dictionaryData.filter(e => e.term_latin === 'adu').map(e => e.definition).sort()).toEqual(['attack', 'smell']);
     });
 
     it('never stores a verb with its columns swapped', () => {
@@ -53,7 +73,7 @@ describe('PDF import (scripts/import_pdf.mjs)', () => {
     });
 
     it('applies corrections for typos in the printed book', () => {
-        expect(find('2').map(e => e.term_latin)).toContain('Sin(masc.)/snat(fem.)');
+        expect(find('2').map(e => e.term_latin)).toContain('Sin/snat');
     });
 
     it('gives every entry a unique ID', () => {
@@ -66,7 +86,9 @@ describe('legacy PDF IDs', () => {
 
     it('maps old IDs only to entries that exist', () => {
         expect(legacyIds.length).toBe(8365);
-        expect(legacyIds.filter(id => id && !ids.has(id))).toEqual([]);
+        // An ID may point at an entry that was later merged; the word page
+        // and favourites follow idAliases to the entry that was kept
+        expect(legacyIds.filter(id => id && !ids.has(idAliases.get(id) ?? id))).toEqual([]);
         expect(legacyIds.filter(Boolean).length).toBeGreaterThan(8300);
     });
 

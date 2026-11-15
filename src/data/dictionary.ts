@@ -2,6 +2,7 @@ import importedData from './dictionary.json';
 import ircamVerbData from './ircam_verbs.json';
 import wiktionaryData from './wiktionary_words.json';
 import { convertScript, pdfLatinToIrcam } from '../utils/scriptConverter';
+import { splitGrammarNotes } from '../utils/grammarNotes';
 
 // Type for the IRCAM verb JSON entries
 interface IrcamVerb {
@@ -40,6 +41,8 @@ export interface DictionaryEntry {
     };
     /** When a phrase is used (the God phrases carry these notes). */
     usage?: string;
+    /** Grammar notes from the source, e.g. "Masculine: yan · Feminine: yat" */
+    notes?: string;
     source?: string;
 }
 
@@ -51,6 +54,8 @@ interface PdfRow {
     present?: string;
     past?: string;
     usage?: string;
+    /** Set when a correction changed the text: the original the ID came from */
+    idKey?: string;
 }
 
 // Stable IDs from content (FNV-1a of section | tamazight | english), so a
@@ -67,7 +72,7 @@ const fnv1a = (text: string): string => {
 };
 const usedPdfIds = new Set<string>();
 const pdfRowId = (row: PdfRow): string => {
-    const base = `pdf_${fnv1a(`${row.section}|${row.tamazight}|${row.english}`)}`;
+    const base = `pdf_${fnv1a(row.idKey ?? `${row.section}|${row.tamazight}|${row.english}`)}`;
     let id = base;
     for (let n = 2; usedPdfIds.has(id); n++) id = `${base}_${n}`;
     usedPdfIds.add(id);
@@ -77,7 +82,16 @@ const pdfRowId = (row: PdfRow): string => {
 const importedEntries: DictionaryEntry[] = (importedData as PdfRow[]).map(item => {
     // The PDF writes ḥ as capital H and the emphatics as ş ţ ď; show the
     // standard IRCAM letters instead (lHsab -> lḥsab, şbaH -> ṣbaḥ)
-    const termLatin = pdfLatinToIrcam(item.tamazight);
+    // English grammar notes ("(conj)", "(masc.)") come out of the Tamazight
+    // text into their own note, so they are not converted or searched as
+    // Tamazight
+    const term = splitGrammarNotes(item.tamazight);
+    const present = item.present ? splitGrammarNotes(item.present) : undefined;
+    const past = item.past ? splitGrammarNotes(item.past) : undefined;
+    const notes = [...new Set([term.notes, present?.notes, past?.notes].filter(Boolean))]
+        .map(note => pdfLatinToIrcam(note!)).join(' · ') || undefined;
+
+    const termLatin = pdfLatinToIrcam(term.term);
     const def = item.english.trim();
 
     // The dictionary halves ('eng-tam' / 'tam-eng') are not categories, so
@@ -92,8 +106,8 @@ const importedEntries: DictionaryEntry[] = (importedData as PdfRow[]).map(item =
     const conjugation = item.section === 'Verbs'
         ? {
             aorist: termLatin,
-            intensive: item.present ? pdfLatinToIrcam(item.present) : undefined,
-            preterite: item.past ? pdfLatinToIrcam(item.past) : undefined,
+            intensive: present ? pdfLatinToIrcam(present.term) : undefined,
+            preterite: past ? pdfLatinToIrcam(past.term) : undefined,
         }
         : undefined;
 
@@ -106,6 +120,7 @@ const importedEntries: DictionaryEntry[] = (importedData as PdfRow[]).map(item =
         category,
         conjugation,
         usage: item.usage,
+        notes,
         // Zaouiat Ahansal is a Central Atlas Tamazight variety. These words
         // used to be labelled Tashelhit, a different language.
         source: 'PDF Import',
@@ -383,18 +398,121 @@ const importedByKey = new Map<string, DictionaryEntry>();
 const uniqueImportedEntries = importedEntries.filter(e => {
     const key = `${e.term_tifinagh}|${e.definition.toLowerCase()}`;
     const kept = importedByKey.get(key);
-    if (!kept) {
-        importedByKey.set(key, e);
+    // Same word and meaning but a different verb table (the PDF gives "to
+    // need" as both tḥtadja and tḥatadja): keep both so no form is lost
+    const differentTable = kept?.conjugation && e.conjugation &&
+        JSON.stringify(kept.conjugation) !== JSON.stringify(e.conjugation);
+    if (!kept || differentTable) {
+        if (!kept) importedByKey.set(key, e);
         return true;
     }
     idAliases.set(e.id, kept.id);
     kept.conjugation ??= e.conjugation;
     kept.usage ??= e.usage;
+    kept.notes ??= e.notes;
     // A copy from the verb, country or God-phrase tables knows its category
     // for certain; the dictionary halves only guess one from the meaning
     if (e.category && SECTION_CATEGORIES.has(e.category)) kept.category = e.category;
     return false;
 });
+
+// The PDF often lists one word several times: once per meaning in the
+// English-Tamazight half and once with all of them in the other half
+// ("akr": "to rob" / "to steal" / "to rob; to steal"). Entries with the same
+// spelling that share an identical meaning become one entry listing every
+// meaning once, the fullest list first. Homographs with unrelated meanings
+// share no meaning and stay apart. The first entry keeps its ID; the others
+// become aliases of it.
+const senseKey = (sense: string) => sense.toLowerCase().replace(/\s+/g, ' ').replace(/[.*]+$/, '').trim();
+const sensesOf = (definition: string) => definition.split(/\s*;\s*/).map(s => s.trim()).filter(Boolean);
+
+const mergeRepeatedMeanings = (entries: DictionaryEntry[]): DictionaryEntry[] => {
+    const byTerm = new Map<string, number[]>();
+    entries.forEach((e, i) => {
+        const list = byTerm.get(e.term_tifinagh) ?? [];
+        list.push(i);
+        byTerm.set(e.term_tifinagh, list);
+    });
+
+    // Union-find over entries that share a meaning. Two groups never merge
+    // if they carry different verb tables: the PDF conjugates some verbs
+    // differently per meaning (agh "to bark" vs "to be aglow"), and merging
+    // would keep one table and drop the others.
+    const parent = entries.map((_, i) => i);
+    const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+    const forms = (e: DictionaryEntry) => (e.conjugation ? JSON.stringify(e.conjugation) : undefined);
+    const groupForms = entries.map(forms);
+    const union = (a: number, b: number) => {
+        const ra = find(a), rb = find(b);
+        if (ra === rb) return;
+        if (groupForms[ra] && groupForms[rb] && groupForms[ra] !== groupForms[rb]) return;
+        parent[ra] = rb;
+        groupForms[rb] ??= groupForms[ra];
+    };
+    for (const indices of byTerm.values()) {
+        if (indices.length < 2) continue;
+        const withSense = new Map<string, number[]>();
+        for (const i of indices) {
+            for (const sense of sensesOf(entries[i].definition)) {
+                const key = senseKey(sense);
+                const others = withSense.get(key) ?? [];
+                for (const other of others) union(i, other);
+                others.push(i);
+                withSense.set(key, others);
+            }
+        }
+    }
+
+    const groups = new Map<number, number[]>();
+    entries.forEach((_, i) => {
+        const root = find(i);
+        const group = groups.get(root) ?? [];
+        group.push(i);
+        groups.set(root, group);
+    });
+
+    const result: DictionaryEntry[] = [];
+    entries.forEach((e, i) => {
+        const group = groups.get(find(i))!;
+        if (group[0] !== i) return; // emitted with its group
+        if (group.length === 1) {
+            result.push(e);
+            return;
+        }
+        const members = group.map(j => entries[j]);
+        const fullestFirst = [...members].sort((a, b) => sensesOf(b.definition).length - sensesOf(a.definition).length);
+        const seen = new Set<string>();
+        const senses: string[] = [];
+        for (const m of fullestFirst) {
+            for (const sense of sensesOf(m.definition)) {
+                const key = senseKey(sense);
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    senses.push(sense);
+                } else if (sense.endsWith('*')) {
+                    // "*" marks a word borrowed from Arabic; keep that mark
+                    const at = senses.findIndex(x => senseKey(x) === key);
+                    if (!senses[at].endsWith('*')) senses[at] = sense;
+                }
+            }
+        }
+        const sectionCategory = members.find(m => m.category && SECTION_CATEGORIES.has(m.category))?.category;
+        const specificCategory = members.find(m => m.category && m.category !== 'General')?.category;
+        const merged: DictionaryEntry = {
+            ...e,
+            definition: senses.join('; '),
+            category: sectionCategory ?? specificCategory ?? e.category,
+            conjugation: members.find(m => m.conjugation)?.conjugation,
+            usage: members.find(m => m.usage)?.usage,
+            notes: members.find(m => m.notes)?.notes,
+        };
+        for (const m of members.slice(1)) idAliases.set(m.id, e.id);
+        result.push(merged);
+    });
+    return result;
+};
+
+const mergedImportedEntries = mergeRepeatedMeanings(uniqueImportedEntries);
 
 // Deduplicate across sources: prefer manual > imported > IRCAM > Wiktionary.
 // Two entries are the same word only if they share a spelling AND a meaning.
@@ -418,10 +536,17 @@ const remember = (e: DictionaryEntry) => {
     list.push({ id: e.id, words: meaningWords(e.definition) });
     byTifinagh.set(e.term_tifinagh, list);
 };
+// Same meaning when all the meaning words of one fit inside the other:
+// "steal" ⊂ "rob; steal" merges, but "look in front of you" and
+// "front (of location)" only share a word and stay apart.
+const sameMeaning = (a: Set<string>, b: Set<string>): boolean => {
+    const [small, large] = a.size <= b.size ? [a, b] : [b, a];
+    return small.size > 0 && [...small].every(w => large.has(w));
+};
 /** The entry this one duplicates, if any */
 const duplicateOf = (e: DictionaryEntry): string | undefined => {
     const words = meaningWords(e.definition);
-    return (byTifinagh.get(e.term_tifinagh) ?? []).find(seen => [...words].some(w => seen.words.has(w)))?.id;
+    return (byTifinagh.get(e.term_tifinagh) ?? []).find(seen => sameMeaning(words, seen.words))?.id;
 };
 const keepNew = (e: DictionaryEntry): boolean => {
     const original = duplicateOf(e);
@@ -434,13 +559,13 @@ const keepNew = (e: DictionaryEntry): boolean => {
 };
 
 manualEntries.forEach(remember);
-uniqueImportedEntries.forEach(remember);
+mergedImportedEntries.forEach(remember);
 const uniqueIrcamEntries = ircamEntries.filter(keepNew);
 const uniqueWiktionaryEntries = wiktionaryEntries.filter(keepNew);
 
 export const fullDictionaryData: DictionaryEntry[] = [
     ...manualEntries,
-    ...uniqueImportedEntries,
+    ...mergedImportedEntries,
     ...uniqueIrcamEntries,
     ...uniqueWiktionaryEntries
 ];

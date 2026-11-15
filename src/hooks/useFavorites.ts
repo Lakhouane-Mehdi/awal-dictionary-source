@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { get, set } from 'idb-keyval';
-import { isLegacyId, migrateLegacyIds } from '../utils/legacyIds';
+import { migrateLegacyIds } from '../utils/legacyIds';
+import { idAliases } from '../data/dictionary';
 
 const STORAGE_KEY = 'favorites';
 const CHANNEL = 'awal_favorites_sync';
@@ -21,9 +22,11 @@ export const useFavorites = () => {
 
         const loadFavorites = async () => {
             const stored: string[] = (await get(STORAGE_KEY)) ?? [];
-            // Favourites saved before PDF entries had stable IDs
-            const current = await migrateLegacyIds(stored);
-            if (current !== stored && stored.some(isLegacyId)) await set(STORAGE_KEY, current);
+            // Favourites saved before PDF entries had stable IDs, or pointing
+            // at an entry that has since been merged into another
+            const migrated = await migrateLegacyIds(stored);
+            const current = [...new Set(migrated.map(id => idAliases.get(id) ?? id))];
+            if (current.join() !== stored.join()) await set(STORAGE_KEY, current);
             if (active) setFavorites(current);
         };
 

@@ -17371,7 +17371,8 @@
   },
   {
     "english": "to please someone",
-    "tamazight": "ɛ)jb* i (reflexive",
+    "tamazight": "ɛjb* i (reflexive)",
+    "idKey": "eng-tam|ɛ)jb* i (reflexive|to please someone",
     "section": "eng-tam",
     "page": 40
   },
@@ -21127,7 +21128,8 @@
   },
   {
     "english": "to please someone",
-    "tamazight": "ɛ)jb* i (reflexive",
+    "tamazight": "ɛjb* i (reflexive)",
+    "idKey": "tam-eng|ɛ)jb* i (reflexive|to please someone",
     "section": "tam-eng",
     "page": 49
   },
@@ -49627,9 +49629,10 @@
   },
   {
     "english": "to please someone",
-    "tamazight": "ɛ)jb* i (reflexive",
+    "tamazight": "ɛjb* i (reflexive)",
     "present": "tɛjab* i",
-    "past": "jbghɛ* i",
+    "past": "ɛjbgh* i",
+    "idKey": "Verbs|ɛ)jb* i (reflexive|to please someone",
     "section": "Verbs",
     "page": 126
   },

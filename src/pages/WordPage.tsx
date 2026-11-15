@@ -176,6 +176,13 @@ export const WordPage = () => {
                 </div>
             </div>
 
+            {entry.notes && (
+                <div className="glass-panel p-6 mb-6">
+                    <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-2">Grammar</h2>
+                    <p className="text-indigo-800 dark:text-sand-100">{entry.notes}</p>
+                </div>
+            )}
+
             {entry.usage && (
                 <div className="glass-panel p-6 mb-6">
                     <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300 mb-2">When it's used</h2>

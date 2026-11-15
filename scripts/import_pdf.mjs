@@ -182,17 +182,6 @@ for (const e of entries) {
     }
 }
 
-// Typos in the printed book itself, keyed by section + Tamazight + English
-const SOURCE_CORRECTIONS = [
-    // The numbers list reads "1 Yan, 5 Sin, 3 Krad"; Sin is two
-    { section: 'eng-tam', tamazight: 'Sin(masc.)/snat(fem.)', english: '5', set: { english: '2' } },
-];
-for (const fix of SOURCE_CORRECTIONS) {
-    const hit = entries.find(e => e.section === fix.section && e.tamazight === fix.tamazight && e.english === fix.english);
-    if (!hit) throw new Error(`Source correction no longer matches: ${JSON.stringify(fix)}`);
-    Object.assign(hit, fix.set);
-}
-
 // The same bidi glitch appears elsewhere without the full stop: "adiɛ" for
 // ɛadi, verb "aqbɛ / tɛqab / aqbghɛ" for ɛaqb. Many Arabic loanwords really
 // end in ɛ (ljamɛ "mosque", shariɛ "street"), so only move the ɛ when the
@@ -214,6 +203,34 @@ for (const e of entries) {
     }
 }
 console.log(`Moved a misplaced leading ɛ back in ${aynFixes} entries`);
+
+// Typos in the printed book itself, keyed by section + Tamazight + English
+// Runs after the ɛ fixes above, so `tamazight` matches the text that the
+// live IDs were derived from. A correction with keepId records the text the entry's ID was derived from
+// (idKey), so fixing the text does not break links to it. Corrections made
+// before IDs went live leave it out: their IDs already use the fixed text.
+// Leave `section` out to fix every section the row appears in.
+const SOURCE_CORRECTIONS = [
+    // The numbers list reads "1 Yan, 5 Sin, 3 Krad"; Sin is two
+    { section: 'eng-tam', tamazight: 'Sin(masc.)/snat(fem.)', english: '5', set: { english: '2' } },
+    // Bidi printed "ɛjb* i (reflexive)" as ")jb* i (reflexiveع"
+    {
+        tamazight: 'ɛ)jb* i (reflexive', english: 'to please someone', keepId: true,
+        set: { tamazight: 'ɛjb* i (reflexive)' }, setIf: { past: ['jbghɛ* i', 'ɛjbgh* i'] },
+    },
+];
+for (const fix of SOURCE_CORRECTIONS) {
+    const hits = entries.filter(e => (!fix.section || e.section === fix.section) && e.tamazight === fix.tamazight && e.english === fix.english);
+    if (!hits.length) throw new Error(`Source correction no longer matches: ${JSON.stringify(fix)}`);
+    for (const hit of hits) {
+        if (fix.keepId) hit.idKey ??= `${hit.section}|${hit.tamazight}|${hit.english}`;
+        Object.assign(hit, fix.set);
+        for (const [field, [from, to]] of Object.entries(fix.setIf ?? {})) {
+            if (hit[field] === from) hit[field] = to;
+        }
+    }
+}
+
 
 // Field order: english, tamazight, the rest. Entry IDs are not stored:
 // src/data/dictionary.ts derives them from section + tamazight + english,
