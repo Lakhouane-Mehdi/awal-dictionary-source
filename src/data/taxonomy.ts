@@ -3,6 +3,7 @@
 // disagrees with itself about what exists.
 
 import { dictionaryData, type DictionaryEntry } from './dictionary';
+import { keyOfRoot, rootSlug } from './roots';
 
 export const slugify = (value: string): string =>
     value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -46,21 +47,34 @@ export interface RootSummary {
 }
 
 // Root families. Only roots shared by at least two words are interesting —
-// a family of one says nothing about morphology.
+// a family of one says nothing about morphology. Roots are grouped by their
+// letters, so a hand-written "M-Gh-R" and a found "M-Gh-R" are one family.
 export const rootFamilies: RootSummary[] = (() => {
-    const groups = new Map<string, DictionaryEntry[]>();
+    const groups = new Map<string, { root: string; entries: DictionaryEntry[] }>();
     for (const entry of dictionaryData) {
         const root = entry.root?.trim();
         if (!root) continue;
-        const bucket = groups.get(root);
-        if (bucket) bucket.push(entry);
-        else groups.set(root, [entry]);
+        const key = keyOfRoot(root);
+        const group = groups.get(key);
+        if (group) group.entries.push(entry);
+        else groups.set(key, { root, entries: [entry] });
     }
-    return [...groups.entries()]
-        .filter(([, entries]) => entries.length > 1)
-        .map(([root, entries]) => ({ root, slug: slugify(root), entries }))
-        .sort((a, b) => b.entries.length - a.entries.length);
+    // D-Ɛ-F and Ḍ-Ɛ-F share a slug, so a repeated one gets a number
+    const slugCounts = new Map<string, number>();
+    return [...groups.values()]
+        .filter(group => group.entries.length > 1)
+        .sort((a, b) => b.entries.length - a.entries.length || a.root.localeCompare(b.root))
+        .map(({ root, entries }) => {
+            const base = rootSlug(root);
+            const count = (slugCounts.get(base) ?? 0) + 1;
+            slugCounts.set(base, count);
+            return { root, slug: count > 1 ? `${base}-${count}` : base, entries };
+        });
 })();
+
+/** The family an entry belongs to, if its root is shared with other words */
+export const getRootFamilyOf = (entry: DictionaryEntry): RootSummary | undefined =>
+    entry.root ? rootFamilies.find(f => keyOfRoot(f.root) === keyOfRoot(entry.root!)) : undefined;
 
 export const getRootBySlug = (slug: string): RootSummary | undefined =>
     rootFamilies.find(r => r.slug === slug);

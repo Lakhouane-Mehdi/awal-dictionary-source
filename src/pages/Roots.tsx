@@ -17,7 +17,7 @@ export const Roots = () => {
                 title="Word roots"
                 tifinagh="ⵉⵥⵓⵕⴰⵏ"
                 meta={`${rootFamilies.length} famil${rootFamilies.length === 1 ? 'y' : 'ies'}`}
-                description="Tamazight builds meaning from consonantal roots. A single skeleton such as M-Gh-R yields words for greatness, seniority, and the matriarch of a family. These are the root families currently mapped in the dictionary."
+                description="Tamazight builds related words around a fixed skeleton of consonants: mɛdr (to be crazy), amɛdur (crazy person) and timmiɛdrt (craziness) all share M-Ɛ-D-R. These families were found by matching consonants and checking that the meanings agree, so some real families are not listed yet."
                 crumbs={[{ label: 'Home', to: '/' }, { label: 'Roots' }]}
             />
 

@@ -19,7 +19,7 @@ import { ContributionModal } from '../components/ContributionModal';
 import { PenLine, BookOpen } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { tifinaghAlphabet } from '../data/tifinagh';
-import { categories, rootFamilies } from '../data/taxonomy';
+import { categories, getRootFamilyOf, rootFamilies } from '../data/taxonomy';
 import { proverbs } from '../data/proverbs';
 
 
@@ -73,10 +73,11 @@ export const Home = () => {
     };
 
     // Helper to find related words
-    const getRelatedWords = (entry: DictionaryEntry) => {
-        if (!entry.root) return [];
-        return dictionaryData.filter(d => d.root === entry.root && d.id !== entry.id);
-    };
+    const getRelatedWords = (entry: DictionaryEntry) =>
+        getRootFamilyOf(entry)?.entries.filter(d => d.id !== entry.id) ?? [];
+    // The root button only appears when the word has relatives to show
+    const rootHandler = (entry: DictionaryEntry) =>
+        getRootFamilyOf(entry) ? () => setRootEntry(entry) : undefined;
 
     return (
         <div className="w-full h-full relative">
@@ -231,7 +232,7 @@ export const Home = () => {
                             script={script}
                             onConjugate={() => setConjugationEntry(randomWord)}
                             onTrace={() => handleTrace(randomWord.term_tifinagh)}
-                            onRoot={() => setRootEntry(randomWord)}
+                            onRoot={rootHandler(randomWord)}
                         />
                     )}
 
@@ -302,7 +303,7 @@ export const Home = () => {
                                         script={script}
                                         onConjugate={() => setConjugationEntry(entry)}
                                         onTrace={() => handleTrace(entry.term_tifinagh)}
-                                        onRoot={() => setRootEntry(entry)}
+                                        onRoot={rootHandler(entry)}
                                     />
                                 ))
                             )}

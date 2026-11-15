@@ -4,6 +4,7 @@ import wiktionaryData from './wiktionary_words.json';
 import { convertScript, pdfLatinToIrcam } from '../utils/scriptConverter';
 import { splitGrammarNotes } from '../utils/grammarNotes';
 import { categorizeWord } from './categorize';
+import { findRootFamilies } from './roots';
 
 // Type for the IRCAM verb JSON entries
 interface IrcamVerb {
@@ -546,5 +547,9 @@ export const fullDictionaryData: DictionaryEntry[] = [
     ...uniqueIrcamEntries,
     ...uniqueWiktionaryEntries
 ];
+
+// Root families found across every source (see roots.ts). Hand-written
+// roots are kept as they are.
+for (const [entry, root] of findRootFamilies(fullDictionaryData)) entry.root = root;
 
 export const dictionaryData = fullDictionaryData;

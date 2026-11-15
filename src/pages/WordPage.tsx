@@ -1,5 +1,6 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { slugify } from '../data/taxonomy';
+import { getRootFamilyOf, slugify } from '../data/taxonomy';
+import { WordRow } from '../components/WordRow';
 import { dictionaryData, idAliases } from '../data/dictionary';
 import { WordCard } from '../components/WordCard';
 import { useScript } from '../context/ScriptContext';
@@ -10,6 +11,9 @@ import tatoebaExamples from '../data/tatoeba_examples.json';
 import { SITE_URL, DEFAULT_TITLE, DEFAULT_DESCRIPTION } from '../utils/seo';
 import { convertScript } from '../utils/scriptConverter';
 import { isLegacyId, resolveLegacyId } from '../utils/legacyIds';
+
+/** Relatives shown on the word page before "See all" */
+const FAMILY_PREVIEW = 6;
 
 const CONJUGATION_LABELS = [
     { key: 'aorist', label: 'Infinitive / Imperative' },
@@ -109,6 +113,10 @@ export const WordPage = () => {
         .filter(ex => wordPattern.test(ex.tamazight.toLowerCase()))
         .slice(0, 3);
 
+    // Other words built on the same root, when the root is shared at all
+    const family = getRootFamilyOf(entry);
+    const relatives = family?.entries.filter(e => e.id !== entry.id) ?? [];
+
     return (
         <div className="max-w-3xl mx-auto w-full pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <button
@@ -134,15 +142,15 @@ export const WordPage = () => {
                         to={`/category/${slugify(entry.category)}`}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
-                        <Tag size={14} /> More {entry.category.toLowerCase()} words
+                        <Tag size={14} /> More in {entry.category}
                     </Link>
                 )}
-                {entry.root && (
+                {family && (
                     <Link
-                        to={`/root/${slugify(entry.root)}`}
+                        to={`/root/${family.slug}`}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-700/10 dark:border-white/10 text-sm font-semibold text-indigo-600 dark:text-indigo-200 hover:border-accent-400 hover:text-accent-600 transition-all"
                     >
-                        <Network size={14} /> Root {entry.root}
+                        <Network size={14} /> Root {family.root}
                     </Link>
                 )}
             </div>
@@ -206,6 +214,36 @@ export const WordPage = () => {
                             ) : null;
                         })}
                     </dl>
+                </div>
+            )}
+
+            {family && relatives.length > 0 && (
+                <div className="glass-panel p-6 mb-6">
+                    <div className="flex items-baseline justify-between gap-3 mb-3">
+                        <h2 className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-400 dark:text-indigo-300">Word family</h2>
+                        <Link
+                            to={`/root/${family.slug}`}
+                            className="text-xs font-semibold text-accent-700 dark:text-accent-300 hover:underline"
+                        >
+                            Root {family.root}
+                        </Link>
+                    </div>
+                    <p className="text-sm text-indigo-500 dark:text-indigo-200 mb-3">
+                        Words built on the same consonants as <span className="font-semibold">{entry.term_latin}</span>.
+                    </p>
+                    <div className="divide-y divide-indigo-700/5 dark:divide-white/5 -mx-2">
+                        {relatives.slice(0, FAMILY_PREVIEW).map(relative => (
+                            <WordRow key={relative.id} entry={relative} />
+                        ))}
+                    </div>
+                    {relatives.length > FAMILY_PREVIEW && (
+                        <Link
+                            to={`/root/${family.slug}`}
+                            className="inline-block mt-3 text-sm font-semibold text-accent-700 dark:text-accent-300 hover:underline"
+                        >
+                            See all {family.entries.length} words
+                        </Link>
+                    )}
                 </div>
             )}
 
