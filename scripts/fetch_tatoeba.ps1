@@ -16,7 +16,11 @@ for ($i = 0; $i -lt $maxBatches; $i++) {
     $url = "https://datasets-server.huggingface.co/rows?dataset=Tamazight-NLP%2FTatoeba-Translations&config=default&split=train&offset=$offset&length=$batchSize"
     
     try {
-        $response = Invoke-RestMethod -Uri $url -Headers @{"Accept"="application/json"} -TimeoutSec 15
+        # Windows PowerShell 5.1's Invoke-RestMethod decodes responses without a
+        # charset as Windows-1252, which garbled every ɣ/ḍ/ɛ in this data.
+        # Decode the raw bytes as UTF-8 explicitly.
+        $raw = Invoke-WebRequest -Uri $url -Headers @{"Accept"="application/json"} -TimeoutSec 15 -UseBasicParsing
+        $response = [System.Text.Encoding]::UTF8.GetString($raw.RawContentStream.ToArray()) | ConvertFrom-Json
         $rows = $response.rows
         
         if ($rows.Count -eq 0) { break }
