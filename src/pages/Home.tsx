@@ -3,11 +3,11 @@ import { SearchBar } from '../components/SearchBar';
 import { DialectToggle } from '../components/DialectToggle';
 import type { DictionaryEntry } from '../data/dictionary';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useScript } from '../context/ScriptContext';
 import { Eye, Sparkles, Moon, Sun, Flame } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import { useGamification } from '../hooks/useGamification';
+import { useGamification } from '../context/GamificationContext';
 import { VerbConjugationModal } from '../components/VerbConjugationModal';
 import { TraceModal } from '../components/TraceModal';
 import { ProverbCard } from '../components/ProverbCard';
@@ -30,12 +30,23 @@ const CONJUGATED_VERB_COUNT = dictionaryData.filter(e => e.conjugation && Object
 
 const HAS_DIALECT_DATA = dictionaryData.some(e => e.dialects && Object.values(e.dialects).some(Boolean));
 
+/** How long the query must stay unchanged before it counts as a search */
+const SEARCH_SETTLE_MS = 1200;
+
 export const Home = () => {
     const { query, searchedQuery, setQuery, results, suggestions, dialectFilter, setDialectFilter, loadMore, hasMore } = useSearch();
     const { script, toggleScript } = useScript();
     const { theme, toggleTheme } = useTheme();
     const { stats, trackAction } = useGamification();
     const navigate = useNavigate();
+
+    // Count a search once the reader stops typing for a moment, not on every
+    // keystroke ("a", "ag", "agh" is one search)
+    useEffect(() => {
+        if (!searchedQuery.trim()) return undefined;
+        const timer = setTimeout(() => trackAction('SEARCH'), SEARCH_SETTLE_MS);
+        return () => clearTimeout(timer);
+    }, [searchedQuery, trackAction]);
 
     // Modal State
     const [isAboutOpen, setIsAboutOpen] = useState(false);

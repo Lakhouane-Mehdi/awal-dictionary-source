@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, Shuffle, Volume2 } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { useGamification } from '../hooks/useGamification';
+import { useGamification } from '../context/GamificationContext';
 import { useScript } from '../context/ScriptContext';
 import { useTTS } from '../hooks/useTTS';
 import { displayTerm } from '../utils/displayTerm';

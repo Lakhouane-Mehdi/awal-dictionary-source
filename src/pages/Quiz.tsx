@@ -3,7 +3,7 @@ import { ArrowLeft, CheckCircle, XCircle, Trophy, Star, Loader2, Type } from 'lu
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuiz } from '../hooks/useQuiz';
-import { useGamification } from '../hooks/useGamification';
+import { useGamification } from '../context/GamificationContext';
 
 export const Quiz = () => {
     const navigate = useNavigate();

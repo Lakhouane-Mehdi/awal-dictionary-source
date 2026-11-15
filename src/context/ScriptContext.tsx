@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { readString, writeString } from '../utils/storage';
 
 type ScriptType = 'latin' | 'tifinagh' | 'arabic';
+
+const SCRIPTS: ScriptType[] = ['latin', 'tifinagh', 'arabic'];
+const SCRIPT_KEY = 'awal_script_pref';
 
 interface ScriptContextType {
     script: ScriptType;
@@ -11,15 +15,14 @@ interface ScriptContextType {
 const ScriptContext = createContext<ScriptContextType | undefined>(undefined);
 
 export const ScriptProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // Default to 'latin' or read from localStorage if you want persistence
+    // The reader's chosen script, kept across visits. An unknown saved value
+    // (corrupted, or from an older version) falls back to Latin
     const [script, setScriptState] = useState<ScriptType>(() => {
-        const saved = localStorage.getItem('awal_script_pref');
-        return (saved as ScriptType) || 'latin';
+        const saved = readString(SCRIPT_KEY);
+        return SCRIPTS.includes(saved as ScriptType) ? (saved as ScriptType) : 'latin';
     });
 
-    useEffect(() => {
-        localStorage.setItem('awal_script_pref', script);
-    }, [script]);
+    useEffect(() => writeString(SCRIPT_KEY, script), [script]);
 
     const toggleScript = () => {
         setScriptState((prev) => {

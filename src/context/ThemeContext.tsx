@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { readString, removeKey, writeString } from '../utils/storage';
 
 type Theme = 'light' | 'dark';
 
@@ -16,11 +17,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // choice. The old 'theme' key was written on every visit, copying the
     // system setting, so it says nothing about a choice and is ignored.
     const [theme, setTheme] = useState<Theme>(() => {
-        try {
-            return localStorage.getItem(THEME_CHOICE_KEY) === 'dark' ? 'dark' : 'light';
-        } catch {
-            return 'light';
-        }
+        return readString(THEME_CHOICE_KEY) === 'dark' ? 'dark' : 'light';
     });
 
     useEffect(() => {
@@ -32,12 +29,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const toggleTheme = () => {
         const next: Theme = theme === 'light' ? 'dark' : 'light';
         setTheme(next);
-        try {
-            localStorage.setItem(THEME_CHOICE_KEY, next);
-            localStorage.removeItem('theme');
-        } catch {
-            // Storage blocked: the choice lasts until the page is closed
-        }
+        writeString(THEME_CHOICE_KEY, next);
+        removeKey('theme');
     };
 
     return (

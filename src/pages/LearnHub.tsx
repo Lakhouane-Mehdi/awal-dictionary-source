@@ -3,7 +3,7 @@ import { Type, Layers, BrainCircuit, BookOpen, Quote, Network } from 'lucide-rea
 import type { ReactNode } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { useGamification } from '../hooks/useGamification';
+import { useGamification } from '../context/GamificationContext';
 import { tifinaghAlphabet } from '../data/tifinagh';
 import { totalEntries, rootFamilies } from '../data/taxonomy';
 import { proverbs } from '../data/proverbs';

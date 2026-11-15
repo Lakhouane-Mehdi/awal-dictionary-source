@@ -6,6 +6,7 @@ import App from './App';
 import './styles/global.css';
 import { ScriptProvider } from './context/ScriptContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { GamificationProvider } from './context/GamificationContext';
 import { initMonitoring } from './utils/monitoring';
 import { ErrorFallback } from './components/ErrorFallback';
 
@@ -19,9 +20,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     )}>
       <ScriptProvider>
         <ThemeProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <GamificationProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </GamificationProvider>
         </ThemeProvider>
       </ScriptProvider>
     </Sentry.ErrorBoundary>

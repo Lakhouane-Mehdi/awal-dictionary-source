@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, Lock } from 'lucide-react';
-import { useGamification, ACHIEVEMENTS } from '../hooks/useGamification';
+import { useGamification } from '../context/GamificationContext';
+import { ACHIEVEMENTS } from '../data/achievements';
 
 interface AchievementsModalProps {
     isOpen: boolean;
