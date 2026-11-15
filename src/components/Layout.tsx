@@ -69,7 +69,8 @@ export const Layout = () => {
             </button>
 
             {/* Main Content Area with padding for Nav */}
-            <main id="main" tabIndex={-1} className="flex-1 pb-28 lg:pb-16 px-4 pt-8 max-w-3xl lg:max-w-5xl mx-auto w-full scroll-mt-20 focus:outline-none">
+            {/* Grows with the screen; text-heavy pages keep their own reading width */}
+            <main id="main" tabIndex={-1} className="flex-1 pb-28 lg:pb-16 px-4 sm:px-6 lg:px-8 pt-8 max-w-3xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto w-full scroll-mt-20 focus:outline-none">
                 <Suspense fallback={<div className="py-24 text-center text-indigo-400" role="status">Loading…</div>}>
                     <Outlet />
                 </Suspense>

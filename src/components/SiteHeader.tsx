@@ -35,7 +35,9 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
 
     return (
         <header className="glass-header">
-            <div className="max-w-6xl mx-auto px-4">
+            {/* Full width at every size: the logo sits at the far left, the
+                controls at the far right, with padding that grows with the screen */}
+            <div className="px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16 gap-4">
                     {/* Wordmark */}
                     <Link to="/" className="flex items-center gap-2 shrink-0 group">
@@ -43,7 +45,8 @@ export const SiteHeader = ({ onOpenAchievements }: SiteHeaderProps) => {
                         <span className="font-display text-2xl font-bold text-indigo-700 dark:text-sand-100 tracking-tight">
                             Awal
                         </span>
-                        <span className="tifinagh-text text-base text-accent-500 group-hover:text-accent-600 transition-colors">
+                        {/* Hidden on the narrowest phones (320 px), where it pushes the menu button off screen */}
+                        <span className="hidden min-[360px]:inline tifinagh-text text-base text-accent-500 group-hover:text-accent-600 transition-colors">
                             ⴰⵡⴰⵍ
                         </span>
                     </Link>

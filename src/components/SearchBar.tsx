@@ -142,7 +142,7 @@ export const SearchBar = ({ value, onChange, onClear, results = [], onSelect }: 
                     onFocus={() => setIsFocused(true)}
                     onKeyDown={handleKeyDown}
                     placeholder={isListening ? "Listening…" : "Search, e.g. argaz…"}
-                    className="flex-1 bg-transparent border-none outline-none px-4 py-1 text-lg font-medium text-indigo-800 dark:text-sand-100 placeholder-indigo-300 dark:placeholder-indigo-400"
+                    className="flex-1 min-w-0 bg-transparent border-none outline-none px-2 sm:px-4 py-1 text-lg font-medium text-indigo-800 dark:text-sand-100 placeholder-indigo-300 dark:placeholder-indigo-400"
                     aria-label="Search the dictionary"
                     aria-autocomplete="list"
                     aria-controls="search-suggestions"
