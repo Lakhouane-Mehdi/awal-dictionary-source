@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { readJSON, readString, writeJSON, writeString } from '../utils/storage';
 import { ACHIEVEMENTS, type UserStats } from '../data/achievements';
+import { addDays, localDay } from '../utils/dates';
 
 export type TrackedAction = 'SEARCH' | 'VIEW' | 'QUIZ';
 
@@ -33,9 +34,6 @@ const loadStats = (): UserStats => {
     return stats;
 };
 
-/** The visitor's calendar day, so a streak day ends at their midnight, not UTC's */
-const localDay = (date: Date): string =>
-    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 const GamificationContext = createContext<GamificationContextType | undefined>(undefined);
 
@@ -83,12 +81,10 @@ export const GamificationProvider = ({ children }: { children: React.ReactNode }
     }, [updateStats]);
 
     const completeDailyTask = useCallback(() => {
-        const now = new Date();
-        const today = localDay(now);
+        // The visitor's own calendar day, so a streak day ends at their midnight
+        const today = localDay();
         if (lastPlayDate === today) return;
-        const yesterday = new Date(now);
-        yesterday.setDate(now.getDate() - 1);
-        const continues = lastPlayDate === localDay(yesterday);
+        const continues = lastPlayDate === addDays(today, -1);
         updateStats(prev => ({ ...prev, streak: continues ? prev.streak + 1 : 1 }));
         setLastPlayDate(today);
         writeString(LAST_PLAY_KEY, today);

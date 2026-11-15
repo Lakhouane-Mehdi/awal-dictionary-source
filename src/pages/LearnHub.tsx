@@ -38,7 +38,7 @@ export const LearnHub = () => {
             label: 'Vocabulary flashcards',
             icon: <Layers size={22} />,
             meta: `${totalEntries.toLocaleString()} words`,
-            desc: 'Reveal-and-review cards drawn from the full dictionary.',
+            desc: 'Review your saved words on a spaced-repetition schedule, or practise with random words.',
         },
         {
             to: '/tools/quiz',

@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFavorites } from '../hooks/useFavorites';
 import { dictionaryData } from '../data/dictionary';
 import { useScript } from '../context/ScriptContext';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { Heart, ArrowLeft, Repeat } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { displayTerm } from '../utils/displayTerm';
 
@@ -15,10 +15,18 @@ export const Favorites = () => {
     return (
         <div className="w-full min-h-screen">
             <header className="mb-6 mt-4 flex items-center gap-4">
-                <Link to="/" className="p-2 rounded-full hover:bg-white/50 text-slate-600 transition-colors">
-                    <ArrowLeft size={24} />
+                <Link to="/" aria-label="Back to home" className="p-2 rounded-full hover:bg-white/50 text-slate-600 dark:text-indigo-200 transition-colors">
+                    <ArrowLeft size={24} aria-hidden="true" />
                 </Link>
-                <h1 className="text-2xl font-black text-slate-800">Saved Words</h1>
+                <h1 className="text-2xl font-black text-slate-800 dark:text-sand-100 flex-1">Saved Words</h1>
+                {favoriteAndEntries.length > 0 && (
+                    <Link
+                        to="/learn/vocabulary"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition"
+                    >
+                        <Repeat size={16} aria-hidden="true" /> Review Them
+                    </Link>
+                )}
             </header>
 
             <div className="flex flex-col gap-4 pb-20">
