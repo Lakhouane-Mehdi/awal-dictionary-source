@@ -75,7 +75,7 @@ export const CookieBanner: React.FC = () => {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-[200] p-4 bg-gray-900/95 backdrop-blur-md border-t border-gray-700 text-white shadow-2xl transition-all duration-300">
+        <div className="fixed bottom-0 left-0 right-0 z-[200] p-4 bg-gray-900/95 backdrop-blur-md border-t border-gray-700 text-white shadow-2xl transition duration-300">
             <div className="max-w-6xl mx-auto">
                 {!showSettings ? (
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -126,15 +126,14 @@ export const CookieBanner: React.FC = () => {
                             <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-700 opacity-75 cursor-not-allowed">
                                 <div className="flex justify-between items-start mb-1">
                                     <span className="font-medium flex items-center gap-2"><Shield className="w-4 h-4 text-green-400" /> Essential</span>
-                                    <input type="checkbox" checked disabled className="w-4 h-4 rounded text-indigo-600 bg-gray-700 border-gray-500" />
+                                    <input type="checkbox" checked disabled aria-label="Essential cookies (always on)" className="w-4 h-4 rounded text-indigo-600 bg-gray-700 border-gray-500" />
                                 </div>
                                 <p className="text-xs text-gray-400">Strictly necessary for security and core functionality. Cannot be disabled.</p>
                             </div>
 
                             {/* Analytics */}
-                            <div
-                                className="bg-gray-800 p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-gray-600"
-                                onClick={() => toggleSetting('analytics')}
+                            <label
+                                className="block bg-gray-800 p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-gray-600"
                             >
                                 <div className="flex justify-between items-start mb-1">
                                     <span className="font-medium">Analytics</span>
@@ -146,12 +145,11 @@ export const CookieBanner: React.FC = () => {
                                     />
                                 </div>
                                 <p className="text-xs text-gray-400">Help us improve by collecting anonymous usage data.</p>
-                            </div>
+                            </label>
 
                             {/* Marketing */}
-                            <div
-                                className="bg-gray-800 p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-gray-600"
-                                onClick={() => toggleSetting('marketing')}
+                            <label
+                                className="block bg-gray-800 p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-gray-600"
                             >
                                 <div className="flex justify-between items-start mb-1">
                                     <span className="font-medium">Marketing</span>
@@ -163,7 +161,7 @@ export const CookieBanner: React.FC = () => {
                                     />
                                 </div>
                                 <p className="text-xs text-gray-400">Allow personalized content and ads (if any).</p>
-                            </div>
+                            </label>
                         </div>
 
                         <div className="flex justify-end gap-2 pt-2">
