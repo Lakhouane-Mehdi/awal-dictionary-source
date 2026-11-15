@@ -3,6 +3,7 @@ import ircamVerbData from './ircam_verbs.json';
 import wiktionaryData from './wiktionary_words.json';
 import { convertScript, pdfLatinToIrcam } from '../utils/scriptConverter';
 import { splitGrammarNotes } from '../utils/grammarNotes';
+import { categorizeWord } from './categorize';
 
 // Type for the IRCAM verb JSON entries
 interface IrcamVerb {
@@ -334,30 +335,6 @@ const ircamEntries: DictionaryEntry[] = (ircamVerbData as IrcamVerb[]).map((verb
         source: 'IRCAM'
     };
 }).filter(entry => entry.definition.length > 0);
-
-// Auto-categorize an entry from its English definition.
-// Declared as a function so it is hoisted above the imported-entry mapping.
-function categorizeWord(definition: string): string {
-    const d = definition.toLowerCase();
-    if (/\b(color|colour)\b/.test(d)) return 'Colors';
-    if (/\b(red|blue|green|yellow|white|black|brown|grey|gray|orange|pink|purple)\b/.test(d) && d.length < 30) return 'Colors';
-    if (/\b(hand|foot|head|ear|eye|nose|mouth|lip|finger|belly|stomach|skin|hair|neck|throat|breast|tooth|nail|tongue|bone|heart|knee|back|leg|arm|shoulder)\b/.test(d) && !d.includes('to ')) return 'Body';
-    if (/\b(rain|snow|wind|cloud|storm|lightning|thunder|ice|freeze|fog|sun|cold|hot|warm|breeze|weather)\b/.test(d) && !d.includes('to ')) return 'Weather';
-    if (/\b(bear|bird|cat|dog|horse|fish|lion|tiger|falcon|eagle|snake|wolf|sheep|cow|goat|donkey|bee|ant|worm|dolphin|giraffe|nightingale|camel)\b/.test(d) && !d.includes('to ')) return 'Animals';
-    if (/\b(bread|milk|meat|tea|water|apple|corn|salt|butter|olive|fig|soup|food|eat|drink|honey|fruit|egg|cheese|flour)\b/.test(d) && !d.includes('to ')) return 'Food';
-    if (/\b(father|mother|brother|sister|son|daughter|child|husband|wife|man|woman|family|grandfather|grandmother|uncle|aunt|friend|person)\b/.test(d) && !d.includes('to ')) return 'Family';
-    if (/\b(mountain|river|sea|ocean|lake|forest|tree|flower|rock|stone|sand|cliff|swamp|spring|root|earth|land|soil|well|valley|hill)\b/.test(d) && !d.includes('to ')) return 'Nature';
-    if (/\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday|day|night|month|year|week|time|season)\b/.test(d)) return 'Time';
-    if (/\b(house|road|wall|village|market|school|mosque|city|town|airport|village|portal|door|gate)\b/.test(d)) return 'Places';
-    if (/\b(big|small|old|new|long|short|round|wide|wet|smooth|bad|honest|complex|national|left|right)\b/.test(d) && !d.includes('to ') && d.length < 50) return 'Adjectives';
-    if (/\b(one|two|three|four|five|six|seven|eight|nine|ten|twenty|hundred|thousand|zero|number)\b/.test(d) && d.length < 30) return 'Numbers';
-    // Bare numerals ("10", "24") — the PDF's numbers section stores them this way
-    if (/^\d+(st|nd|rd|th)?$/.test(d.trim())) return 'Numbers';
-    if (d.startsWith('to ')) return 'Verbs';
-    if (/\b(garment|wool|cloth|cape|robe|dress|shoe|hat|cap)\b/.test(d)) return 'Clothing';
-    if (/\b(king|flag|people|assembly|rope|smoke|fire|seed|silver|health|word)\b/.test(d)) return 'Culture';
-    return 'General';
-}
 
 // Convert Wiktionary data into DictionaryEntry format
 // Source: Wiktionary (CC-BY-SA 4.0 / GFDL)

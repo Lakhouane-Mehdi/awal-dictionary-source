@@ -36,6 +36,18 @@ const CATEGORY_STYLES: Record<string, { spine: string; chip: string }> = {
     family: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     people: { spine: 'bg-indigo-700', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
     time: { spine: 'bg-indigo-800', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    health: { spine: 'bg-clay-700', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    household: { spine: 'bg-clay-300', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    'tools & materials': { spine: 'bg-clay-800', chip: 'bg-clay-50 text-clay-700 dark:bg-clay-900/30 dark:text-clay-200' },
+    religion: { spine: 'bg-saffron-700', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    feelings: { spine: 'bg-saffron-200', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    expressions: { spine: 'bg-saffron-400', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    'grammar words': { spine: 'bg-indigo-200', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    education: { spine: 'bg-indigo-900', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    society: { spine: 'bg-indigo-600', chip: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200' },
+    'work & money': { spine: 'bg-saffron-800', chip: 'bg-saffron-50 text-saffron-800 dark:bg-saffron-900/30 dark:text-saffron-200' },
+    farming: { spine: 'bg-emerald-400', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
+    transport: { spine: 'bg-emerald-800', chip: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200' },
 };
 
 const DEFAULT_CATEGORY_STYLE = {
